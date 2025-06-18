@@ -1,13 +1,10 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from services.chatbot_rag import ChatbotRAGService
 import logging
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 router = APIRouter(tags=["GenAI Chatbot"])
 
 # Initialize the RAG service
@@ -21,28 +18,34 @@ class QuestionRequest(BaseModel):
 class ExplainRequest(BaseModel):
     clause: str
     document_type: Optional[str] = "legal"
-    detail_level: Optional[str] = "medium"  # basic, medium, detailed
+    detail_level: Optional[str] = "medium"
 
-class GenerateDocRequest(BaseModel):
-    doc_type: str  # "business_plan", "pitch_deck", "legal_doc"
-    template: Optional[str] = None
-    parameters: Optional[dict] = None
+class ContentGenerationRequest(BaseModel):
+    content_type: str  # "pitch_deck", "business_plan", "legal_nda", etc.
+    user_info: Dict[str, Any]
 
 class ChatResponse(BaseModel):
     answer: str
     sources: Optional[List[str]] = None
     confidence: Optional[float] = None
 
+class ContentResponse(BaseModel):
+    content_structure: Dict[str, Any]
+    content_type: str
+    user_info: Dict[str, Any]
+    confidence: float
+
 @router.post("/ask", response_model=ChatResponse)
 async def ask_question(request: QuestionRequest):
     """
-    Q&A endpoint for startup-related questions.
-    
-    This endpoint uses RAG to provide intelligent answers to startup questions
-    by combining the user's query with relevant context from the knowledge base.
+    Q&A endpoint for startup-related questions using RAG
     """
     try:
         logger.info(f"Processing question: {request.question[:100]}...")
+        
+        # Prevent duplicate processing by checking if question is too short or empty
+        if not request.question or len(request.question.strip()) < 3:
+            raise HTTPException(status_code=400, detail="Question must be at least 3 characters long")
         
         result = await rag_service.ask_question(
             question=request.question,
@@ -63,13 +66,14 @@ async def ask_question(request: QuestionRequest):
 @router.post("/explain", response_model=ChatResponse)
 async def explain_clause(request: ExplainRequest):
     """
-    Clause explanation endpoint for legal and business documents.
-    
-    This endpoint provides detailed explanations of clauses in legal documents,
-    contracts, or business terms in simple, understandable language.
+    Explain a legal or business clause in simple terms
     """
     try:
         logger.info(f"Explaining clause: {request.clause[:100]}...")
+        
+        # Prevent duplicate processing
+        if not request.clause or len(request.clause.strip()) < 5:
+            raise HTTPException(status_code=400, detail="Clause must be at least 5 characters long")
         
         result = await rag_service.explain_clause(
             clause=request.clause,
@@ -87,53 +91,26 @@ async def explain_clause(request: ExplainRequest):
         logger.error(f"Error explaining clause: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error explaining clause: {str(e)}")
 
-@router.post("/generate-doc", response_model=ChatResponse)
-async def generate_document(request: GenerateDocRequest):
+@router.post("/generate-content", response_model=ContentResponse)
+async def generate_content(request: ContentGenerationRequest):
     """
-    Optional text generation endpoint for creating startup documents.
-    
-    This endpoint can generate various types of startup documents such as
-    business plans, pitch decks, or legal documents based on provided parameters.
+    Generate structured content for various document types (pitch deck, business plan, legal docs)
     """
     try:
-        logger.info(f"Generating document of type: {request.doc_type}")
+        logger.info(f"Generating {request.content_type} content...")
         
-        result = await rag_service.generate_document(
-            doc_type=request.doc_type,
-            template=request.template,
-            parameters=request.parameters or {}
+        result = await rag_service.generate_content_structure(
+            content_type=request.content_type,
+            user_info=request.user_info
         )
         
-        return ChatResponse(
-            answer=result["document"],
-            sources=result.get("templates_used", []),
+        return ContentResponse(
+            content_structure=result["content_structure"],
+            content_type=result["content_type"],
+            user_info=result["user_info"],
             confidence=result.get("confidence", 0.0)
         )
         
     except Exception as e:
-        logger.error(f"Error generating document: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error generating document: {str(e)}")
-
-@router.get("/knowledge-base/status")
-async def get_knowledge_base_status():
-    """
-    Get the status of the knowledge base and available documents.
-    """
-    try:
-        status = await rag_service.get_knowledge_base_status()
-        return status
-    except Exception as e:
-        logger.error(f"Error getting knowledge base status: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error getting knowledge base status: {str(e)}")
-
-@router.post("/knowledge-base/refresh")
-async def refresh_knowledge_base():
-    """
-    Refresh the knowledge base with latest documents.
-    """
-    try:
-        result = await rag_service.refresh_knowledge_base()
-        return result
-    except Exception as e:
-        logger.error(f"Error refreshing knowledge base: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error refreshing knowledge base: {str(e)}")
+        logger.error(f"Error generating content: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating content: {str(e)}")
