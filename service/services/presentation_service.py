@@ -23,16 +23,12 @@ class PresentationService:
         """Create a pitch deck presentation with AI-generated content or provided content"""
         try:
             if use_ai:
-                # Generate content using AI
                 content_structure = await self.content_generator.generate_pitch_deck_content(business_info)
             else:
-                # Use provided content structure (fallback)
                 content_structure = business_info.get('content_structure', {})
             
-            # Call the generator with the generated content
             file_path = self.ppt_generator.create_pitch_deck(content_structure, business_info)
             
-            # Generate filename from business info
             company_name = business_info.get('company_name', 'pitch_deck')
             filename = f"pitch_deck_{company_name.lower().replace(' ', '_')}.pptx"
             

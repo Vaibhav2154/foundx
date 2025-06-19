@@ -9,18 +9,17 @@ import os
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Presentation Generation"])
 
-# Initialize the presentation service
 presentation_service = PresentationService()
 
 class PitchDeckRequest(BaseModel):
-    business_info: Dict[str, Any]  # Business information for AI generation
-    use_ai: bool = True  # Whether to use AI for content generation
-    content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    business_info: Dict[str, Any]
+    use_ai: bool = True
+    content_structure: Optional[Dict[str, Any]] = None
 
 class BusinessPlanRequest(BaseModel):
-    business_info: Dict[str, Any]  # Business information for AI generation  
-    use_ai: bool = True  # Whether to use AI for content generation
-    content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    business_info: Dict[str, Any]  
+    use_ai: bool = True 
+    content_structure: Optional[Dict[str, Any]] = None
 
 class PresentationResponse(BaseModel):
     filename: str

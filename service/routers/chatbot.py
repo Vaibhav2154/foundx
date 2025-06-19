@@ -7,7 +7,6 @@ import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["GenAI Chatbot"])
 
-# Initialize the RAG service
 rag_service = ChatbotRAGService()
 
 class QuestionRequest(BaseModel):
@@ -21,7 +20,7 @@ class ExplainRequest(BaseModel):
     detail_level: Optional[str] = "medium"
 
 class ContentGenerationRequest(BaseModel):
-    content_type: str  # "pitch_deck", "business_plan", "legal_nda", etc.
+    content_type: str
     user_info: Dict[str, Any]
 
 class ChatResponse(BaseModel):
@@ -47,7 +46,7 @@ async def ask_question(request: QuestionRequest):
         if not request.question or len(request.question.strip()) < 3:
             raise HTTPException(status_code=400, detail="Question must be at least 3 characters long")
         
-        result = await rag_service.ask_question(
+        result = await rag_service.ask_qustion(
             question=request.question,
             context=request.context,
             startup_type=request.startup_type

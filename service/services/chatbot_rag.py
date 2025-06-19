@@ -58,22 +58,6 @@ class ChatbotRAGService:
             logger.error(f"Error generating response with Gemini: {str(e)}")
             return f"I encountered an error while processing your request: {str(e)}"
     
-    def _load_knowledge_base(self):
-        """Load and process documents for the knowledge base"""
-        try:
-            # Load the PRD document
-            prd_path = Path("FoundX-2.pdf")
-            if prd_path.exists():
-                logger.info("Loading FoundX PRD document...")
-                prd_content = self.pdf_processor.extract_text(str(prd_path))
-                self.knowledge_base["foundx_prd"] = prd_content
-            
-            # Load additional startup knowledge
-            self._load_startup_templates()
-            logger.info(f"Knowledge base loaded with {len(self.knowledge_base)} documents")
-            
-        except Exception as e:
-            logger.error(f"Error loading knowledge base: {str(e)}")
     
     def _load_startup_templates(self):
         """Load predefined startup knowledge and templates"""

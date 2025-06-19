@@ -151,7 +151,6 @@ class ContentGeneratorService:
         try:
             response = await self._generate_response(prompt)
             
-            # Parse JSON response
             content_structure = json.loads(response)
             return content_structure
             
