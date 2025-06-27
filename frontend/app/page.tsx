@@ -1,4 +1,5 @@
 import { ArrowRight, Shield, Users, CheckCircle, Zap, FileText, MessageSquare, Target, Star, Bot, Briefcase } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -16,9 +17,11 @@ export default function Home() {
               <a href="#features" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Features</a>
               <a href="#how-it-works" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How it Works</a>
               <a href="#pricing" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Pricing</a>
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium">
-                Get Started
-              </button>
+              <Link href="/options">
+                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium">
+                  Get Started
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -42,10 +45,12 @@ export default function Home() {
                 track projects, and get AI-powered guidance - all in one place.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl flex items-center">
-                  Start Building Today
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </button>
+                <Link href="/options">
+                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl flex items-center">
+                    Start Building Today
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </button>
+                </Link>
                 <button className="border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-8 py-4 rounded-xl hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 font-semibold text-lg">
                   Watch Demo
                 </button>
