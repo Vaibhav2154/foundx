@@ -9,7 +9,7 @@ export default function Home() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">F</span>
+                <span className="text-primary-foreground font-bold text-sm">F</span>
               </div>
               <span className="text-xl font-bold text-slate-900 dark:text-white">FoundX</span>
             </div>
@@ -18,7 +18,7 @@ export default function Home() {
               <a href="#how-it-works" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How it Works</a>
               <a href="#pricing" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Pricing</a>
               <Link href="/options">
-                <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium">
+                <button className="btn-primary">
                   Get Started
                 </button>
               </Link>
@@ -46,7 +46,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                 <Link href="/options">
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl flex items-center">
+                  <button className="btn-secondary">
                     Start Building Today
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </button>
