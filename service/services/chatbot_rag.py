@@ -59,6 +59,40 @@ class ChatbotRAGService:
             return f"I encountered an error while processing your request: {str(e)}"
     
     
+    def _load_knowledge_base(self):
+        """Load knowledge base from files and initialize with startup templates"""
+        try:
+            # Load startup templates first
+            self._load_startup_templates()
+            
+            # Load any existing documents from knowledge_base directory
+            if self.knowledge_base_path.exists():
+                for file_path in self.knowledge_base_path.glob("*.txt"):
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                            self.knowledge_base[file_path.stem] = content
+                            logger.info(f"Loaded knowledge base file: {file_path.name}")
+                    except Exception as e:
+                        logger.error(f"Error loading {file_path}: {str(e)}")
+                
+                # Load PDF files if any
+                for file_path in self.knowledge_base_path.glob("*.pdf"):
+                    try:
+                        content = self.pdf_processor.extract_text(str(file_path))
+                        if content:
+                            self.knowledge_base[file_path.stem] = content
+                            logger.info(f"Loaded PDF knowledge base file: {file_path.name}")
+                    except Exception as e:
+                        logger.error(f"Error loading PDF {file_path}: {str(e)}")
+            
+            logger.info(f"Knowledge base loaded with {len(self.knowledge_base)} documents")
+            
+        except Exception as e:
+            logger.error(f"Error loading knowledge base: {str(e)}")
+            # Ensure we have at least the basic templates
+            self._load_startup_templates()
+
     def _load_startup_templates(self):
         """Load predefined startup knowledge and templates"""
         self.knowledge_base.update({
