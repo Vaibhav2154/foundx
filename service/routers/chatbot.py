@@ -46,7 +46,7 @@ async def ask_question(request: QuestionRequest):
         if not request.question or len(request.question.strip()) < 3:
             raise HTTPException(status_code=400, detail="Question must be at least 3 characters long")
         
-        result = await rag_service.ask_qustion(
+        result = await rag_service.ask_question(
             question=request.question,
             context=request.context,
             startup_type=request.startup_type

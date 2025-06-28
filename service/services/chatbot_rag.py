@@ -1,6 +1,3 @@
-# ===== 1. Enhanced ChatBot RAG Service =====
-# services/chatbot_rag.py
-
 import google.generativeai as genai
 from typing import Dict, List, Optional, Any
 import os
