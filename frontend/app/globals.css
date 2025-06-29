@@ -84,6 +84,14 @@ h1, h2, h3 {
   .btn-secondary {
     @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl flex items-center;
   }
+  
+   .card-primary {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-xl shadow-md transition-transform hover:scale-105;
+  }
+
+  .card-secondary {
+    @apply bg-gradient-to-r from-blue-500 to-purple-500 text-white p-4 rounded-lg shadow-lg hover:shadow-xl;
+  }
 
   .assistant-chat {
     @apply h-full mx-auto p-4 rounded-lg shadow-lg;
