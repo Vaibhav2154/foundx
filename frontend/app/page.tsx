@@ -6,6 +6,7 @@ import Testimonial from "@/components/landing/Testimonial";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
 import { ArrowRight, Shield, Users, CheckCircle, Zap, FileText, MessageSquare, Target, Star, Bot, Briefcase } from "lucide-react";
+import Features from "@/components/landing/Fetures";
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
 
       <main className="relative">
         <Intro />
-        {/* <Features /> */}
+        <Features />
         <HowItWorks />
         <Testimonial />
         <CTASection />
