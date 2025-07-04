@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+
 
 export default function Navbar() {
   return (
@@ -6,10 +8,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">F</span>
-              </div>
-              <span className="text-xl font-bold text-slate-900 dark:text-white">FoundX</span>
+              <Image src="/logo.png" alt="FoundX Logo" width={150} height={150} />
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Features</a>
