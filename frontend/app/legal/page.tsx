@@ -79,6 +79,485 @@ const LegalDocuments = () => {
     { title: 'Consultant Agreement - Marketing', status: 'completed', date: '1 week ago', type: 'Contract' }
   ];
 
+  const renderFormFields = () => {
+    const template = templates.find(t => t.id === selectedTemplate);
+    
+    switch (selectedTemplate) {
+      case 'nda':
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Disclosing Party (Your Company)
+                </label>
+                <input
+                  type="text"
+                  value={formData.companyName || ''}
+                  onChange={(e) => handleFormChange('companyName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Your Company Name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Receiving Party
+                </label>
+                <input
+                  type="text"
+                  value={formData.receivingParty || ''}
+                  onChange={(e) => handleFormChange('receivingParty', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Partner/Employee Name"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Purpose of Disclosure
+              </label>
+              <textarea
+                rows={3}
+                value={formData.purpose || ''}
+                onChange={(e) => handleFormChange('purpose', e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                placeholder="Describe why you're sharing confidential information..."
+              />
+            </div>
+          </>
+        );
+      
+      case 'founder-agreement':
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.companyName || ''}
+                  onChange={(e) => handleFormChange('companyName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Your Company Name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Vesting Schedule
+                </label>
+                <select 
+                  value={formData.vestingSchedule || '4 years'}
+                  onChange={(e) => handleFormChange('vestingSchedule', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                >
+                  <option value="4 years">4 years</option>
+                  <option value="3 years">3 years</option>
+                  <option value="5 years">5 years</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Founders Information
+              </label>
+              <textarea
+                rows={3}
+                value={formData.founders || ''}
+                onChange={(e) => handleFormChange('founders', e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                placeholder="List founder names and basic info..."
+              />
+            </div>
+          </>
+        );
+      
+      case 'employment-contract':
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.companyName || ''}
+                  onChange={(e) => handleFormChange('companyName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Your Company Name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Employee Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.employeeName || ''}
+                  onChange={(e) => handleFormChange('employeeName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Employee Full Name"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Position
+                </label>
+                <input
+                  type="text"
+                  value={formData.position || ''}
+                  onChange={(e) => handleFormChange('position', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Job Title"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Salary
+                </label>
+                <input
+                  type="text"
+                  value={formData.salary || ''}
+                  onChange={(e) => handleFormChange('salary', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Annual Salary"
+                />
+              </div>
+            </div>
+          </>
+        );
+      
+      case 'consultant-agreement':
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.companyName || ''}
+                  onChange={(e) => handleFormChange('companyName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Your Company Name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Consultant Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.consultantName || ''}
+                  onChange={(e) => handleFormChange('consultantName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Consultant Full Name"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Scope of Work
+              </label>
+              <textarea
+                rows={3}
+                value={formData.scopeOfWork || ''}
+                onChange={(e) => handleFormChange('scopeOfWork', e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                placeholder="Describe the work to be performed..."
+              />
+            </div>
+          </>
+        );
+      
+      case 'terms-of-service':
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.companyName || ''}
+                  onChange={(e) => handleFormChange('companyName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Your Company Name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Website URL
+                </label>
+                <input
+                  type="url"
+                  value={formData.websiteUrl || ''}
+                  onChange={(e) => handleFormChange('websiteUrl', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="https://yourcompany.com"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Contact Email
+                </label>
+                <input
+                  type="email"
+                  value={formData.contactEmail || ''}
+                  onChange={(e) => handleFormChange('contactEmail', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="contact@yourcompany.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Effective Date
+                </label>
+                <input
+                  type="date"
+                  value={formData.effectiveDate || ''}
+                  onChange={(e) => handleFormChange('effectiveDate', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Service Description
+              </label>
+              <textarea
+                rows={3}
+                value={formData.serviceDescription || ''}
+                onChange={(e) => handleFormChange('serviceDescription', e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                placeholder="Describe your service or product..."
+              />
+            </div>
+          </>
+        );
+      
+      case 'privacy-policy':
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  value={formData.companyName || ''}
+                  onChange={(e) => handleFormChange('companyName', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="Your Company Name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Website URL
+                </label>
+                <input
+                  type="url"
+                  value={formData.websiteUrl || ''}
+                  onChange={(e) => handleFormChange('websiteUrl', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="https://yourcompany.com"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Contact Email
+                </label>
+                <input
+                  type="email"
+                  value={formData.contactEmail || ''}
+                  onChange={(e) => handleFormChange('contactEmail', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                  placeholder="privacy@yourcompany.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Effective Date
+                </label>
+                <input
+                  type="date"
+                  value={formData.effectiveDate || ''}
+                  onChange={(e) => handleFormChange('effectiveDate', e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Data Collection Practices
+              </label>
+              <textarea
+                rows={3}
+                value={formData.dataCollection || ''}
+                onChange={(e) => handleFormChange('dataCollection', e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
+                placeholder="Describe what data you collect from users..."
+              />
+            </div>
+          </>
+        );
+      
+      default:
+        return null;
+    }
+  };
+
+  const renderHelpContent = () => {
+    const template = templates.find(t => t.id === selectedTemplate);
+    if (!template) return null;
+
+    const helpContent = {
+      'nda': {
+        title: 'Understanding NDAs',
+        sections: [
+          {
+            title: 'What is an NDA?',
+            content: 'A legal contract that prevents the sharing of confidential business information.'
+          },
+          {
+            title: 'When to use it?',
+            content: 'Before sharing business plans, financial data, or proprietary information with partners, employees, or investors.'
+          },
+          {
+            title: 'Key clauses:',
+            content: ['Definition of confidential information', 'Duration of confidentiality', 'Permitted disclosures', 'Return of information']
+          }
+        ]
+      },
+      'founder-agreement': {
+        title: 'Understanding Founder Agreements',
+        sections: [
+          {
+            title: 'What is a Founder Agreement?',
+            content: 'A legal contract that defines the relationship, roles, and equity distribution among company co-founders.'
+          },
+          {
+            title: 'When to use it?',
+            content: 'At the very beginning of your startup journey, before any significant business activities begin.'
+          },
+          {
+            title: 'Key clauses:',
+            content: ['Equity distribution', 'Roles and responsibilities', 'Vesting schedules', 'Decision-making process']
+          }
+        ]
+      },
+      'employment-contract': {
+        title: 'Understanding Employment Contracts',
+        sections: [
+          {
+            title: 'What is an Employment Contract?',
+            content: 'A legal agreement that outlines the terms and conditions of employment between employer and employee.'
+          },
+          {
+            title: 'When to use it?',
+            content: 'When hiring new employees to clearly define expectations, compensation, and obligations.'
+          },
+          {
+            title: 'Key clauses:',
+            content: ['Job description and duties', 'Compensation and benefits', 'Working hours and location', 'Termination conditions']
+          }
+        ]
+      },
+      'consultant-agreement': {
+        title: 'Understanding Consultant Agreements',
+        sections: [
+          {
+            title: 'What is a Consultant Agreement?',
+            content: 'A contract that defines the scope of work, payment terms, and obligations for freelance or consulting services.'
+          },
+          {
+            title: 'When to use it?',
+            content: 'When engaging independent contractors or consultants for specific projects or ongoing services.'
+          },
+          {
+            title: 'Key clauses:',
+            content: ['Scope of work', 'Payment terms and schedule', 'Intellectual property ownership', 'Confidentiality provisions']
+          }
+        ]
+      },
+      'terms-of-service': {
+        title: 'Understanding Terms of Service',
+        sections: [
+          {
+            title: 'What are Terms of Service?',
+            content: 'Legal agreements that users must accept to use your website, app, or service.'
+          },
+          {
+            title: 'When to use it?',
+            content: 'For any digital product or service to protect your business and set clear user expectations.'
+          },
+          {
+            title: 'Key clauses:',
+            content: ['User obligations and prohibited uses', 'Limitation of liability', 'Intellectual property rights', 'Termination conditions']
+          }
+        ]
+      },
+      'privacy-policy': {
+        title: 'Understanding Privacy Policies',
+        sections: [
+          {
+            title: 'What is a Privacy Policy?',
+            content: 'A legal document that explains how you collect, use, store, and protect user data.'
+          },
+          {
+            title: 'When to use it?',
+            content: 'Required by law in most jurisdictions when collecting any personal data from users.'
+          },
+          {
+            title: 'Key clauses:',
+            content: ['Data collection practices', 'Data usage and sharing', 'User rights and controls', 'Security measures']
+          }
+        ]
+      }
+    };
+
+    const content = helpContent[selectedTemplate as keyof typeof helpContent];
+    if (!content) return null;
+
+    return (
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-6 backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
+        <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+            <HelpCircle className="h-4 w-4 text-white" />
+          </div>
+          {content.title}
+        </h3>
+        <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+          {content.sections.map((section, index) => (
+            <div key={index} className="p-4 bg-white/50 dark:bg-slate-800/30 rounded-xl border border-white/30 dark:border-slate-700/30">
+              <p className="font-medium text-slate-900 dark:text-slate-100 mb-2">{section.title}</p>
+              {Array.isArray(section.content) ? (
+                <ul className="list-disc list-inside mt-1 space-y-1">
+                  {section.content.map((item, itemIndex) => (
+                    <li key={itemIndex}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{section.content}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   const handleFormChange = (field: string, value: string) => {
     setFormData((prev: any) => ({
       ...prev,
@@ -158,6 +637,38 @@ const LegalDocuments = () => {
             use_ai: true
           });
           filename = `consultant_agreement_${formData.consultantName || 'document'}.pdf`;
+          break;
+        
+        case 'terms-of-service':
+          response = await apiService.createTermsOfService({
+            company_info: {
+              company_name: formData.companyName || '',
+              website_url: formData.websiteUrl || '',
+              contact_email: formData.contactEmail || '',
+              service_description: formData.serviceDescription || '',
+              governing_law: formData.governingLaw || 'india',
+              effective_date: formData.effectiveDate || new Date().toISOString().split('T')[0]
+            },
+            use_ai: true
+          });
+          filename = `terms_of_service_${formData.companyName || 'document'}.pdf`;
+          break;
+        
+        case 'privacy-policy':
+          response = await apiService.createPrivacyPolicy({
+            company_info: {
+              company_name: formData.companyName || '',
+              website_url: formData.websiteUrl || '',
+              contact_email: formData.contactEmail || '',
+              data_collection: formData.dataCollection || '',
+              data_usage: formData.dataUsage || '',
+              data_sharing: formData.dataSharing || '',
+              governing_law: formData.governingLaw || 'india',
+              effective_date: formData.effectiveDate || new Date().toISOString().split('T')[0]
+            },
+            use_ai: true
+          });
+          filename = `privacy_policy_${formData.companyName || 'document'}.pdf`;
           break;
         
         default:
@@ -323,42 +834,7 @@ const LegalDocuments = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
                 <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Disclosing Party (Your Company)
-                      </label>
-                      <input
-                        type="text"
-                        onChange={(e) => handleFormChange('companyName', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
-                        placeholder="Your Company Name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Receiving Party
-                      </label>
-                      <input
-                        type="text"
-                        onChange={(e) => handleFormChange('receivingParty', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
-                        placeholder="Partner/Employee Name"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      Purpose of Disclosure
-                    </label>
-                    <textarea
-                      rows={3}
-                      onChange={(e) => handleFormChange('purpose', e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
-                      placeholder="Describe why you're sharing confidential information..."
-                    />
-                  </div>
+                  {renderFormFields()}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -366,6 +842,7 @@ const LegalDocuments = () => {
                         Duration (Years)
                       </label>
                       <select 
+                        value={formData.duration || '2'}
                         onChange={(e) => handleFormChange('duration', e.target.value)}
                         className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
                       >
@@ -380,6 +857,7 @@ const LegalDocuments = () => {
                         Governing Law
                       </label>
                       <select 
+                        value={formData.governingLaw || 'india'}
                         onChange={(e) => handleFormChange('governingLaw', e.target.value)}
                         className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm transition-all duration-200"
                       >
@@ -440,31 +918,7 @@ const LegalDocuments = () => {
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-6 backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
-                <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                    <HelpCircle className="h-4 w-4 text-white" />
-                  </div>
-                  Understanding NDAs
-                </h3>
-                <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
-                  <div className="p-4 bg-white/50 dark:bg-slate-800/30 rounded-xl border border-white/30 dark:border-slate-700/30">
-                    <p className="font-medium text-slate-900 dark:text-slate-100 mb-2">What is an NDA?</p>
-                    <p>A legal contract that prevents the sharing of confidential business information.</p>
-                  </div>
-                  <div className="p-4 bg-white/50 dark:bg-slate-800/30 rounded-xl border border-white/30 dark:border-slate-700/30">
-                    <p className="font-medium text-slate-900 dark:text-slate-100 mb-2">When to use it?</p>
-                    <p>Before sharing business plans, financial data, or proprietary information with partners, employees, or investors.</p>
-                  </div>
-                  <div className="p-4 bg-white/50 dark:bg-slate-800/30 rounded-xl border border-white/30 dark:border-slate-700/30">
-                    <p className="font-medium text-slate-900 dark:text-slate-100 mb-2">Key clauses:</p>
-                    <ul className="list-disc list-inside mt-1 space-y-1">
-                      <li>Definition of confidential information</li>
-                      <li>Duration of confidentiality</li>
-                      <li>Permitted disclosures</li>
-                      <li>Return of information</li>
-                    </ul>
-                  </div>
-                </div>
+                {renderHelpContent()}
               </div>
             </div>
           </div>

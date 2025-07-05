@@ -32,6 +32,16 @@ class FounderAgreementRequest(BaseModel):
     use_ai: bool = True  # Whether to use AI for content generation
     content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
 
+class TermsOfServiceRequest(BaseModel):
+    company_info: Dict[str, Any]  # Company details, service details, etc.
+    use_ai: bool = True  # Whether to use AI for content generation
+    content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+
+class PrivacyPolicyRequest(BaseModel):
+    company_info: Dict[str, Any]  # Company details, data collection practices, etc.
+    use_ai: bool = True  # Whether to use AI for content generation
+    content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+
 class LegalDocumentResponse(BaseModel):
     filename: str
     file_type: str
@@ -233,6 +243,102 @@ async def create_founder_agreement(request: FounderAgreementRequest):
         logger.error(f"Error creating founder agreement: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error creating founder agreement: {str(e)}")
 
+@router.post("/create-terms-of-service")
+async def create_terms_of_service(request: TermsOfServiceRequest):
+    """
+    Generate a Terms of Service document with AI-powered content generation
+    
+    Expected company_info structure:
+    {
+        "company_name": "Your Company",
+        "website_url": "https://yourcompany.com",
+        "contact_email": "contact@yourcompany.com",
+        "service_description": "Description of your services",
+        "governing_law": "State/Country of governing law",
+        "effective_date": "Terms effective date"
+    }
+    
+    Set use_ai=True (default) to automatically generate professional legal content,
+    or use_ai=False to provide manual content_structure.
+    """
+    try:
+        logger.info(f"Creating {'AI-generated' if request.use_ai else 'manual'} Terms of Service for: {request.company_info.get('company_name', 'Unknown')}")
+        
+        # Add content_structure to company_info if provided manually
+        if not request.use_ai and request.content_structure:
+            request.company_info['content_structure'] = request.content_structure
+        
+        result = await legal_service.generate_terms_of_service(
+            company_info=request.company_info,
+            use_ai=request.use_ai
+        )
+        
+        file_path = result["file_path"]
+        filename = result["filename"]
+        
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=500, detail="Generated file not found")
+        
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type=result["file_type"],
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+        
+    except Exception as e:
+        logger.error(f"Error creating Terms of Service: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating Terms of Service: {str(e)}")
+
+@router.post("/create-privacy-policy")
+async def create_privacy_policy(request: PrivacyPolicyRequest):
+    """
+    Generate a Privacy Policy document with AI-powered content generation
+    
+    Expected company_info structure:
+    {
+        "company_name": "Your Company",
+        "website_url": "https://yourcompany.com",
+        "contact_email": "privacy@yourcompany.com",
+        "data_collection": "Types of data collected",
+        "data_usage": "How data is used",
+        "data_sharing": "Data sharing practices",
+        "governing_law": "State/Country of governing law",
+        "effective_date": "Policy effective date"
+    }
+    
+    Set use_ai=True (default) to automatically generate professional legal content,
+    or use_ai=False to provide manual content_structure.
+    """
+    try:
+        logger.info(f"Creating {'AI-generated' if request.use_ai else 'manual'} Privacy Policy for: {request.company_info.get('company_name', 'Unknown')}")
+        
+        # Add content_structure to company_info if provided manually
+        if not request.use_ai and request.content_structure:
+            request.company_info['content_structure'] = request.content_structure
+        
+        result = await legal_service.generate_privacy_policy(
+            company_info=request.company_info,
+            use_ai=request.use_ai
+        )
+        
+        file_path = result["file_path"]
+        filename = result["filename"]
+        
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=500, detail="Generated file not found")
+        
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type=result["file_type"],
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+        
+    except Exception as e:
+        logger.error(f"Error creating Privacy Policy: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error creating Privacy Policy: {str(e)}")
+
 @router.get("/templates")
 async def get_legal_templates():
     """
@@ -275,6 +381,24 @@ async def get_legal_templates():
                 "company_name", "founders", "equity_split", "roles",
                 "vesting_schedule", "initial_investment"
             ]
+        },
+        "terms_of_service": {
+            "name": "Terms of Service",
+            "description": "Define the terms and conditions for using your service (AI-Generated)",
+            "ai_supported": True,
+            "required_fields": [
+                "company_name", "service_description", "user_obligations", 
+                "limitation_of_liability", "governing_law", "effective_date"
+            ]
+        },
+        "privacy_policy": {
+            "name": "Privacy Policy",
+            "description": "Inform users about data collection and usage (AI-Generated)",
+            "ai_supported": True,
+            "required_fields": [
+                "company_name", "data_collection_practices", "user_rights", 
+                "data_security_measures", "effective_date"
+            ]
         }
     }
 
@@ -283,7 +407,7 @@ async def preview_legal_content(document_type: str, parties_info: Dict[str, Any]
     """
     Preview AI-generated content for legal documents without creating the PDF
     
-    document_type: 'nda', 'cda', 'employment', or 'founder'
+    document_type: 'nda', 'cda', 'employment', 'founder', 'terms_of_service', or 'privacy_policy'
     parties_info: Same structure as the respective create endpoints
     """
     try:

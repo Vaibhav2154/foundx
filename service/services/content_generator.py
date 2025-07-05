@@ -38,6 +38,9 @@ class ContentGeneratorService:
         
         try:
             response = await self.model.generate_content_async(prompt)
+            logger.info(f"Gemini response received, length: {len(response.text) if response.text else 0}")
+            if response.text:
+                logger.debug(f"Gemini response preview: {response.text[:200]}...")
             return response.text
         except Exception as e:
             logger.error(f"Error generating content with Gemini: {str(e)}")
@@ -173,13 +176,16 @@ class ContentGeneratorService:
                 return await self._generate_employment_agreement_content(document_info)
             elif document_type.lower() == "founder":
                 return await self._generate_founder_agreement_content(document_info)
+            elif document_type.lower() == "terms_of_service":
+                return await self._generate_terms_of_service_content(document_info)
+            elif document_type.lower() == "privacy_policy":
+                return await self._generate_privacy_policy_content(document_info)
             else:
                 raise ValueError(f"Unsupported document type: {document_type}")
                 
         except Exception as e:
             logger.error(f"Error generating {document_type} content: {str(e)}")
-            # Return basic fallback content instead of raising exception
-            return self._get_fallback_content(document_type, document_info)
+            raise
 
     async def _generate_nda_content(self, parties_info: Dict[str, Any]) -> Dict[str, Any]:
         """Generate NDA content using AI"""
@@ -253,10 +259,10 @@ class ContentGeneratorService:
             
         except json.JSONDecodeError as e:
             logger.error(f"Error parsing JSON response: {str(e)}")
-            return self._get_fallback_content("nda", parties_info)
+            raise
         except Exception as e:
             logger.error(f"Error generating NDA content: {str(e)}")
-            return self._get_fallback_content("nda", parties_info)
+            raise
 
     async def _generate_employment_agreement_content(self, employment_info: Dict[str, Any]) -> Dict[str, Any]:
         """Generate employment agreement content"""
@@ -313,10 +319,10 @@ class ContentGeneratorService:
             
         except json.JSONDecodeError as e:
             logger.error(f"Error parsing JSON response: {str(e)}")
-            return self._get_fallback_employment_content(employment_info)
+            raise
         except Exception as e:
             logger.error(f"Error generating employment agreement content: {str(e)}")
-            return self._get_fallback_employment_content(employment_info)
+            raise
 
     async def _generate_founder_agreement_content(self, founders_info: Dict[str, Any]) -> Dict[str, Any]:
         """Generate founder agreement content"""
@@ -378,10 +384,182 @@ class ContentGeneratorService:
             
         except json.JSONDecodeError as e:
             logger.error(f"Error parsing JSON response: {str(e)}")
-            return self._get_fallback_founder_content(founders_info)
+            raise
         except Exception as e:
             logger.error(f"Error generating founder agreement content: {str(e)}")
-            return self._get_fallback_founder_content(founders_info)
+            raise
+
+    async def _generate_terms_of_service_content(self, company_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate Terms of Service content using AI"""
+        
+        prompt = f"""
+        You are a legal expert specializing in technology and business law. Generate comprehensive Terms of Service based on the following information:
+
+        Company Information:
+        - Company Name: {company_info.get('company_name', 'N/A')}
+        - Website URL: {company_info.get('website_url', 'N/A')}
+        - Contact Email: {company_info.get('contact_email', 'N/A')}
+        - Service Description: {company_info.get('service_description', 'N/A')}
+        - Governing Law: {company_info.get('governing_law', 'India')}
+        - Effective Date: {company_info.get('effective_date', 'N/A')}
+
+        Generate professional Terms of Service that covers all essential legal protections for a digital service/platform.
+
+        Return the response in JSON format with the following structure:
+        {{
+            "document_title": "TERMS OF SERVICE",
+            "introduction": {{
+                "title": "1. Introduction and Acceptance",
+                "content": "These Terms of Service (Terms) govern your use of {company_info.get('company_name', '[COMPANY]')} services available at {company_info.get('website_url', '[WEBSITE]')}..."
+            }},
+            "service_description": {{
+                "title": "2. Service Description",
+                "content": "Our service provides {company_info.get('service_description', 'digital services')}..."
+            }},
+            "user_obligations": {{
+                "title": "3. User Obligations and Prohibited Uses",
+                "content": "By using our service, you agree to comply with all applicable laws and regulations..."
+            }},
+            "intellectual_property": {{
+                "title": "4. Intellectual Property Rights",
+                "content": "All content, features, and functionality of our service are owned by {company_info.get('company_name', '[COMPANY]')}..."
+            }},
+            "privacy_data": {{
+                "title": "5. Privacy and Data Protection",
+                "content": "Your privacy is important to us. Please review our Privacy Policy..."
+            }},
+            "payment_terms": {{
+                "title": "6. Payment Terms and Refunds",
+                "content": "If applicable, payment terms, billing cycles, and refund policies..."
+            }},
+            "limitation_liability": {{
+                "title": "7. Limitation of Liability",
+                "content": "To the maximum extent permitted by law, {company_info.get('company_name', '[COMPANY]')} shall not be liable for any indirect, incidental, special, consequential, or punitive damages..."
+            }},
+            "termination": {{
+                "title": "8. Termination",
+                "content": "We may terminate or suspend your access to our service immediately, without prior notice..."
+            }},
+            "dispute_resolution": {{
+                "title": "9. Dispute Resolution",
+                "content": "Any disputes arising from these Terms shall be resolved through binding arbitration under the laws of {company_info.get('governing_law', 'India')}..."
+            }},
+            "general_provisions": {{
+                "title": "10. General Provisions",
+                "content": "These Terms constitute the entire agreement between you and {company_info.get('company_name', '[COMPANY]')}. Contact us at {company_info.get('contact_email', '[EMAIL]')} for questions..."
+            }}
+        }}
+
+        Ensure all content is professional, legally comprehensive, and customized to the provided company information.
+        """
+        
+        try:
+            response = await self._generate_response(prompt)
+            # Clean up the response to ensure it's valid JSON
+            response_text = response.strip()
+            if response_text.startswith('```json'):
+                response_text = response_text[7:]
+            if response_text.endswith('```'):
+                response_text = response_text[:-3]
+            response_text = response_text.strip()
+            
+            content_structure = json.loads(response_text)
+            return content_structure
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing JSON response for Terms of Service: {str(e)}")
+            logger.error(f"Raw response: {response}")
+            raise
+        except Exception as e:
+            logger.error(f"Error generating Terms of Service content: {str(e)}")
+            raise
+
+    async def _generate_privacy_policy_content(self, company_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate Privacy Policy content using AI"""
+        
+        prompt = f"""
+        You are a legal expert specializing in privacy law and data protection. Generate a comprehensive Privacy Policy based on the following information:
+
+        Company Information:
+        - Company Name: {company_info.get('company_name', 'N/A')}
+        - Website URL: {company_info.get('website_url', 'N/A')}
+        - Contact Email: {company_info.get('contact_email', 'N/A')}
+        - Data Collection: {company_info.get('data_collection', 'N/A')}
+        - Data Usage: {company_info.get('data_usage', 'N/A')}
+        - Data Sharing: {company_info.get('data_sharing', 'N/A')}
+        - Governing Law: {company_info.get('governing_law', 'India')}
+        - Effective Date: {company_info.get('effective_date', 'N/A')}
+
+        Generate a professional Privacy Policy that complies with major privacy regulations (GDPR, CCPA, etc.).
+
+        Return the response in JSON format with the following structure:
+        {{
+            "document_title": "PRIVACY POLICY",
+            "introduction": {{
+                "title": "1. Introduction",
+                "content": "This Privacy Policy describes how {company_info.get('company_name', '[COMPANY]')} collects, uses, and protects your personal information when you use our services at {company_info.get('website_url', '[WEBSITE]')}..."
+            }},
+            "information_collected": {{
+                "title": "2. Information We Collect",
+                "content": "We collect information you provide directly to us, such as when you create an account, make a purchase, or contact us..."
+            }},
+            "how_we_use": {{
+                "title": "3. How We Use Your Information",
+                "content": "We use the information we collect for purposes including: {company_info.get('data_usage', 'providing and improving our services')}..."
+            }},
+            "information_sharing": {{
+                "title": "4. Information Sharing and Disclosure",
+                "content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy..."
+            }},
+            "data_security": {{
+                "title": "5. Data Security",
+                "content": "We implement appropriate technical and organizational measures to protect your personal information..."
+            }},
+            "your_rights": {{
+                "title": "6. Your Privacy Rights",
+                "content": "Depending on your location, you may have certain rights regarding your personal information, including the right to access, update, or delete your data..."
+            }},
+            "cookies_tracking": {{
+                "title": "7. Cookies and Tracking Technologies",
+                "content": "We use cookies and similar tracking technologies to enhance your experience on our website..."
+            }},
+            "children_privacy": {{
+                "title": "8. Children's Privacy",
+                "content": "Our services are not intended for children under 13 years of age. We do not knowingly collect personal information from children..."
+            }},
+            "policy_changes": {{
+                "title": "9. Changes to This Privacy Policy",
+                "content": "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page..."
+            }},
+            "contact_information": {{
+                "title": "10. Contact Information",
+                "content": "If you have any questions about this Privacy Policy, please contact us at {company_info.get('contact_email', '[EMAIL]')}..."
+            }}
+        }}
+
+        Ensure all content is professional, legally compliant, and customized to the provided company information.
+        """
+        
+        try:
+            response = await self._generate_response(prompt)
+            # Clean up the response to ensure it's valid JSON
+            response_text = response.strip()
+            if response_text.startswith('```json'):
+                response_text = response_text[7:]
+            if response_text.endswith('```'):
+                response_text = response_text[:-3]
+            response_text = response_text.strip()
+            
+            content_structure = json.loads(response_text)
+            return content_structure
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing JSON response for Privacy Policy: {str(e)}")
+            logger.error(f"Raw response: {response}")
+            raise
+        except Exception as e:
+            logger.error(f"Error generating Privacy Policy content: {str(e)}")
+            raise
 
     def _get_fallback_content(self, document_type: str, document_info: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -393,6 +571,10 @@ class ContentGeneratorService:
             return self._get_fallback_employment_content(document_info)
         elif document_type.lower() == "founder":
             return self._get_fallback_founder_content(document_info)
+        elif document_type.lower() == "terms_of_service":
+            return self._get_fallback_terms_content(document_info)
+        elif document_type.lower() == "privacy_policy":
+            return self._get_fallback_privacy_content(document_info)
         else:
             # Generic fallback
             return {

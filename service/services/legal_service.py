@@ -146,3 +146,67 @@ class LegalService:
         except Exception as e:
             logger.error(f"Error generating founder agreement: {str(e)}")
             raise
+
+    async def generate_terms_of_service(self, company_info: Dict[str, Any],
+                                       use_ai: bool = True) -> Dict[str, Any]:
+        """Generate Terms of Service with optional AI content generation"""
+        try:
+            filename = f"terms_of_service_{company_info.get('company_name', 'document').lower().replace(' ', '_')}.pdf"
+            
+            if use_ai:
+                # Generate content using AI
+                content_structure = await self.content_generator.generate_legal_document_content(
+                    "terms_of_service", company_info
+                )
+            else:
+                # Use provided content structure (fallback)
+                content_structure = company_info.get('content_structure', {})
+            
+            file_path = self.legal_generator.create_terms_of_service(
+                content_structure,
+                str(self.output_dir / filename)
+            )
+            
+            return {
+                "file_path": file_path,
+                "filename": filename,
+                "file_type": "application/pdf",
+                "status": "success",
+                "ai_generated": use_ai
+            }
+            
+        except Exception as e:
+            logger.error(f"Error generating Terms of Service: {str(e)}")
+            raise
+
+    async def generate_privacy_policy(self, company_info: Dict[str, Any],
+                                     use_ai: bool = True) -> Dict[str, Any]:
+        """Generate Privacy Policy with optional AI content generation"""
+        try:
+            filename = f"privacy_policy_{company_info.get('company_name', 'document').lower().replace(' ', '_')}.pdf"
+            
+            if use_ai:
+                # Generate content using AI
+                content_structure = await self.content_generator.generate_legal_document_content(
+                    "privacy_policy", company_info
+                )
+            else:
+                # Use provided content structure (fallback)
+                content_structure = company_info.get('content_structure', {})
+            
+            file_path = self.legal_generator.create_privacy_policy(
+                content_structure,
+                str(self.output_dir / filename)
+            )
+            
+            return {
+                "file_path": file_path,
+                "filename": filename,
+                "file_type": "application/pdf",
+                "status": "success",
+                "ai_generated": use_ai
+            }
+            
+        except Exception as e:
+            logger.error(f"Error generating Privacy Policy: {str(e)}")
+            raise
