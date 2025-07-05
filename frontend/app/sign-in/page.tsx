@@ -1,33 +1,68 @@
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+
 export default function SignInPage() {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted:", form);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-      <h1 className="text-4xl font-bold mb-8">Sign In</h1>
-      <form className="flex flex-col space-y-4 w-full max-w-md">
-        <input
-          type="email"
-          placeholder="Email"
-          className="p-3 bg-gray-800 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="p-3 bg-gray-800 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-        <button
-          type="submit"
-          className="px-6 py-3 bg-blue-600 rounded-md hover:bg-blue-700 transition  duration-200"
-        >
-          Sign In
-        </button>
-      </form>
-      <p className="mt-4 text-sm">
-        Don't have an account?{' '}
-        <a href="/sign-up" className="text-blue-400 hover:underline">
-          Sign Up
-        </a>
-      </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white flex items-center justify-center px-4">
+      <div className="bg-gray-800/60 backdrop-blur-md p-8 rounded-2xl w-full max-w-md shadow-xl border border-gray-700">
+        <h1 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Welcome Back
+        </h1>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="Email"
+            required
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-3 rounded-lg font-semibold shadow-md hover:shadow-xl transition-all duration-200"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-gray-400">
+          Don't have an account?{" "}
+          <Link
+            href="/sign-up"
+            className="text-blue-400 hover:underline hover:text-blue-300"
+          >
+            Sign Up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 } 

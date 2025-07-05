@@ -17,6 +17,7 @@ export interface LegalDocumentRequest {
   parties_info?: any;
   employment_info?: any;
   founders_info?: any;
+  company_info?: any;
   use_ai?: boolean;
   content_structure?: any;
 }
@@ -124,6 +125,38 @@ class ApiService {
 
   async createCDA(request: LegalDocumentRequest): Promise<Blob> {
     const response = await fetch(`${API_BASE_URL}/legal/create-cda`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.blob();
+  }
+
+  async createTermsOfService(request: LegalDocumentRequest): Promise<Blob> {
+    const response = await fetch(`${API_BASE_URL}/legal/create-terms-of-service`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.blob();
+  }
+
+  async createPrivacyPolicy(request: LegalDocumentRequest): Promise<Blob> {
+    const response = await fetch(`${API_BASE_URL}/legal/create-privacy-policy`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

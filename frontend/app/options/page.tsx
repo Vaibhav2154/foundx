@@ -11,7 +11,6 @@ export default function OptionsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
-      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-4 -left-4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-1/2 -right-4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -19,7 +18,6 @@ export default function OptionsPage() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
-        {/* Hero Section */}
         <div className={`text-center mb-16 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight">
             Choose Your Path
@@ -29,9 +27,7 @@ export default function OptionsPage() {
           </p>
         </div>
 
-        {/* Options Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl w-full">
-          {/* Experienced Founder Option */}
           <div className="group bg-gray-800/50 backdrop-blur-sm rounded-3xl border border-gray-700/50 p-8 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-[1.02]">
             <div className="text-center mb-8">
               <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:shadow-lg transition-all duration-300">
@@ -72,8 +68,6 @@ export default function OptionsPage() {
               <ArrowRight className="w-5 h-5 ml-2 group-hover/btn:translate-x-1 transition-transform" />
             </a>
           </div>
-
-          {/* First-time Entrepreneur Option */}
           <div className="group bg-gray-800/50 backdrop-blur-sm rounded-3xl border border-gray-700/50 p-8 hover:border-green-500/50 hover:shadow-2xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-[1.02]">
             <div className="text-center mb-8">
               <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:shadow-lg transition-all duration-300">
@@ -116,9 +110,13 @@ export default function OptionsPage() {
           </div>
         </div>
 
-        {/* Additional Info */}
         <div className="mt-12 text-center">
-          
+          <p className="text-sm text-gray-400 mb-4">
+            Not sure which path is right for you? Take our quick assessment to get personalized recommendations.
+          </p>
+          <button className="text-blue-400 hover:text-blue-300 underline text-sm transition-colors">
+            Take Assessment
+          </button>
         </div>
       </div>
     </div>

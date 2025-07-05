@@ -119,3 +119,55 @@ class LegalDocumentGenerator:
         except Exception as e:
             logger.error(f"Error creating founder agreement: {str(e)}")
             raise
+
+    def create_terms_of_service(self, content_structure: Dict[str, Any], output_path: str) -> str:
+        """Generate Terms of Service PDF document"""
+        try:
+            doc = SimpleDocTemplate(output_path, pagesize=letter)
+            story = []
+            
+            # Title  
+            story.append(Paragraph("TERMS OF SERVICE", self.title_style))
+            story.append(Spacer(1, 20))
+            
+            # Add content from structure
+            for section_key, section_content in content_structure.items():
+                if isinstance(section_content, dict):
+                    if 'title' in section_content:
+                        story.append(Paragraph(section_content['title'], self.heading_style))
+                    if 'content' in section_content:
+                        story.append(Paragraph(section_content['content'], self.styles['Normal']))
+                        story.append(Spacer(1, 12))
+            
+            doc.build(story)
+            return output_path
+            
+        except Exception as e:
+            logger.error(f"Error creating Terms of Service: {str(e)}")
+            raise
+
+    def create_privacy_policy(self, content_structure: Dict[str, Any], output_path: str) -> str:
+        """Generate Privacy Policy PDF document"""
+        try:
+            doc = SimpleDocTemplate(output_path, pagesize=letter)
+            story = []
+            
+            # Title  
+            story.append(Paragraph("PRIVACY POLICY", self.title_style))
+            story.append(Spacer(1, 20))
+            
+            # Add content from structure
+            for section_key, section_content in content_structure.items():
+                if isinstance(section_content, dict):
+                    if 'title' in section_content:
+                        story.append(Paragraph(section_content['title'], self.heading_style))
+                    if 'content' in section_content:
+                        story.append(Paragraph(section_content['content'], self.styles['Normal']))
+                        story.append(Spacer(1, 12))
+            
+            doc.build(story)
+            return output_path
+            
+        except Exception as e:
+            logger.error(f"Error creating Privacy Policy: {str(e)}")
+            raise

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import chatbot, presentations, legal
+from routers import chatbot, legal
 import uvicorn
 
 app = FastAPI(
@@ -18,7 +18,6 @@ app.add_middleware(
 )
 
 app.include_router(chatbot.router, prefix="/api/v1")
-app.include_router(presentations.router, prefix="/api/v1/presentations")
 app.include_router(legal.router, prefix="/api/v1/legal")
 
 @app.get("/")
@@ -28,7 +27,6 @@ def root():
         "version": "2.0.0",        
         "services": {
             "chatbot": "/api/v1/ask, /api/v1/explain, /api/v1/generate-content",
-            "presentations": "/api/v1/presentations/create-pitch-deck, /api/v1/presentations/create-business-plan",
             "legal": "/api/v1/legal/create-nda, /api/v1/legal/create-cda, /api/v1/legal/create-employment-agreement, /api/v1/legal/create-founder-agreement"
         }
     }

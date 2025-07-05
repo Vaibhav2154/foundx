@@ -15,9 +15,9 @@ export default function Navbar() {
               <a href="#features" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Features</a>
               <a href="#how-it-works" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">How it Works</a>
               <a href="#pricing" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Pricing</a>
-              <Link href="/options">
+              <Link href="/sign-up">
                 <button className="btn-primary">
-                  Get Started
+                  Sign Up
                 </button>
               </Link>
             </div>
