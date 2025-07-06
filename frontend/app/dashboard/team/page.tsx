@@ -16,10 +16,21 @@ export default function TeamPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch('/api/startup/team')
+    fetch('http://localhost:8000/api/v1/startups/getEmployees',{
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+       },
+      body: JSON.stringify({ companyName: localStorage.getItem('companyName') })
+    })
       .then(res => res.json())
       .then(data => {
-        if (data.success) setMembers(data.data);
+        console.log(data);
+        if (data.success && data.data && data.data.length > 0) {
+          // Extract employees from the nested structure
+          const employees = data.data[0].employees || [];
+          setMembers(employees);
+        }
       })
       .catch(() => alert('Failed to load team'));
   }, []);
@@ -28,7 +39,7 @@ export default function TeamPage() {
     if (!newEmail.trim()) return alert('Enter email');
     setLoading(true);
     try {
-      const res = await fetch('/api/startup/team/add', {
+      const res = await fetch('http://localhost:8000/api/v1/startups/addEmployee', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: newEmail })
@@ -48,10 +59,12 @@ export default function TeamPage() {
   async function remove(id: string) {
     if (!confirm('Remove this member?')) return;
     try {
-      const res = await fetch('/api/startup/team/remove', {
+      const res = await fetch('http://localhost:8000/api/v1/startups/removeEmployee', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ memberId: id })
+        headers: { 'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+       },
+        body: JSON.stringify({ employeeId: id })
       });
       const data = await res.json();
       if (res.ok) {
@@ -113,6 +126,9 @@ export default function TeamPage() {
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">{member.fullName}</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">{member.email}</p>
+                    {member.role && (
+                      <p className="text-xs text-slate-500 dark:text-slate-500 capitalize">{member.role}</p>
+                    )}
                   </div>
                   <button
                     onClick={() => remove(member._id)}

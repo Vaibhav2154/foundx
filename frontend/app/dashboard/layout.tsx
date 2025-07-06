@@ -5,11 +5,43 @@ import Link from 'next/link';
 import { Home, Rocket, Briefcase, CheckSquare, Users, Settings, Bell, User, MessageCircle, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+interface UserProfile {
+  name: string;
+  email?: string;
+  role?: string;
+  avatar?: string;
+  initials?: string;
+}
+
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+  user?: UserProfile;
+}
+
+export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+  // Default user fallback
+  
+  const currentUser = user || {
+    name: 'Guest User',
+    role: 'Member',
+    initials: 'GU'
+  };
+
+  // Generate initials from name if not provided
+  const getInitials = (name: string) => {
+    if (currentUser.initials) return currentUser.initials;
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   const navItems = [
     { href: '/dashboard', icon: Home, label: 'Overview', active: true },
-    { href: '/dashboard/startup', icon: Rocket, label: 'Startup' },
     { href: '/dashboard/projects', icon: Briefcase, label: 'Projects' },
     { href: '/dashboard/tasks', icon: CheckSquare, label: 'Tasks' },
     { href: '/dashboard/team', icon: Users, label: 'Team' },
@@ -33,7 +65,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 F
               </div>
             )}
-           </div>
+          </div>
           <nav className="flex-1 px-4">
             <ul className="space-y-2">
               {navItems.map((item) => (
@@ -55,11 +87,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="p-4 border-t border-gray-700/50">
               <div className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700/50 rounded-xl transition-all cursor-pointer">
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3 flex items-center justify-center">
-                  <User className="w-4 h-4 text-white" />
+                  {currentUser.avatar ? (
+                    <Image
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <span className="text-white text-sm font-semibold">
+                      {getInitials(currentUser.name)}
+                    </span>
+                  )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-white">John Doe</p>
-                  <p className="text-xs text-gray-400">Founder</p>
+                  <p className="text-sm font-medium text-white truncate">
+                    {currentUser.name}
+                  </p>
+                  <p className="text-xs text-gray-400 truncate">
+                    {currentUser.role || 'Member'}
+                  </p>
+                  {currentUser.email && (
+                    <p className="text-xs text-gray-500 truncate">
+                      {currentUser.email}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -79,7 +132,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </button>
               <div>
                 <h2 className="text-2xl font-bold text-white">Dashboard</h2>
-                <p className="text-gray-400 text-sm">Welcome back! Here's what's happening with your startup.</p>
+                <p className="text-gray-400 text-sm">
+                  Welcome back, {currentUser.name.split(' ')[0]}! Here's what's happening with your startup.
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-4">

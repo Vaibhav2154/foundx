@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -40,9 +41,9 @@ export default function SignInPage() {
 
       localStorage.setItem("authToken", data.data.token);
       localStorage.setItem("userId", data.data._id);
-
+      localStorage.setItem("user", JSON.stringify(data.data));
       alert("Sign-in successful!");
-      router.push("/dashboard/startup");
+      router.push("/startup");
     } catch (error) {
       console.error("Error during sign-in:", error);
       alert("An error occurred while signing in. Please try again.");
