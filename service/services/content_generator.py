@@ -1,5 +1,5 @@
 import google.generativeai as genai
-from typing import Dict, List, Optional, Any
+from typing import Dict, Any
 import os
 import logging
 import json
@@ -39,13 +39,28 @@ class ContentGeneratorService:
         try:
             response = await self.model.generate_content_async(prompt)
             logger.info(f"Gemini response received, length: {len(response.text) if response.text else 0}")
-            if response.text:
-                logger.debug(f"Gemini response preview: {response.text[:200]}...")
-            return response.text
+            
+            if not response.text:
+                logger.error("Empty response received from Gemini AI")
+                raise Exception("Empty response received from Gemini AI")
+            
+            # Clean the response text
+            response_text = response.text.strip()
+            logger.debug(f"Gemini response preview: {response_text[:200]}...")
+            
+            # Remove markdown code blocks if present
+            if response_text.startswith('```json'):
+                response_text = response_text[7:]
+            if response_text.startswith('```'):
+                response_text = response_text[3:]
+            if response_text.endswith('```'):
+                response_text = response_text[:-3]
+            
+            return response_text.strip()
         except Exception as e:
             logger.error(f"Error generating content with Gemini: {str(e)}")
             raise
-    
+
     async def generate_pitch_deck_content(self, business_info: Dict[str, Any]) -> Dict[str, Any]:
         """Generate comprehensive pitch deck content based on business information"""
         
@@ -64,6 +79,8 @@ class ContentGeneratorService:
         - Key Features: {business_info.get('key_features', 'N/A')}
         - Competitive Advantage: {business_info.get('competitive_advantage', 'N/A')}
 
+        IMPORTANT: You must return ONLY a valid JSON object with no additional text, comments, or markdown formatting. Do not include ```json or ``` markers.
+
         Generate a detailed pitch deck structure with the following slides. For each slide, provide compelling, professional content that would impress investors:
 
         1. Title Slide
@@ -77,7 +94,7 @@ class ContentGeneratorService:
         9. Funding Request
         10. Contact Information
 
-        Return the response in JSON format with the following structure:
+        Return the response as a valid JSON object with this exact structure:
         {{
             "title": {{
                 "company_name": "...",
@@ -152,13 +169,18 @@ class ContentGeneratorService:
         try:
             response = await self._generate_response(prompt)
             
-            content_structure = json.loads(response)
-            return content_structure
+            if not response:
+                logger.error("Empty response from AI for pitch deck content")
+                raise Exception("Empty response from AI")
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing JSON response: {str(e)}")
-            # Return a fallback structure if JSON parsing fails
-            return self._get_fallback_pitch_deck_content(business_info)
+            try:
+                content_structure = json.loads(response)
+                return content_structure
+            except json.JSONDecodeError as json_err:
+                logger.error(f"Error parsing JSON response: {str(json_err)}")
+                logger.error(f"Raw response: {response[:500]}...")
+                raise Exception(f"Invalid JSON response from AI: {str(json_err)}")
+            
         except Exception as e:
             logger.error(f"Error generating pitch deck content: {str(e)}")
             raise
@@ -202,6 +224,8 @@ class ContentGeneratorService:
         - Duration: {parties_info.get('duration', '2')} years
         - Governing Law: {parties_info.get('governing_law', 'India')}
 
+        IMPORTANT: You must return ONLY a valid JSON object with no additional text, comments, or markdown formatting. Do not include ```json or ``` markers.
+
         Generate a professional NDA with the following sections:
         1. Introduction and Parties
         2. Definition of Confidential Information
@@ -212,7 +236,7 @@ class ContentGeneratorService:
         7. Remedies
         8. General Provisions
 
-        Return the response in JSON format with the following structure:
+        Return the response as a valid JSON object with this exact structure:
         {{
             "document_title": "NON-DISCLOSURE AGREEMENT",
             "introduction": {{
@@ -254,12 +278,19 @@ class ContentGeneratorService:
         
         try:
             response = await self._generate_response(prompt)
-            content_structure = json.loads(response)
-            return content_structure
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing JSON response: {str(e)}")
-            raise
+            if not response:
+                logger.error("Empty response from AI for NDA content")
+                raise Exception("Empty response from AI")
+            
+            try:
+                content_structure = json.loads(response)
+                return content_structure
+            except json.JSONDecodeError as json_err:
+                logger.error(f"Error parsing JSON response: {str(json_err)}")
+                logger.error(f"Raw response: {response[:500]}...")
+                raise Exception(f"Invalid JSON response from AI: {str(json_err)}")
+            
         except Exception as e:
             logger.error(f"Error generating NDA content: {str(e)}")
             raise
@@ -281,7 +312,9 @@ class ContentGeneratorService:
         - Benefits: {employment_info.get('benefits', 'N/A')}
         - Location: {employment_info.get('location', 'N/A')}
 
-        Generate a professional employment agreement with standard employment terms. Return the response in JSON format with structured sections.
+        IMPORTANT: You must return ONLY a valid JSON object with no additional text, comments, or markdown formatting. Do not include ```json or ``` markers.
+
+        Generate a professional employment agreement with standard employment terms. Return the response as a valid JSON object with this exact structure:
 
         {{
             "document_title": "EMPLOYMENT AGREEMENT",
@@ -314,12 +347,19 @@ class ContentGeneratorService:
         
         try:
             response = await self._generate_response(prompt)
-            content_structure = json.loads(response)
-            return content_structure
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing JSON response: {str(e)}")
-            raise
+            if not response:
+                logger.error("Empty response from AI for employment agreement content")
+                raise Exception("Empty response from AI")
+            
+            try:
+                content_structure = json.loads(response)
+                return content_structure
+            except json.JSONDecodeError as json_err:
+                logger.error(f"Error parsing JSON response: {str(json_err)}")
+                logger.error(f"Raw response: {response[:500]}...")
+                raise Exception(f"Invalid JSON response from AI: {str(json_err)}")
+            
         except Exception as e:
             logger.error(f"Error generating employment agreement content: {str(e)}")
             raise
@@ -338,8 +378,11 @@ class ContentGeneratorService:
         - Vesting Schedule: {founders_info.get('vesting_schedule', 'N/A')}
         - Initial Investment: {founders_info.get('initial_investment', 'N/A')}
 
+        IMPORTANT: You must return ONLY a valid JSON object with no additional text, comments, or markdown formatting. Do not include ```json or ``` markers.
+
         Generate a professional founder agreement covering all essential aspects of a startup founder relationship.
 
+        Return the response as a valid JSON object with this exact structure:
         {{
             "document_title": "FOUNDER AGREEMENT",
             "company_formation": {{
@@ -379,12 +422,19 @@ class ContentGeneratorService:
         
         try:
             response = await self._generate_response(prompt)
-            content_structure = json.loads(response)
-            return content_structure
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing JSON response: {str(e)}")
-            raise
+            if not response:
+                logger.error("Empty response from AI for founder agreement content")
+                raise Exception("Empty response from AI")
+            
+            try:
+                content_structure = json.loads(response)
+                return content_structure
+            except json.JSONDecodeError as json_err:
+                logger.error(f"Error parsing JSON response: {str(json_err)}")
+                logger.error(f"Raw response: {response[:500]}...")
+                raise Exception(f"Invalid JSON response from AI: {str(json_err)}")
+            
         except Exception as e:
             logger.error(f"Error generating founder agreement content: {str(e)}")
             raise
@@ -403,9 +453,11 @@ class ContentGeneratorService:
         - Governing Law: {company_info.get('governing_law', 'India')}
         - Effective Date: {company_info.get('effective_date', 'N/A')}
 
+        IMPORTANT: You must return ONLY a valid JSON object with no additional text, comments, or markdown formatting. Do not include ```json or ``` markers.
+
         Generate professional Terms of Service that covers all essential legal protections for a digital service/platform.
 
-        Return the response in JSON format with the following structure:
+        Return the response as a valid JSON object with this exact structure:
         {{
             "document_title": "TERMS OF SERVICE",
             "introduction": {{
@@ -455,21 +507,19 @@ class ContentGeneratorService:
         
         try:
             response = await self._generate_response(prompt)
-            # Clean up the response to ensure it's valid JSON
-            response_text = response.strip()
-            if response_text.startswith('```json'):
-                response_text = response_text[7:]
-            if response_text.endswith('```'):
-                response_text = response_text[:-3]
-            response_text = response_text.strip()
             
-            content_structure = json.loads(response_text)
-            return content_structure
+            if not response:
+                logger.error("Empty response from AI for Terms of Service content")
+                raise Exception("Empty response from AI")
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing JSON response for Terms of Service: {str(e)}")
-            logger.error(f"Raw response: {response}")
-            raise
+            try:
+                content_structure = json.loads(response)
+                return content_structure
+            except json.JSONDecodeError as json_err:
+                logger.error(f"Error parsing JSON response for Terms of Service: {str(json_err)}")
+                logger.error(f"Raw response: {response[:500]}...")
+                raise Exception(f"Invalid JSON response from AI: {str(json_err)}")
+            
         except Exception as e:
             logger.error(f"Error generating Terms of Service content: {str(e)}")
             raise
@@ -490,9 +540,11 @@ class ContentGeneratorService:
         - Governing Law: {company_info.get('governing_law', 'India')}
         - Effective Date: {company_info.get('effective_date', 'N/A')}
 
+        IMPORTANT: You must return ONLY a valid JSON object with no additional text, comments, or markdown formatting. Do not include ```json or ``` markers.
+
         Generate a professional Privacy Policy that complies with major privacy regulations (GDPR, CCPA, etc.).
 
-        Return the response in JSON format with the following structure:
+        Return the response as a valid JSON object with this exact structure:
         {{
             "document_title": "PRIVACY POLICY",
             "introduction": {{
@@ -542,21 +594,19 @@ class ContentGeneratorService:
         
         try:
             response = await self._generate_response(prompt)
-            # Clean up the response to ensure it's valid JSON
-            response_text = response.strip()
-            if response_text.startswith('```json'):
-                response_text = response_text[7:]
-            if response_text.endswith('```'):
-                response_text = response_text[:-3]
-            response_text = response_text.strip()
             
-            content_structure = json.loads(response_text)
-            return content_structure
+            if not response:
+                logger.error("Empty response from AI for Privacy Policy content")
+                raise Exception("Empty response from AI")
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Error parsing JSON response for Privacy Policy: {str(e)}")
-            logger.error(f"Raw response: {response}")
-            raise
+            try:
+                content_structure = json.loads(response)
+                return content_structure
+            except json.JSONDecodeError as json_err:
+                logger.error(f"Error parsing JSON response for Privacy Policy: {str(json_err)}")
+                logger.error(f"Raw response: {response[:500]}...")
+                raise Exception(f"Invalid JSON response from AI: {str(json_err)}")
+            
         except Exception as e:
             logger.error(f"Error generating Privacy Policy content: {str(e)}")
             raise
