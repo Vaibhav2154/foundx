@@ -1,5 +1,3 @@
-# services/content_generator.py
-
 import google.generativeai as genai
 from typing import Dict, List, Optional, Any
 import os
@@ -27,7 +25,7 @@ class ContentGeneratorService:
         
         try:
             genai.configure(api_key=api_key)
-            self.model = genai.GenerativeModel('gemini-2.0-flash')
+            self.model = genai.GenerativeModel('gemini-2.5-flash')
             logger.info("Gemini AI configured successfully for content generation")
         except Exception as e:
             logger.error(f"Error configuring Gemini AI: {str(e)}")
@@ -40,6 +38,9 @@ class ContentGeneratorService:
         
         try:
             response = await self.model.generate_content_async(prompt)
+            logger.info(f"Gemini response received, length: {len(response.text) if response.text else 0}")
+            if response.text:
+                logger.debug(f"Gemini response preview: {response.text[:200]}...")
             return response.text
         except Exception as e:
             logger.error(f"Error generating content with Gemini: {str(e)}")
@@ -162,37 +163,46 @@ class ContentGeneratorService:
             logger.error(f"Error generating pitch deck content: {str(e)}")
             raise
     
-    async def generate_legal_document_content(self, document_type: str, parties_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate legal document content based on document type and parties information"""
-        
-        if document_type.lower() in ['nda', 'cda']:
-            return await self._generate_nda_cda_content(document_type, parties_info)
-        elif document_type.lower() == 'employment':
-            return await self._generate_employment_agreement_content(parties_info)
-        elif document_type.lower() == 'founder':
-            return await self._generate_founder_agreement_content(parties_info)
-        else:
-            raise ValueError(f"Unsupported document type: {document_type}")
-    
-    async def _generate_nda_cda_content(self, document_type: str, parties_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate NDA/CDA content"""
-        
-        doc_name = "Non-Disclosure Agreement" if document_type.lower() == 'nda' else "Confidentiality Disclosure Agreement"
+    async def generate_legal_document_content(self, document_type: str, document_info: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Main method to generate legal document content based on document type
+        """
+        try:
+            if document_type.lower() == "nda":
+                return await self._generate_nda_content(document_info)
+            elif document_type.lower() == "cda":
+                return await self._generate_nda_content(document_info)  # CDA uses similar structure to NDA
+            elif document_type.lower() == "employment":
+                return await self._generate_employment_agreement_content(document_info)
+            elif document_type.lower() == "founder":
+                return await self._generate_founder_agreement_content(document_info)
+            elif document_type.lower() == "terms_of_service":
+                return await self._generate_terms_of_service_content(document_info)
+            elif document_type.lower() == "privacy_policy":
+                return await self._generate_privacy_policy_content(document_info)
+            else:
+                raise ValueError(f"Unsupported document type: {document_type}")
+                
+        except Exception as e:
+            logger.error(f"Error generating {document_type} content: {str(e)}")
+            raise
+
+    async def _generate_nda_content(self, parties_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate NDA content using AI"""
         
         prompt = f"""
-        You are a legal expert specializing in business contracts. Generate a comprehensive {doc_name} based on the following information:
+        You are a legal expert specializing in confidentiality agreements. Generate a comprehensive Non-Disclosure Agreement (NDA) based on the following information:
 
-        Parties Information:
-        - Company Name: {parties_info.get('company_name', 'N/A')}
+        Party Information:
+        - Disclosing Party (Company): {parties_info.get('company_name', 'N/A')}
         - Company Address: {parties_info.get('company_address', 'N/A')}
-        - Other Party Name: {parties_info.get('other_party_name', 'N/A')}
-        - Other Party Address: {parties_info.get('other_party_address', 'N/A')}
+        - Receiving Party: {parties_info.get('other_party_name', 'N/A')}
+        - Receiving Party Address: {parties_info.get('other_party_address', 'N/A')}
         - Purpose: {parties_info.get('purpose', 'N/A')}
-        - Duration: {parties_info.get('duration', 'N/A')}
-        - Effective Date: {parties_info.get('effective_date', 'N/A')}
+        - Duration: {parties_info.get('duration', '2')} years
+        - Governing Law: {parties_info.get('governing_law', 'India')}
 
-        Generate a professional {doc_name} with the following sections. Ensure the content is legally sound and professional:
-
+        Generate a professional NDA with the following sections:
         1. Introduction and Parties
         2. Definition of Confidential Information
         3. Obligations of Receiving Party
@@ -204,38 +214,38 @@ class ContentGeneratorService:
 
         Return the response in JSON format with the following structure:
         {{
-            "document_title": "{doc_name.upper()}",
+            "document_title": "NON-DISCLOSURE AGREEMENT",
             "introduction": {{
                 "title": "Introduction and Parties",
-                "content": "Detailed introduction paragraph mentioning both parties and the purpose of the agreement..."
+                "content": "This Non-Disclosure Agreement (Agreement) is entered into on [DATE] between {parties_info.get('company_name', '[COMPANY]')} (Disclosing Party) and {parties_info.get('other_party_name', '[RECEIVING_PARTY]')} (Receiving Party) for the purpose of {parties_info.get('purpose', 'discussing potential business opportunities')}."
             }},
             "definitions": {{
                 "title": "Definition of Confidential Information", 
-                "content": "Comprehensive definition of what constitutes confidential information..."
+                "content": "For purposes of this Agreement, Confidential Information means any and all non-public, proprietary, or confidential information disclosed by the Disclosing Party..."
             }},
             "obligations": {{
                 "title": "Obligations of Receiving Party",
-                "content": "Detailed obligations and responsibilities of the receiving party..."
+                "content": "The Receiving Party agrees to hold and maintain the Confidential Information in strict confidence..."
             }},
             "permitted_disclosures": {{
                 "title": "Permitted Disclosures",
-                "content": "Circumstances under which disclosure is permitted..."
+                "content": "The obligations set forth in this Agreement shall not apply to information that..."
             }},
             "return_of_information": {{
                 "title": "Return of Information",
-                "content": "Requirements for returning confidential information..."
+                "content": "Upon termination of this Agreement or upon written request by the Disclosing Party..."
             }},
             "term_termination": {{
                 "title": "Term and Termination",
-                "content": "Duration of the agreement and termination conditions..."
+                "content": "This Agreement shall remain in effect for a period of {parties_info.get('duration', '2')} years from the date of execution..."
             }},
             "remedies": {{
                 "title": "Remedies",
-                "content": "Legal remedies available for breach of agreement..."
+                "content": "The Receiving Party acknowledges that any breach of this Agreement may cause irreparable harm..."
             }},
             "general_provisions": {{
                 "title": "General Provisions",
-                "content": "Governing law, jurisdiction, and other general terms..."
+                "content": "This Agreement shall be governed by the laws of {parties_info.get('governing_law', 'India')}..."
             }}
         }}
 
@@ -249,11 +259,11 @@ class ContentGeneratorService:
             
         except json.JSONDecodeError as e:
             logger.error(f"Error parsing JSON response: {str(e)}")
-            return self._get_fallback_nda_content(document_type, parties_info)
-        except Exception as e:
-            logger.error(f"Error generating {document_type} content: {str(e)}")
             raise
-    
+        except Exception as e:
+            logger.error(f"Error generating NDA content: {str(e)}")
+            raise
+
     async def _generate_employment_agreement_content(self, employment_info: Dict[str, Any]) -> Dict[str, Any]:
         """Generate employment agreement content"""
         
@@ -309,11 +319,11 @@ class ContentGeneratorService:
             
         except json.JSONDecodeError as e:
             logger.error(f"Error parsing JSON response: {str(e)}")
-            return self._get_fallback_employment_content(employment_info)
+            raise
         except Exception as e:
             logger.error(f"Error generating employment agreement content: {str(e)}")
             raise
-    
+
     async def _generate_founder_agreement_content(self, founders_info: Dict[str, Any]) -> Dict[str, Any]:
         """Generate founder agreement content"""
         
@@ -323,8 +333,8 @@ class ContentGeneratorService:
         Founders Information:
         - Company Name: {founders_info.get('company_name', 'N/A')}
         - Founders: {founders_info.get('founders', 'N/A')}
-        - Equity Split: {founders_info.get('equity_split', 'N/A')}
-        - Roles and Responsibilities: {founders_info.get('roles', 'N/A')}
+        - Equity Split: {founders_info.get('equity_distribution', 'N/A')}
+        - Roles and Responsibilities: {founders_info.get('roles_responsibilities', 'N/A')}
         - Vesting Schedule: {founders_info.get('vesting_schedule', 'N/A')}
         - Initial Investment: {founders_info.get('initial_investment', 'N/A')}
 
@@ -374,187 +384,348 @@ class ContentGeneratorService:
             
         except json.JSONDecodeError as e:
             logger.error(f"Error parsing JSON response: {str(e)}")
-            return self._get_fallback_founder_content(founders_info)
+            raise
         except Exception as e:
             logger.error(f"Error generating founder agreement content: {str(e)}")
             raise
-    
-    def _get_fallback_pitch_deck_content(self, business_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Fallback pitch deck content if AI generation fails"""
-        company_name = business_info.get('company_name', 'Your Company')
+
+    async def _generate_terms_of_service_content(self, company_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate Terms of Service content using AI"""
         
-        return {
-            "title": {
-                "company_name": company_name,
-                "tagline": f"Innovative solutions in {business_info.get('industry', 'technology')}",
-                "founders": business_info.get('founders', 'Founding Team')
-            },
-            "problem": {
-                "title": "Problem",
-                "main_problem": f"Current challenges in {business_info.get('industry', 'the market')}",
-                "pain_points": ["Market inefficiencies", "Customer pain points", "Existing solution gaps"],
-                "market_size_affected": "Large addressable market"
-            },
-            "solution": {
-                "title": "Solution",
-                "value_proposition": f"{company_name} provides innovative solutions",
-                "key_features": ["Feature 1", "Feature 2", "Feature 3"],
-                "unique_selling_points": ["Competitive advantage 1", "Competitive advantage 2"]
-            },
-            "market": {
-                "title": "Market Opportunity",
-                "total_addressable_market": "Large TAM",
-                "serviceable_addressable_market": "Significant SAM",
-                "target_market_description": business_info.get('target_market', 'Target customers'),
-                "market_trends": ["Growing market", "Digital transformation", "Industry trends"]
-            },
-            "business_model": {
-                "title": "Business Model",
-                "revenue_streams": ["Primary revenue", "Secondary revenue", "Future opportunities"],
-                "pricing_strategy": "Competitive pricing model",
-                "customer_acquisition": "Multi-channel acquisition strategy",
-                "key_partnerships": ["Strategic partner 1", "Strategic partner 2"]
-            },
-            "competition": {
-                "title": "Competition",
-                "main_competitors": ["Competitor 1", "Competitor 2", "Indirect competitors"],
-                "competitive_advantages": ["Our advantage 1", "Our advantage 2"],
-                "market_positioning": "Unique market position"
-            },
-            "team": {
-                "title": "Team",
-                "team_description": "Experienced team with domain expertise",
-                "key_team_members": ["Founder/CEO", "CTO", "Key team members"],
-                "advisors": ["Industry advisor", "Technical advisor"],
-                "hiring_plans": "Strategic hiring roadmap"
-            },
-            "financials": {
-                "title": "Financial Projections",
-                "revenue_projection": "Growing revenue trajectory",
-                "key_metrics": ["User growth", "Revenue growth", "Market penetration"],
-                "financial_highlights": ["Positive unit economics", "Scalable model"],
-                "break_even_timeline": "Path to profitability"
-            },
-            "funding": {
-                "title": "Funding Request",
-                "funding_amount": business_info.get('funding_amount', 'Seeking investment'),
-                "use_of_funds": ["Product development", "Marketing", "Team expansion"],
-                "milestones": ["6-month goals", "12-month goals", "18-month goals"],
-                "expected_roi": "Strong return potential"
-            },
-            "contact": {
-                "title": "Contact",
-                "contact_info": "Contact information",
-                "website": "www.company.com",
-                "social_media": "Social media handles",
-                "call_to_action": "Let's discuss partnership opportunities"
+        prompt = f"""
+        You are a legal expert specializing in technology and business law. Generate comprehensive Terms of Service based on the following information:
+
+        Company Information:
+        - Company Name: {company_info.get('company_name', 'N/A')}
+        - Website URL: {company_info.get('website_url', 'N/A')}
+        - Contact Email: {company_info.get('contact_email', 'N/A')}
+        - Service Description: {company_info.get('service_description', 'N/A')}
+        - Governing Law: {company_info.get('governing_law', 'India')}
+        - Effective Date: {company_info.get('effective_date', 'N/A')}
+
+        Generate professional Terms of Service that covers all essential legal protections for a digital service/platform.
+
+        Return the response in JSON format with the following structure:
+        {{
+            "document_title": "TERMS OF SERVICE",
+            "introduction": {{
+                "title": "1. Introduction and Acceptance",
+                "content": "These Terms of Service (Terms) govern your use of {company_info.get('company_name', '[COMPANY]')} services available at {company_info.get('website_url', '[WEBSITE]')}..."
+            }},
+            "service_description": {{
+                "title": "2. Service Description",
+                "content": "Our service provides {company_info.get('service_description', 'digital services')}..."
+            }},
+            "user_obligations": {{
+                "title": "3. User Obligations and Prohibited Uses",
+                "content": "By using our service, you agree to comply with all applicable laws and regulations..."
+            }},
+            "intellectual_property": {{
+                "title": "4. Intellectual Property Rights",
+                "content": "All content, features, and functionality of our service are owned by {company_info.get('company_name', '[COMPANY]')}..."
+            }},
+            "privacy_data": {{
+                "title": "5. Privacy and Data Protection",
+                "content": "Your privacy is important to us. Please review our Privacy Policy..."
+            }},
+            "payment_terms": {{
+                "title": "6. Payment Terms and Refunds",
+                "content": "If applicable, payment terms, billing cycles, and refund policies..."
+            }},
+            "limitation_liability": {{
+                "title": "7. Limitation of Liability",
+                "content": "To the maximum extent permitted by law, {company_info.get('company_name', '[COMPANY]')} shall not be liable for any indirect, incidental, special, consequential, or punitive damages..."
+            }},
+            "termination": {{
+                "title": "8. Termination",
+                "content": "We may terminate or suspend your access to our service immediately, without prior notice..."
+            }},
+            "dispute_resolution": {{
+                "title": "9. Dispute Resolution",
+                "content": "Any disputes arising from these Terms shall be resolved through binding arbitration under the laws of {company_info.get('governing_law', 'India')}..."
+            }},
+            "general_provisions": {{
+                "title": "10. General Provisions",
+                "content": "These Terms constitute the entire agreement between you and {company_info.get('company_name', '[COMPANY]')}. Contact us at {company_info.get('contact_email', '[EMAIL]')} for questions..."
+            }}
+        }}
+
+        Ensure all content is professional, legally comprehensive, and customized to the provided company information.
+        """
+        
+        try:
+            response = await self._generate_response(prompt)
+            # Clean up the response to ensure it's valid JSON
+            response_text = response.strip()
+            if response_text.startswith('```json'):
+                response_text = response_text[7:]
+            if response_text.endswith('```'):
+                response_text = response_text[:-3]
+            response_text = response_text.strip()
+            
+            content_structure = json.loads(response_text)
+            return content_structure
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing JSON response for Terms of Service: {str(e)}")
+            logger.error(f"Raw response: {response}")
+            raise
+        except Exception as e:
+            logger.error(f"Error generating Terms of Service content: {str(e)}")
+            raise
+
+    async def _generate_privacy_policy_content(self, company_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate Privacy Policy content using AI"""
+        
+        prompt = f"""
+        You are a legal expert specializing in privacy law and data protection. Generate a comprehensive Privacy Policy based on the following information:
+
+        Company Information:
+        - Company Name: {company_info.get('company_name', 'N/A')}
+        - Website URL: {company_info.get('website_url', 'N/A')}
+        - Contact Email: {company_info.get('contact_email', 'N/A')}
+        - Data Collection: {company_info.get('data_collection', 'N/A')}
+        - Data Usage: {company_info.get('data_usage', 'N/A')}
+        - Data Sharing: {company_info.get('data_sharing', 'N/A')}
+        - Governing Law: {company_info.get('governing_law', 'India')}
+        - Effective Date: {company_info.get('effective_date', 'N/A')}
+
+        Generate a professional Privacy Policy that complies with major privacy regulations (GDPR, CCPA, etc.).
+
+        Return the response in JSON format with the following structure:
+        {{
+            "document_title": "PRIVACY POLICY",
+            "introduction": {{
+                "title": "1. Introduction",
+                "content": "This Privacy Policy describes how {company_info.get('company_name', '[COMPANY]')} collects, uses, and protects your personal information when you use our services at {company_info.get('website_url', '[WEBSITE]')}..."
+            }},
+            "information_collected": {{
+                "title": "2. Information We Collect",
+                "content": "We collect information you provide directly to us, such as when you create an account, make a purchase, or contact us..."
+            }},
+            "how_we_use": {{
+                "title": "3. How We Use Your Information",
+                "content": "We use the information we collect for purposes including: {company_info.get('data_usage', 'providing and improving our services')}..."
+            }},
+            "information_sharing": {{
+                "title": "4. Information Sharing and Disclosure",
+                "content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy..."
+            }},
+            "data_security": {{
+                "title": "5. Data Security",
+                "content": "We implement appropriate technical and organizational measures to protect your personal information..."
+            }},
+            "your_rights": {{
+                "title": "6. Your Privacy Rights",
+                "content": "Depending on your location, you may have certain rights regarding your personal information, including the right to access, update, or delete your data..."
+            }},
+            "cookies_tracking": {{
+                "title": "7. Cookies and Tracking Technologies",
+                "content": "We use cookies and similar tracking technologies to enhance your experience on our website..."
+            }},
+            "children_privacy": {{
+                "title": "8. Children's Privacy",
+                "content": "Our services are not intended for children under 13 years of age. We do not knowingly collect personal information from children..."
+            }},
+            "policy_changes": {{
+                "title": "9. Changes to This Privacy Policy",
+                "content": "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page..."
+            }},
+            "contact_information": {{
+                "title": "10. Contact Information",
+                "content": "If you have any questions about this Privacy Policy, please contact us at {company_info.get('contact_email', '[EMAIL]')}..."
+            }}
+        }}
+
+        Ensure all content is professional, legally compliant, and customized to the provided company information.
+        """
+        
+        try:
+            response = await self._generate_response(prompt)
+            # Clean up the response to ensure it's valid JSON
+            response_text = response.strip()
+            if response_text.startswith('```json'):
+                response_text = response_text[7:]
+            if response_text.endswith('```'):
+                response_text = response_text[:-3]
+            response_text = response_text.strip()
+            
+            content_structure = json.loads(response_text)
+            return content_structure
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing JSON response for Privacy Policy: {str(e)}")
+            logger.error(f"Raw response: {response}")
+            raise
+        except Exception as e:
+            logger.error(f"Error generating Privacy Policy content: {str(e)}")
+            raise
+
+    def _get_fallback_content(self, document_type: str, document_info: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Provide fallback content when AI generation fails
+        """
+        if document_type.lower() in ["nda", "cda"]:
+            return self._get_fallback_nda_content(document_info)
+        elif document_type.lower() == "employment":
+            return self._get_fallback_employment_content(document_info)
+        elif document_type.lower() == "founder":
+            return self._get_fallback_founder_content(document_info)
+        elif document_type.lower() == "terms_of_service":
+            return self._get_fallback_terms_content(document_info)
+        elif document_type.lower() == "privacy_policy":
+            return self._get_fallback_privacy_content(document_info)
+        else:
+            # Generic fallback
+            return {
+                "document_title": f"{document_type.upper()} AGREEMENT",
+                "content": {
+                    "title": "Agreement",
+                    "content": "This is a standard legal agreement template. Please consult with a legal professional for proper customization."
+                }
             }
-        }
-    
-    def _get_fallback_nda_content(self, document_type: str, parties_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Fallback NDA/CDA content if AI generation fails"""
-        doc_title = "NON-DISCLOSURE AGREEMENT" if document_type.lower() == 'nda' else "CONFIDENTIALITY DISCLOSURE AGREEMENT"
+
+    def _get_fallback_nda_content(self, parties_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Fallback NDA content when AI generation fails"""
+        company_name = parties_info.get('company_name', '[COMPANY_NAME]')
+        other_party = parties_info.get('other_party_name', '[RECEIVING_PARTY]')
+        purpose = parties_info.get('purpose', 'discussing potential business opportunities')
+        duration = parties_info.get('duration', '2')
+        governing_law = parties_info.get('governing_law', 'India')
         
         return {
-            "document_title": doc_title,
+            "document_title": "NON-DISCLOSURE AGREEMENT",
             "introduction": {
                 "title": "Introduction and Parties",
-                "content": f"This {doc_title} is entered into between {parties_info.get('company_name', '[Company Name]')} and {parties_info.get('other_party_name', '[Other Party Name]')} for the purpose of {parties_info.get('purpose', '[Purpose]')}."
+                "content": f"This Non-Disclosure Agreement (Agreement) is entered into between {company_name} (Disclosing Party) and {other_party} (Receiving Party) for the purpose of {purpose}."
             },
             "definitions": {
                 "title": "Definition of Confidential Information",
-                "content": "Confidential Information includes all non-public, proprietary information disclosed by either party."
+                "content": "For purposes of this Agreement, Confidential Information means any and all non-public, proprietary, or confidential information disclosed by the Disclosing Party to the Receiving Party, whether orally, in writing, or in any other form."
             },
             "obligations": {
                 "title": "Obligations of Receiving Party",
-                "content": "The receiving party agrees to maintain confidentiality and use the information solely for the specified purpose."
+                "content": "The Receiving Party agrees to hold and maintain the Confidential Information in strict confidence and not to disclose such information to any third parties without prior written consent from the Disclosing Party."
             },
             "permitted_disclosures": {
                 "title": "Permitted Disclosures",
-                "content": "Information may be disclosed if required by law or if it becomes publicly available through no fault of the receiving party."
+                "content": "The obligations set forth in this Agreement shall not apply to information that: (a) is or becomes publicly available through no breach of this Agreement; (b) is rightfully received from a third party; or (c) is required to be disclosed by law."
             },
             "return_of_information": {
                 "title": "Return of Information",
-                "content": "All confidential materials must be returned or destroyed upon termination of this agreement."
+                "content": "Upon termination of this Agreement or upon written request by the Disclosing Party, the Receiving Party shall promptly return or destroy all Confidential Information and any copies thereof."
             },
             "term_termination": {
                 "title": "Term and Termination",
-                "content": f"This agreement shall remain in effect for {parties_info.get('duration', '[Duration]')} unless terminated earlier."
+                "content": f"This Agreement shall remain in effect for a period of {duration} years from the date of execution, unless terminated earlier by mutual consent of the parties."
             },
             "remedies": {
                 "title": "Remedies",
-                "content": "Breach of this agreement may result in irreparable harm, and the disclosing party may seek injunctive relief."
+                "content": "The Receiving Party acknowledges that any breach of this Agreement may cause irreparable harm to the Disclosing Party, for which monetary damages would be inadequate. Therefore, the Disclosing Party shall be entitled to seek injunctive relief."
             },
             "general_provisions": {
                 "title": "General Provisions",
-                "content": "This agreement shall be governed by applicable law and any disputes shall be resolved through appropriate legal channels."
+                "content": f"This Agreement shall be governed by the laws of {governing_law}. Any disputes arising under this Agreement shall be resolved through binding arbitration."
             }
         }
-    
+
     def _get_fallback_employment_content(self, employment_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Fallback employment agreement content if AI generation fails"""
+        """Fallback employment agreement content when AI generation fails"""
+        company_name = employment_info.get('company_name', '[COMPANY_NAME]')
+        employee_name = employment_info.get('employee_name', '[EMPLOYEE_NAME]')
+        position = employment_info.get('position', '[POSITION]')
+        salary = employment_info.get('salary', '[SALARY]')
+        
         return {
             "document_title": "EMPLOYMENT AGREEMENT",
             "parties_and_position": {
                 "title": "Parties and Position",
-                "content": f"Employment agreement between {employment_info.get('company_name', '[Company Name]')} and {employment_info.get('employee_name', '[Employee Name]')} for the position of {employment_info.get('position', '[Position]')}."
+                "content": f"This Employment Agreement is entered into between {company_name} (Company) and {employee_name} (Employee) for the position of {position}."
             },
             "duties_responsibilities": {
                 "title": "Duties and Responsibilities",
-                "content": f"Employee will perform duties as {employment_info.get('position', '[Position]')} in the {employment_info.get('department', '[Department]')} department."
+                "content": f"The Employee shall perform the duties and responsibilities associated with the position of {position} as directed by the Company's management."
             },
             "compensation_benefits": {
                 "title": "Compensation and Benefits",
-                "content": f"Annual salary of {employment_info.get('salary', '[Salary]')} plus benefits as outlined in company policy."
-            },
-            "confidentiality": {
-                "title": "Confidentiality",
-                "content": "Employee agrees to maintain confidentiality of all proprietary company information."
+                "content": f"The Employee shall receive an annual salary of {salary}, payable in accordance with the Company's standard payroll practices."
             },
             "termination": {
                 "title": "Termination",
-                "content": "Employment may be terminated by either party with appropriate notice as required by law."
+                "content": "This agreement may be terminated by either party with appropriate notice as required by applicable law."
             },
             "general_provisions": {
                 "title": "General Provisions",
-                "content": "This agreement is governed by applicable employment law and company policies."
+                "content": "This Agreement shall be governed by applicable employment laws and regulations."
             }
         }
-    
+
     def _get_fallback_founder_content(self, founders_info: Dict[str, Any]) -> Dict[str, Any]:
-        """Fallback founder agreement content if AI generation fails"""
+        """Fallback founder agreement content when AI generation fails"""
+        company_name = founders_info.get('company_name', '[COMPANY_NAME]')
+        
         return {
             "document_title": "FOUNDER AGREEMENT",
             "company_formation": {
                 "title": "Company Formation and Ownership",
-                "content": f"Agreement for {founders_info.get('company_name', '[Company Name]')} among the founding team."
+                "content": f"This Founder Agreement establishes the relationship between the founders of {company_name} and their respective ownership interests."
             },
             "equity_distribution": {
                 "title": "Equity Distribution",
-                "content": f"Equity will be distributed as follows: {founders_info.get('equity_split', '[Equity Split]')}."
+                "content": "The equity distribution among founders shall be as agreed upon and documented in the company's capitalization table."
             },
             "roles_responsibilities": {
                 "title": "Roles and Responsibilities",
-                "content": f"Founder roles and responsibilities: {founders_info.get('roles', '[Roles and Responsibilities]')}."
+                "content": "Each founder shall have specific roles and responsibilities as outlined in this agreement and as may be modified by mutual consent."
             },
             "vesting_provisions": {
                 "title": "Vesting Provisions",
-                "content": f"Equity vesting schedule: {founders_info.get('vesting_schedule', '[Vesting Schedule]')}."
+                "content": "Founder equity shall be subject to vesting schedules to ensure long-term commitment to the company's success."
             },
             "decision_making": {
                 "title": "Decision Making Process",
-                "content": "Major decisions require consensus among all founders."
+                "content": "Major business decisions shall be made collectively by the founders according to the voting procedures outlined herein."
             },
             "departure_provisions": {
                 "title": "Founder Departure",
-                "content": "Procedures for handling founder departure and equity treatment."
+                "content": "In the event a founder leaves the company, the remaining founders shall have the right to repurchase unvested equity."
             },
             "intellectual_property": {
                 "title": "Intellectual Property",
-                "content": "All IP developed for the company belongs to the company."
+                "content": "All intellectual property created by founders in connection with the company shall be assigned to the company."
             },
             "general_provisions": {
                 "title": "General Provisions",
-                "content": "This agreement is governed by applicable corporate law."
+                "content": "This Agreement shall be governed by applicable corporate law and shall be binding upon the parties and their successors."
+            }
+        }
+
+    def _get_fallback_pitch_deck_content(self, business_info: Dict[str, Any]) -> Dict[str, Any]:
+        """Fallback pitch deck content when AI generation fails"""
+        company_name = business_info.get('company_name', '[COMPANY_NAME]')
+        
+        return {
+            "title": {
+                "company_name": company_name,
+                "tagline": business_info.get('tagline', 'Revolutionizing the industry'),
+                "founders": business_info.get('founders', 'Founding Team')
+            },
+            "problem": {
+                "title": "Problem",
+                "main_problem": "There is a significant gap in the market that needs addressing.",
+                "pain_points": ["Current solutions are inadequate", "Market needs innovation", "Customers are underserved"],
+                "market_size_affected": "Large market segment affected"
+            },
+            "solution": {
+                "title": "Solution",
+                "value_proposition": f"{company_name} provides an innovative solution to address market needs.",
+                "key_features": ["Feature 1", "Feature 2", "Feature 3"],
+                "unique_selling_points": ["Unique advantage 1", "Unique advantage 2"]
+            },
+            "market": {
+                "title": "Market Opportunity",
+                "total_addressable_market": "$X Billion",
+                "serviceable_addressable_market": "$Y Million",
+                "target_market_description": "Our target market consists of..."
             }
         }

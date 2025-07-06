@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "FoundX - Simplify Your Startup Journey",
   description: "All-in-one platform for early-stage startup founders. Generate legal documents, manage teams, track projects, and get AI-powered startup guidance.",
+  icons: {
+    icon: '/logo2.png',
+  },
 };
 
 export default function RootLayout({
