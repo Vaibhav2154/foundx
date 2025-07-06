@@ -21,5 +21,5 @@ app.use(cookieParser());
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/startups',startUpRoutes);
 app.use('/api/v1/projects',projectRoutes);
-app.use('/api/v1/project',taskRoutes)
+app.use('/api/v1',taskRoutes)
 export default app;

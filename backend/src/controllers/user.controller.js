@@ -73,8 +73,13 @@ const loginUser = asyncHandler(async(req,res)=>{
     const userData = await User.findById(user._id).select(
         "-password -refreshToken"
     );
+    if(!userData){
+        throw new ApiError(500, "Something went wrong while logging in the user")
+    }
+    const cleanUser = userData.toObject();
+    
     return res.status(200).json(
-        new ApiResponse(200, { ...userData, token }, "User logged in Successfully")
+        new ApiResponse(200, { ...cleanUser, token }, "User logged in Successfully")
     );
 }
 )

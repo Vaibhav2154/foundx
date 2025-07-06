@@ -24,6 +24,12 @@ const createTask = asyncHandler(async(req,res)=>{
         projectId
     })
 
+    const project = await Project.findById(projectId);
+    if(!project){
+        throw new ApiError(404, "Project not found")
+    }   
+    project.tasks.push(task._id);
+    await project.save();
     if(!task){
         throw new ApiError(404,"Task not created")
     }
@@ -34,17 +40,55 @@ const createTask = asyncHandler(async(req,res)=>{
 
 })
 
+const getTasksByProject = asyncHandler(async(req,res)=>{
+    const {projectId} = req.params;
+    if(!projectId){
+        throw new ApiError(404, "Project Id not found")
+    }
+    const tasks = await Task.find({projectId: projectId}).populate("members", "fullName email username");
+    if(!tasks || tasks.length === 0){
+        throw new ApiError(404, "No tasks found for this project")
+    }
+    return res.status(200).json(
+        new ApiResponse(200, tasks, "Tasks retrieved successfully")
+    )
+})
+
+const getAllTasks = asyncHandler(async(req,res)=>{
+    const {startUpId} = req.body;
+    console.log("StartUp Id:", startUpId);
+    if(!startUpId){
+        throw new ApiError(404, "StartUp Id not found")
+    }
+    const projects = await Project.find({startUpId: startUpId}).select("_id title");
+    if(!projects || projects.length === 0){
+        throw new ApiError(404, "No projects found for this startup")
+    }
+    const projectIds = projects.map(project => project._id);
+    const tasks = await Task.find({projectId: {$in: projectIds}}).populate("members", "fullName email username");
+    if(!tasks || tasks.length === 0){
+        throw new ApiError(404, "No tasks found for this startup")
+    }
+    return res.status(200).json(
+        new ApiResponse(200, tasks, "Tasks retrieved successfully")
+    )
+})
 const assignMember = asyncHandler(async(req , res)=>{
-    console.log(req.body);
-    const {memberId, taskId} = req.body;
-    if(!memberId){
-        throw new ApiError(404, "Member Id not found");
+    
+    const {memberEmail, taskId} = req.body;
+    if(!memberEmail || !taskId){
+        throw new ApiError(400, "Member email and task id are required")
     }
     const task = await Task.findById(taskId);
     if(!task){
-        throw new ApiError(404, "Not found task")
+        throw new ApiError(404, "Proper task id is required");
     }
-    task.members.push(memberId);
+    const User = (await import("../models/user.models.js")).default;
+    const member = await User.findOne({ email: memberEmail });
+    if(!member){
+        throw new ApiError(404, "Member not found");
+    }
+    task.members.push(member._id);
     await task.save();
     return res.status(200).json(
         new ApiResponse(200, task, "Member addition completed")
@@ -52,19 +96,23 @@ const assignMember = asyncHandler(async(req , res)=>{
 })
 
 const deAssignMember = asyncHandler(async(req,res)=>{
-    const {memberId, taskId} = req.body;
-    if(!memberId){
-        throw new ApiError(400, "Member id is not specified")
+    const {memberEmail, taskId} = req.body;
+    if(!memberEmail || !taskId){
+        throw new ApiError(400, "Member email and task id are required")
     }
     const task = await Task.findById(taskId);
     if(!task){
         throw new ApiError(404, "Proper task id is required");
     }
-    task.members.pull(memberId);
+    const User = (await import("../models/user.models.js")).default;
+    const member = await User.findOne({ email: memberEmail });
+    if(!member){
+        throw new ApiError(404, "Member not found");
+    }
+    task.members = task.members.filter(memberId => memberId.toString() !== member._id.toString());
     await task.save();
-
     return res.status(200).json(
-        new ApiResponse(200, task, "Member deletion completed")
+        new ApiResponse(200, task, "Member de-assignment completed")
     )
 
 })
@@ -94,4 +142,4 @@ const updateTask = asyncHandler(async(req,res)=>{
 })
 
 
-export {createTask, assignMember, updateTask, deAssignMember}
+export {createTask, assignMember, updateTask, deAssignMember, getAllTasks,getTasksByProject}

@@ -1,8 +1,10 @@
 "use client";
-import Link from "next/link";
+
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignInPage() {
+  const router = useRouter();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -12,9 +14,39 @@ export default function SignInPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", form);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); 
+    if (!form.email || !form.password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/v1/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to sign in. Please try again.");
+      }
+
+      const data = await response.json();
+      console.log("Sign-in response:", data);
+
+      localStorage.setItem("authToken", data.data.token);
+      localStorage.setItem("userId", data.data._id);
+
+      alert("Sign-in successful!");
+      router.push("/dashboard/startup");
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      alert("An error occurred while signing in. Please try again.");
+    }
   };
 
   return (
@@ -65,4 +97,4 @@ export default function SignInPage() {
       </div>
     </div>
   );
-} 
+}
