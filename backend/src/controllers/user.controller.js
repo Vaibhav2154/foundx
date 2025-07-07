@@ -18,7 +18,7 @@ const registerUser = asyncHandler( async (req, res) => {
     }
 
     const existedUser = await User.findOne({
-        $or: [{ username }, { email }]
+        $or: [{ username: username.toLowerCase() }, { email: email.toLowerCase().trim() }]
     })
 
     if (existedUser) {
@@ -30,7 +30,7 @@ const registerUser = asyncHandler( async (req, res) => {
 
     const user = await User.create({
         fullName,
-        email, 
+        email: email.toLowerCase().trim(), 
         password,
         username: username.toLowerCase(),
         startUpId: startUpId ? startUpId : null //if startUpId is not provided, it will be null
@@ -58,17 +58,29 @@ const registerUser = asyncHandler( async (req, res) => {
 } )
 
 const loginUser = asyncHandler(async(req,res)=>{
+    console.log("Login attempt with:", req.body);
     const {email,password} = req.body;
     if(!email || !password){
         throw new ApiError(400, "email and password are required")
     }
-    const user = await User.findOne({email})
+    
+    // Convert email to lowercase to match the database schema
+    const normalizedEmail = email.toLowerCase().trim();
+    console.log("Searching for user with email:", normalizedEmail);
+    const user = await User.findOne({email: normalizedEmail});
+    console.log("Found user:", user ? "Yes" : "No");
+    
     if(!user){
+        console.log("User not found for email:", normalizedEmail);
         throw new ApiError(404,"User not found")
     }
-    else if(!await user.comparePassword(password)){
+    
+    const isPasswordValid = await user.comparePassword(password);
+    console.log("Password valid:", isPasswordValid);
+    if(!isPasswordValid){
         throw new ApiError(401,"Invalid email or password")
     }
+    
     const token = await user.generateAccessToken();
     const userData = await User.findById(user._id).select(
         "-password -refreshToken"
@@ -90,13 +102,13 @@ const logout = asyncHandler(async(req,res)=>{
     if(!userId){
         throw new ApiError(400, "unauthorized")
     }
-    const user  = User.findByIdAndUpdate(userId, {$unset:{refreshToken:1}})
+    await User.findByIdAndUpdate(userId, {$unset:{refreshToken:1}})
 
     res.clearCookie("accessToken")
     res.clearCookie("refreshToken")
 
     return res.status(200).json(
-        new ApiResponse(200, "logged out successfully")
+        new ApiResponse(200, {}, "logged out successfully")
     )
 })
 
