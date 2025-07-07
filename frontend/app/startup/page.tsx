@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Building2, Search, Users, Plus, CheckCircle, Zap, Eye, CreditCard, Lock, UserPlus } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Building2, Search, Users, Plus, CheckCircle, Zap, Eye, CreditCard, Lock, UserPlus, Star, ArrowRight, Sparkles, Shield, Target } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 type Employee = {
@@ -26,6 +26,12 @@ export default function StartupPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [startupData, setStartupData] = useState<Startup | null>(null);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('create');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   const handleCreateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCreateForm({ ...createForm, [e.target.name]: e.target.value });
@@ -213,27 +219,35 @@ export default function StartupPage() {
   };
 
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-transparent to-purple-50 dark:from-blue-900/20 dark:via-transparent dark:to-purple-900/20 opacity-50"></div>
-      <div className="relative max-w-7xl mx-auto">
-        <div className="max-w-4xl mx-auto space-y-12">
-          {/* Header */}
-          <div className="text-center">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8">
-              <Zap className="w-4 h-4 mr-2" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full opacity-20 animate-pulse delay-1000"></div>
+      </div>
+
+      <div className={`relative py-12 px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className="max-w-7xl mx-auto">
+          {/* Enhanced Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200/50 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
               Startup Management Hub
+              <Star className="w-4 h-4 ml-2 text-yellow-500" />
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
-              Manage Your 
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Startup</span>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight">
+              Build Your 
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient"> Dream Team</span>
             </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create, access, and manage your startup team all in one place. Build your organization and track your team members effortlessly.
+            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+              Create, manage, and scale your startup with powerful team collaboration tools. 
+              <span className="text-blue-600 dark:text-blue-400 font-semibold">Join thousands of successful startups</span> building the future.
             </p>
           </div>
 
-          {/* Create Startup */}
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Create Startup */}
+            <div id='create' className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
             <div className="flex items-center mb-6">
               <Plus className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Create a Startup</h2>
@@ -289,9 +303,7 @@ export default function StartupPage() {
               </button>
             </div>
           </div>
-
-          {/* Join Startup */}
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
+          <div id='join' className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
             <div className="flex items-center mb-6">
               <UserPlus className="w-6 h-6 text-orange-600 dark:text-orange-400 mr-3" />
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Join a Startup</h2>
@@ -348,7 +360,6 @@ export default function StartupPage() {
             </div>
           </div>
 
-          {/* Access Startup */}
           <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
             <div className="flex items-center mb-6">
               <Eye className="w-6 h-6 text-green-600 dark:text-green-400 mr-3" />
@@ -422,7 +433,6 @@ export default function StartupPage() {
             </div>
           </div>
 
-          {/* Get Employees */}
           <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
             <div className="flex items-center mb-6">
               <Users className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-3" />
@@ -481,8 +491,9 @@ export default function StartupPage() {
               )}
             </div>
           </div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

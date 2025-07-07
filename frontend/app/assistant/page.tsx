@@ -10,7 +10,6 @@ import {
   Users, 
   DollarSign,
   MessageSquare,
-  Clock,
   Sparkles,
   AlertCircle,
   Loader2,
@@ -145,34 +144,27 @@ const AIAssistant = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-blue-900">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Quick Start Cards */}
-          <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 p-6">
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 p-6 backdrop-blur-sm">
               <h3 className="flex items-center mb-6 font-bold text-gray-900 dark:text-white text-lg">
                 <Zap className="w-5 h-5 mr-2 text-blue-600" />
                 Quick Start
               </h3>
               
-              <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
+              <div className="space-y-3">
                 {quickPrompts.map((prompt, index) => {
                   const Icon = prompt.icon;
                   return (
                     <button
                       key={index}
                       onClick={() => handleSendMessage(prompt.prompt)}
-                      className={`p-4 text-left transition-all bg-gradient-to-br ${prompt.bgGradient} dark:from-slate-700 dark:to-slate-600 border border-gray-200 dark:border-slate-600 rounded-xl hover:shadow-lg hover:scale-105 group card-hover`}
+                      className={`w-full p-4 text-left transition-all bg-gradient-to-br ${prompt.bgGradient} dark:from-slate-700 dark:to-slate-600 border border-gray-200 dark:border-slate-600 rounded-xl hover:shadow-lg hover:scale-105 group card-hover`}
                     >
                       <div className="flex items-start">
-                        <div className={`p-2 mr-3 transition-all bg-gradient-to-r ${prompt.gradient} rounded-lg shadow-sm`}>
+                        <div className={`p-2 mr-3 transition-all bg-gradient-to-r ${prompt.gradient} rounded-lg shadow-sm shrink-0`}>
                           <Icon className="w-4 h-4 text-white" />
                         </div>
                         <div className="min-w-0 flex-1">
@@ -188,53 +180,78 @@ const AIAssistant = () => {
               {/* Stats */}
               <div className="mt-6 pt-6 border-t border-gray-200 dark:border-slate-600">
                 <div className="grid grid-cols-2 gap-4 text-center">
-                  <div>
+                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                     <div className="text-2xl font-bold text-blue-600">1000+</div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">Questions Answered</div>
                   </div>
-                  <div>
+                  <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <div className="text-2xl font-bold text-purple-600">24/7</div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">Always Available</div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Additional Info Card */}
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-700 rounded-xl p-6">
+              <div className="flex items-center mb-4">
+                <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg mr-3">
+                  <Star className="w-5 h-5 text-white" />
+                </div>
+                <h4 className="font-semibold text-green-900 dark:text-green-100">AI Powered</h4>
+              </div>
+              <p className="text-sm text-green-700 dark:text-green-200 mb-4">
+                Our AI is trained on the latest startup methodologies and industry best practices.
+              </p>
+              <div className="flex items-center text-sm text-green-600 dark:text-green-300">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Updated knowledge base
+              </div>
+            </div>
           </div>
 
           {/* Main Chat Area */}
           <div className="lg:col-span-3">
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+            <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden">
               {/* Chat Header */}
-              <div className="p-6 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-slate-700 dark:to-slate-600 border-b border-gray-200 dark:border-slate-600">
+              <div className="p-6 bg-gradient-to-r from-gray-50/80 to-blue-50/80 dark:from-slate-700/80 dark:to-slate-600/80 border-b border-gray-200 dark:border-slate-600 backdrop-blur-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className="p-3 mr-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl shadow-lg">
-                      <Bot className="w-6 h-6 text-white" />
+                    <div className="relative">
+                      <div className="p-3 mr-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl shadow-lg">
+                        <Bot className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-gray-900 dark:text-white">AI Assistant</h2>
-                      <p className="text-gray-600 dark:text-gray-300 text-sm">Ready to help with your startup questions</p>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm flex items-center">
+                        <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                        Online & Ready to help
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                      ))}
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2 bg-white dark:bg-slate-700 px-3 py-2 rounded-lg shadow-sm">
+                      <div className="flex items-center space-x-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">4.9</span>
                     </div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">4.9/5</span>
                   </div>
                 </div>
               </div>
 
               {/* Chat Messages */}
-              <div className="h-96 lg:h-[500px] p-6 space-y-6 overflow-y-auto chat-scroll bg-gradient-to-b from-gray-50/50 to-white dark:from-slate-800 dark:to-slate-800">
+              <div className="h-96 lg:h-[520px] p-6 space-y-6 overflow-y-auto chat-scroll bg-gradient-to-b from-gray-50/30 to-white/30 dark:from-slate-800/30 dark:to-slate-800/30">
                 {chatHistory.map((message, index) => (
                   <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} chat-message`}>
-                    <div className={`max-w-2xl ${
+                    <div className={`max-w-2xl relative ${
                       message.type === 'user' 
                         ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' 
-                        : 'bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 shadow-sm'
+                        : 'bg-white/90 dark:bg-slate-700/90 border border-gray-200 dark:border-slate-600 shadow-sm backdrop-blur-sm'
                     } rounded-2xl p-5`}>
                       {message.type === 'assistant' && (
                         <div className="flex items-center mb-3">
@@ -242,6 +259,13 @@ const AIAssistant = () => {
                             <Bot className="w-4 h-4 text-white" />
                           </div>
                           <span className="font-semibold text-gray-900 dark:text-white text-sm">AI Assistant</span>
+                          <div className="ml-auto">
+                            <div className="flex space-x-1">
+                              <button className="p-1 hover:bg-gray-100 dark:hover:bg-slate-600 rounded transition-colors">
+                                <Star className="w-3 h-3 text-gray-400 hover:text-yellow-500" />
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       )}
                       {message.type === 'user' ? (
@@ -251,32 +275,46 @@ const AIAssistant = () => {
                       ) : (
                         <MarkdownRenderer 
                           content={message.content} 
-                          className="text-sm prose-sm dark:prose-invert"
+                          className="text-sm prose-sm dark:prose-invert max-w-none"
                         />
                       )}
                       {message.type === 'assistant' && message.sources && message.sources.length > 0 && (
                         <div className="pt-3 mt-3 border-t border-gray-100 dark:border-slate-600">
-                          <div className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">Sources:</div>
+                          <div className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400 flex items-center">
+                            <FileText className="w-3 h-3 mr-1" />
+                            Sources:
+                          </div>
                           <div className="flex flex-wrap gap-2">
                             {message.sources.map((source, sourceIndex) => (
-                              <div key={sourceIndex} className="px-2 py-1 text-xs text-blue-600 dark:text-blue-400 rounded-lg bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700">
+                              <div key={sourceIndex} className="px-2 py-1 text-xs text-blue-600 dark:text-blue-400 rounded-lg bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-pointer">
                                 {source}
                               </div>
                             ))}
                           </div>
                         </div>
                       )}
-                      <div className={`text-xs mt-2 ${message.type === 'user' ? 'text-blue-200' : 'text-gray-500 dark:text-gray-400'}`}>
-                        {message.time}
+                      <div className={`text-xs mt-2 flex items-center justify-between ${message.type === 'user' ? 'text-blue-200' : 'text-gray-500 dark:text-gray-400'}`}>
+                        <span>{message.time}</span>
+                        {message.type === 'assistant' && (
+                          <div className="flex items-center space-x-2">
+                            <button className="hover:text-blue-600 transition-colors" title="Copy message">
+                              <ArrowRight className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-2xl p-5 shadow-sm">
-                      <div className="flex items-center space-x-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                    <div className="bg-white/90 dark:bg-slate-700/90 border border-gray-200 dark:border-slate-600 rounded-2xl p-5 shadow-sm backdrop-blur-sm">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                          <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                        </div>
                         <span className="text-sm text-gray-600 dark:text-gray-300">AI is thinking...</span>
                       </div>
                     </div>
@@ -285,15 +323,21 @@ const AIAssistant = () => {
               </div>
 
               {/* Message Input */}
-              <div className="p-6 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-600">
+              <div className="p-6 bg-white/95 dark:bg-slate-800/95 border-t border-gray-200 dark:border-slate-600 backdrop-blur-sm">
                 {error && (
-                  <div className="flex items-center p-4 mb-4 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 rounded-xl bg-red-50 dark:bg-red-900/20">
-                    <AlertCircle className="w-4 h-4 mr-2" />
+                  <div className="flex items-center p-4 mb-4 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-700 rounded-xl bg-red-50/80 dark:bg-red-900/20 backdrop-blur-sm">
+                    <AlertCircle className="w-4 h-4 mr-2 shrink-0" />
                     <span className="text-sm">{error}</span>
+                    <button 
+                      onClick={() => setError('')}
+                      className="ml-auto p-1 hover:bg-red-100 dark:hover:bg-red-800 rounded transition-colors"
+                    >
+                      ×
+                    </button>
                   </div>
                 )}
                 <div className="flex items-end space-x-4">
-                  <div className="flex-1">
+                  <div className="flex-1 relative">
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
@@ -304,26 +348,35 @@ const AIAssistant = () => {
                         }
                       }}
                       placeholder="Ask me anything about startups, legal matters, team building, funding strategies..."
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 text-gray-900 dark:text-white rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-slate-600 bg-gray-50/50 dark:bg-slate-700/50 text-gray-900 dark:text-white rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all backdrop-blur-sm placeholder:text-gray-500 dark:placeholder:text-gray-400"
                       rows={3}
                       disabled={isLoading}
                     />
+                    <div className="absolute bottom-3 right-3 text-xs text-gray-400 dark:text-gray-500">
+                      {message.length}/500
+                    </div>
                   </div>
                   <button
                     onClick={() => handleSendMessage()}
                     disabled={!message.trim() || isLoading}
-                    className="flex items-center p-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
+                    className="flex items-center p-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 disabled:from-gray-300 disabled:to-gray-400 shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed group"
                   >
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      <Send className="w-5 h-5" />
+                      <Send className="w-5 h-5 group-hover:transform group-hover:translate-x-0.5 transition-transform" />
                     )}
                   </button>
                 </div>
                 <div className="flex items-center justify-between mt-3 text-xs text-gray-500 dark:text-gray-400">
-                  <span>Press Enter to send, Shift + Enter for new line</span>
-                  <span>Powered by AI</span>
+                  <span className="flex items-center">
+                    <span className="hidden sm:inline">Press Enter to send, Shift + Enter for new line</span>
+                    <span className="sm:hidden">Enter to send</span>
+                  </span>
+                  <span className="flex items-center">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    Powered by AI
+                  </span>
                 </div>
               </div>
             </div>
