@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Home, Rocket, Briefcase, CheckSquare, Users, Settings, Bell, User, MessageCircle, Menu, X } from 'lucide-react';
 import Image from 'next/image';
@@ -20,18 +20,41 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  
-  // Default user fallback
-  
-  const currentUser = user || {
+  const [currentUser, setCurrentUser] = useState<UserProfile>({
     name: 'Guest User',
     role: 'Member',
     initials: 'GU'
-  };
+  });
+
+  // Get user from localStorage on component mount
+  useEffect(() => {
+    try {
+      const loggedUser = localStorage.getItem('user');
+      const userFromStorage = loggedUser ? JSON.parse(loggedUser) : null;
+      
+      // Priority: prop user > localStorage user > default user
+      const resolvedUser = user || userFromStorage || {
+        name: 'Guest User',
+        role: 'Member',
+        initials: 'GU'
+      };
+      
+      setCurrentUser(resolvedUser);
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      // Fall back to prop user or default
+      setCurrentUser(user || {
+        name: 'Guest User',
+        role: 'Member',
+        initials: 'GU'
+      });
+    }
+  }, [user]);
 
   // Generate initials from name if not provided
   const getInitials = (name: string) => {
     if (currentUser.initials) return currentUser.initials;
+    if (!name || typeof name !== 'string') return 'GU';
     return name
       .split(' ')
       .map(word => word.charAt(0))
@@ -133,7 +156,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
               <div>
                 <h2 className="text-2xl font-bold text-white">Dashboard</h2>
                 <p className="text-gray-400 text-sm">
-                  Welcome back, {currentUser.name.split(' ')[0]}! Here's what's happening with your startup.
+                  Welcome back, {currentUser.name?.split(' ')[0] || 'Guest'}! Here's what's happening with your startup.
                 </p>
               </div>
             </div>
