@@ -6,8 +6,20 @@ export const createProject = async (data: any) => {
 };
 
 export const getProjects = async () => {
-  const response = await api.get('/projects/');
-  return response.data;
+  const response = await fetch('http://localhost:8000/api/v1/projects/', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('authToken')}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch projects');
+  }
+
+  console.log(response)
+  return response.json();
 };
 
 export const deleteProject = async (projectId: string) => {

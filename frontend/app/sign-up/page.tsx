@@ -1,14 +1,18 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const [form, setForm] = useState({
-    name: "",
+    fullName:"",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -16,7 +20,42 @@ export default function SignUpPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add form validation and signup logic here
+    if(!form.fullName || !form.username || !form.email || !form.password || !form.confirmPassword) {
+      alert("Please fill in all fields.");  
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+    if (form.password.length < 6) {
+        alert("Password must be at least 6 characters long.");
+        return;
+      }
+    try{
+      const response = fetch("http://localhost:8000/api/v1/users/register",{
+        method:"POST",
+        headers:{
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form)
+    }).then(async res => {
+      if (!res.ok) {
+        throw new Error("Failed to register. Please try again.");
+      }
+      const data = await res.json();
+      console.log("Registration response:", data);
+     
+
+      console.log("User registered:", data.user);
+      alert("Registration successful!");
+      router.push("/sign-in");
+      return data;
+    })
+    }catch{
+      alert("An error occurred while submitting the form. Please try again.");
+      return;
+    }
     console.log("Form submitted:", form);
   };
 
@@ -30,10 +69,19 @@ export default function SignUpPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            name="name"
-            value={form.name}
+            name="fullName"
+            value={form.fullName}
             onChange={handleChange}
             placeholder="Name"
+            required
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="text"
+            name="username"
+            value={form.username}
+            onChange={handleChange}
+            placeholder="Username"
             required
             className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

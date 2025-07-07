@@ -80,7 +80,111 @@ const getEmployees = asyncHandler(async(req,res)=>{
     )
 })
 
+const addEmployee = asyncHandler(async(req,res)=>{
+    const {companyName, employeeId} = req.body;
+    if(!companyName || !employeeId){
+        throw new ApiError(400, "company name and employee ID are required")
+    }
+    const startUp = await StartUp.findOne({companyName:companyName})
+    if(!startUp){
+        throw new ApiError(404, "Startup not found")
+    }
+    if(startUp.employees.includes(employeeId)){
+        throw new ApiError(409, "Employee already added")
+    }
+    startUp.employees.push(employeeId)
+    await startUp.save()
+    return res.status(200).json(
+        new ApiResponse(200, startUp, "Employee added successfully")
+    )
+})
+
+const addEmployeeToStartUp = asyncHandler(async(req,res)=>{
+    const {email} = req.body;
+    if(!email){
+        throw new ApiError(400, "Email is required")
+    }
+    const User = (await import("../models/user.models.js")).default;
+    const user = await User.findOne({email:email}).select("-password -refreshToken");
+    if(!user){
+        throw new ApiError(404, "User not found")
+    }
+    const startUp = await StartUp.findById(user.startUpId);
+    if(!startUp){
+        throw new ApiError(404, "Startup not found for this user")  
+    }
+    if(startUp.employees.includes(user._id)){
+        throw new ApiError(409, "User is already an employee of this startup")
+    }
+    startUp.employees.push(user._id);
+    await startUp.save();
+    return res.status(200).json(
+        new ApiResponse(200, startUp, "User added as employee successfully")
+    )
+})
+const accessAndJoinStartUp = asyncHandler(async (req, res) => {
+  const { companyName, password } = req.body;
+
+  if (!companyName || !password) {
+    throw new ApiError(400, "Company name and password are required");
+  }
+
+  const startUp = await StartUp.findOne({ companyName });
+  if (!startUp) {
+    throw new ApiError(404, "Startup not found");
+  }
+
+  const isMatch = await startUp.comparePassword(password);
+  if (!isMatch) {
+    throw new ApiError(401, "Invalid password");
+  }
+
+  const userId = req.user._id;
+
+  if (!startUp.employees.includes(userId)) {
+    startUp.employees.push(userId);
+    await startUp.save();
+  }
+
+  const User = (await import("../models/user.models.js")).default;
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  user.startUpId = startUp._id;
+  await user.save();
+
+  return res.status(200).json(
+    new ApiResponse(200, startUp, "Access granted and user added as employee")
+  );
+});
+
+const removeEmployeeFromStartUp = asyncHandler(async (req, res) => {
+    const { employeeId} = req.body;
+    if(!employeeId){
+        throw new ApiError(400, "Employee ID is required")
+    }
+    const User = (await import("../models/user.models.js")).default;
+    const user = await User.findById(employeeId);
+    if(!user){
+        throw new ApiError(404, "User not found")
+    }
+    const startUp = await StartUp.findById(user.startUpId);
+    if(!startUp){
+        throw new ApiError(404, "Startup not found for this user")
+    }
+    if(!startUp.employees.includes(employeeId)){
+        throw new ApiError(404, "User is not an employee of this startup")
+    }
+    startUp.employees = startUp.employees.filter(emp => emp.toString() !== employeeId.toString());
+    await startUp.save();
+    user.startUpId = null;
+    await user.save();
+    return res.status(200).json(
+        new ApiResponse(200, startUp, "User removed from startup successfully")
+    )
+})
 
 
-
-export {createStartUp, getStartUp, getAccessStartUp, getEmployees};
+export {createStartUp, getStartUp, getAccessStartUp, getEmployees, addEmployee, accessAndJoinStartUp, addEmployeeToStartUp, removeEmployeeFromStartUp};

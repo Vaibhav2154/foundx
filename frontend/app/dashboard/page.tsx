@@ -15,46 +15,55 @@ import {
   Clock,
   FileText
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { getProjects } from '../../api/project';
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [stats, setStats] = useState({
-    totalProjects: 3,
-    totalMembers: 8,
-    totalTasks: 24,
-    completedTasks: 18,
-    revenue: 45000,
-    growth: 12.5
+    totalProjects: 0,
+    totalMembers: 0,
+    totalTasks: 0,
+    completedTasks: 0,
+    revenue: 0,
+    growth: 0
   });
-
   const [loading, setLoading] = useState(false);
-  const [activities, setActivities] = useState([
-    {
-      user: "Sarah Johnson",
-      action: "completed task",
-      entity: "User Authentication",
-      timestamp: new Date().toISOString(),
-      type: "success"
-    },
-    {
-      user: "Mike Chen",
-      action: "created project",
-      entity: "Mobile App MVP",
-      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-      type: "info"
-    },
-    {
-      user: "Emma Davis",
-      action: "joined team",
-      entity: "Design Team",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-      type: "success"
-    }
-  ]);
+  const [activities, setActivities] = useState<any[]>([]);
 
   useEffect(() => {
-    // Simulate loading
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
+    async function fetchDashboardData() {
+      setLoading(true);
+      try {
+      
+        const projects = await getProjects();
+        console.log(projects);
+        const totalProjects = projects?.data?.length || 0;
+        
+        let totalTasks = 0;
+        let completedTasks = 0;
+        let totalMembers = 0;
+        projects?.data?.forEach((project: any) => {
+          totalTasks += project.tasks?.length || 0;
+          completedTasks += (project.tasks?.filter((t: any) => t.status === 'completed').length) || 0;
+          totalMembers += project.members?.length || 0;
+        });
+        
+        setStats({
+          totalProjects,
+          totalMembers,
+          totalTasks,
+          completedTasks,
+          revenue: 45000, // TODO: Replace with real data if available
+          growth: 12.5    // TODO: Replace with real data if available
+        });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchDashboardData();
   }, []);
 
   const statCards = [
@@ -126,28 +135,28 @@ export default function DashboardPage() {
             </h3>
             <div className="space-y-3">
               <button
-                onClick={() => window.location.href = '/dashboard/projects'}
+                onClick={() => router.push('/dashboard/projects')}
                 className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
               >
                 <PlusCircle size={18} />
                 New Project
               </button>
               <button
-                onClick={() => window.location.href = '/dashboard/tasks'}
+                onClick={() => router.push('/dashboard/tasks')}
                 className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
               >
                 <PlusCircle size={18} />
                 New Task
               </button>
               <button
-                onClick={() => window.location.href = '/legal'}
+                onClick={() => router.push('/legal')}
                 className="w-full bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-700 hover:to-orange-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
               >
                 <FileText size={18} />
                 Legal Documents
               </button>
               <button
-                onClick={() => window.location.href = '/dashboard/team'}
+                onClick={() => router.push('/dashboard/team')}
                 className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
               >
                 <Users size={18} />
