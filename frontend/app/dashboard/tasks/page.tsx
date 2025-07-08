@@ -353,8 +353,8 @@ export default function TasksPage() {
                           <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                             <p className="font-medium">Members ({task.members.length}):</p>
                             <div className="ml-2 space-y-1">
-                              {task.members.map((member) => (
-                                <div key={member._id} className="text-slate-600 dark:text-slate-400">
+                              {task.members.map((member, index) => (
+                                <div key={member._id || `${member.email}-${index}`} className="text-slate-600 dark:text-slate-400">
                                   <span className="font-medium">{member.fullName}</span>
                                   <span className="text-slate-500 dark:text-slate-500"> ({member.email})</span>
                                   <span className="text-slate-400 dark:text-slate-500"> - @{member.username}</span>
