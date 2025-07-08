@@ -88,6 +88,10 @@ const assignMember = asyncHandler(async(req , res)=>{
     if(!member){
         throw new ApiError(404, "Member not found");
     }
+    if(task.members.includes(member._id)){
+        throw new ApiError(400, "Member is already assigned to this task");
+    }
+    
     task.members.push(member._id);
     await task.save();
     return res.status(200).json(
