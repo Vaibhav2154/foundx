@@ -1,3 +1,4 @@
+import re
 import google.generativeai as genai
 from typing import Dict, List, Optional, Any
 import os
@@ -358,22 +359,49 @@ class ChatbotRAGService:
         
         return "\n\n".join(relevant_docs) if relevant_docs else "No specific context found."
     
-    def _build_qa_prompt(self, question: str, context: str, additional_context: Optional[str] = None, 
-                        startup_type: Optional[str] = None) -> str:
-        """Build a prompt for Q&A"""
-        prompt = f"""You are a startup advisor with expertise in entrepreneurship, business development, and startup ecosystem.
+    import re
 
-Context from knowledge base:
-{context}
+    def _build_qa_prompt(
+        self,
+        question: str,
+        context: str,
+        additional_context: Optional[str] = None,
+        startup_type: Optional[str] = None
+    ) -> str:
+        """Build a dynamic prompt for startup advisory Q&A with adjustable response length based on question intent."""
 
-{f"Additional context: {additional_context}" if additional_context else ""}
-{f"Startup type: {startup_type}" if startup_type else ""}
+        # Define keywords that indicate a need for detailed explanations
+        detailed_keywords = ["explain", "describe", "elaborate", "analyze", "how", "why", "in detail"]
 
-Question: {question}
+        # Check if the question includes any detailed keywords
+        needs_detailed_response = any(re.search(rf"\b{kw}\b", question.lower()) for kw in detailed_keywords)
 
-Please provide a comprehensive, actionable response based on the context and your expertise."""
-        
+        prompt = (
+            "You are a highly experienced startup advisor with expertise in entrepreneurship, "
+            "business development, and the global startup ecosystem. Based on the following information, "
+        )
+
+        prompt += "provide a comprehensive, actionable response" if needs_detailed_response else "give a brief and to-the-point response"
+        prompt += " to the user's question.\n\n"
+
+        prompt += f"Primary Knowledge Context:\n{context.strip()}\n"
+
+        if additional_context:
+            prompt += f"\nAdditional Background Information:\n{additional_context.strip()}\n"
+
+        if startup_type:
+            prompt += f"\nStartup Type: {startup_type.strip()}\n"
+
+        prompt += f"\nUser Question:\n{question.strip()}\n\n"
+
+        prompt += (
+            "Respond in a detailed and structured manner using paragraphs or bullet points if necessary."
+            if needs_detailed_response else
+            "Respond concisely and avoid unnecessary elaboration. Give a 3 4 line response."
+        )
+
         return prompt
+
     
     def _build_explanation_prompt(self, clause: str, document_type: str, detail_level: str, legal_context: str) -> str:
         """Build prompt for clause explanation"""

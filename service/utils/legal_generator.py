@@ -5,6 +5,7 @@ This class needs to be created to handle legal document generation
 from typing import Dict, Any
 import logging
 from pathlib import Path
+from datetime import datetime
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -34,6 +35,26 @@ class LegalDocumentGenerator:
             spaceAfter=12,
             spaceBefore=12
         )
+        self.date_style = ParagraphStyle(
+            'DateStyle',
+            parent=self.styles['Normal'],
+            fontSize=10,
+            spaceBefore=10,
+            spaceAfter=20,
+            alignment=2  # Right alignment
+        )
+    
+    def _add_document_header(self, story, content_structure: Dict[str, Any], doc_title: str):
+        """Add document header with title and generation date"""
+        # Add title
+        story.append(Paragraph(doc_title, self.title_style))
+        
+        # Add generation date if available
+        if content_structure.get('document_date'):
+            date_text = f"Generated on: {content_structure.get('document_date')}"
+            story.append(Paragraph(date_text, self.date_style))
+        
+        story.append(Spacer(1, 20))
     
     def create_nda(self, content_structure: Dict[str, Any], output_path: str) -> str:
         """Generate NDA/CDA PDF document"""
@@ -43,12 +64,11 @@ class LegalDocumentGenerator:
             
             # Title - support both NDA and CDA
             doc_title = content_structure.get('document_title', 'NON-DISCLOSURE AGREEMENT')
-            story.append(Paragraph(doc_title, self.title_style))
-            story.append(Spacer(1, 20))
+            self._add_document_header(story, content_structure, doc_title)
             
             # Add content from structure
             for section_key, section_content in content_structure.items():
-                if isinstance(section_content, dict):
+                if isinstance(section_content, dict) and section_key not in ['document_date', 'document_datetime', 'generation_timestamp']:
                     if 'title' in section_content:
                         story.append(Paragraph(section_content['title'], self.heading_style))
                     if 'content' in section_content:
@@ -75,12 +95,11 @@ class LegalDocumentGenerator:
             story = []
             
             # Title
-            story.append(Paragraph("EMPLOYMENT AGREEMENT", self.title_style))
-            story.append(Spacer(1, 20))
+            self._add_document_header(story, content_structure, "EMPLOYMENT AGREEMENT")
             
             # Add content from structure
             for section_key, section_content in content_structure.items():
-                if isinstance(section_content, dict):
+                if isinstance(section_content, dict) and section_key not in ['document_date', 'document_datetime', 'generation_timestamp']:
                     if 'title' in section_content:
                         story.append(Paragraph(section_content['title'], self.heading_style))
                     if 'content' in section_content:
@@ -101,12 +120,11 @@ class LegalDocumentGenerator:
             story = []
             
             # Title  
-            story.append(Paragraph("FOUNDER AGREEMENT", self.title_style))
-            story.append(Spacer(1, 20))
+            self._add_document_header(story, content_structure, "FOUNDER AGREEMENT")
             
             # Add content from structure
             for section_key, section_content in content_structure.items():
-                if isinstance(section_content, dict):
+                if isinstance(section_content, dict) and section_key not in ['document_date', 'document_datetime', 'generation_timestamp']:
                     if 'title' in section_content:
                         story.append(Paragraph(section_content['title'], self.heading_style))
                     if 'content' in section_content:
@@ -127,12 +145,11 @@ class LegalDocumentGenerator:
             story = []
             
             # Title  
-            story.append(Paragraph("TERMS OF SERVICE", self.title_style))
-            story.append(Spacer(1, 20))
+            self._add_document_header(story, content_structure, "TERMS OF SERVICE")
             
             # Add content from structure
             for section_key, section_content in content_structure.items():
-                if isinstance(section_content, dict):
+                if isinstance(section_content, dict) and section_key not in ['document_date', 'document_datetime', 'generation_timestamp']:
                     if 'title' in section_content:
                         story.append(Paragraph(section_content['title'], self.heading_style))
                     if 'content' in section_content:
@@ -153,12 +170,11 @@ class LegalDocumentGenerator:
             story = []
             
             # Title  
-            story.append(Paragraph("PRIVACY POLICY", self.title_style))
-            story.append(Spacer(1, 20))
+            self._add_document_header(story, content_structure, "PRIVACY POLICY")
             
             # Add content from structure
             for section_key, section_content in content_structure.items():
-                if isinstance(section_content, dict):
+                if isinstance(section_content, dict) and section_key not in ['document_date', 'document_datetime', 'generation_timestamp']:
                     if 'title' in section_content:
                         story.append(Paragraph(section_content['title'], self.heading_style))
                     if 'content' in section_content:
