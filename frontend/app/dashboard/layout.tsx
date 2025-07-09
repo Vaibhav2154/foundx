@@ -161,9 +161,9 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-400 hover:text-white transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
+                <Link target='_blank' href="https://lakshya-brown.vercel.app/" className="p-2 text-gray-400 hover:text-white transition-colors">
+                <Briefcase className="w-5 h-5" />
+                </Link>
               <button className="p-2 text-gray-400 hover:text-white transition-colors">
                 <Settings className="w-5 h-5" />
               </button>
