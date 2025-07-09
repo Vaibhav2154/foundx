@@ -14,9 +14,9 @@ export const getProjects = async () => {
     }
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch projects');
-  }
+  //if (!response.ok) {
+    //throw new Error('Failed to fetch projects');
+  //}
 
   console.log(response)
   return response.json();

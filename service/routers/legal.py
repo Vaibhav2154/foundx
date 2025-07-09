@@ -47,6 +47,8 @@ class LegalDocumentResponse(BaseModel):
     file_type: str
     status: str
     ai_generated: bool = False
+    generation_date: Optional[str] = None
+    generation_datetime: Optional[str] = None
     message: Optional[str] = None
 
 @router.post("/create-nda")

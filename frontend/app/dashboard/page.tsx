@@ -149,7 +149,7 @@ export default function DashboardPage() {
                 New Task
               </button>
               <button
-                onClick={() => router.push('/legal')}
+                onClick={() => router.push('/dashboard/legal')}
                 className="w-full bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-700 hover:to-orange-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
               >
                 <FileText size={18} />

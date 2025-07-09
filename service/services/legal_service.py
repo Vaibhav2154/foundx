@@ -3,6 +3,7 @@
 from typing import Dict, Any
 import logging
 from pathlib import Path
+from datetime import datetime
 from utils.legal_generator import LegalDocumentGenerator
 from services.content_generator import ContentGeneratorService
 
@@ -19,6 +20,33 @@ class LegalService:
         self.output_dir = Path("generated_docs/legal")
         self.output_dir.mkdir(parents=True, exist_ok=True)
     
+    def _add_document_metadata(self, content_structure: Dict[str, Any]) -> Dict[str, Any]:
+        """Add current date and time metadata to document content"""
+        current_datetime = datetime.now()
+        formatted_date = current_datetime.strftime("%B %d, %Y")  # e.g., "January 15, 2024"
+        formatted_datetime = current_datetime.strftime("%B %d, %Y at %I:%M %p")  # e.g., "January 15, 2024 at 02:30 PM"
+        
+        # Add metadata to the content structure
+        metadata = {
+            "document_date": formatted_date,
+            "document_datetime": formatted_datetime,
+            "generation_timestamp": current_datetime.isoformat()
+        }
+        
+        # Replace [DATE] placeholders in all content
+        def replace_date_placeholders(obj):
+            if isinstance(obj, dict):
+                return {k: replace_date_placeholders(v) for k, v in obj.items()}
+            elif isinstance(obj, str):
+                return obj.replace("[DATE]", formatted_date).replace("[DATETIME]", formatted_datetime)
+            else:
+                return obj
+        
+        updated_content = replace_date_placeholders(content_structure)
+        updated_content.update(metadata)
+        
+        return updated_content
+    
     async def generate_nda(self, parties_info: Dict[str, Any], 
                           use_ai: bool = True) -> Dict[str, Any]:
         """Generate NDA document with optional AI content generation"""
@@ -34,6 +62,9 @@ class LegalService:
                 # Use provided content structure (fallback)
                 content_structure = parties_info.get('content_structure', {})
             
+            # Add current date and metadata
+            content_structure = self._add_document_metadata(content_structure)
+            
             file_path = self.legal_generator.create_nda(
                 content_structure,
                 str(self.output_dir / filename)
@@ -44,7 +75,9 @@ class LegalService:
                 "filename": filename,
                 "file_type": "application/pdf",
                 "status": "success",
-                "ai_generated": use_ai
+                "ai_generated": use_ai,
+                "generation_date": content_structure.get('document_date'),
+                "generation_datetime": content_structure.get('document_datetime')
             }
             
         except Exception as e:
@@ -66,6 +99,9 @@ class LegalService:
                 # Use provided content structure (fallback)
                 content_structure = parties_info.get('content_structure', {})
             
+            # Add metadata to content structure
+            content_structure = self._add_document_metadata(content_structure)
+            
             file_path = self.legal_generator.create_cda(
                 content_structure,
                 str(self.output_dir / filename)
@@ -76,7 +112,9 @@ class LegalService:
                 "filename": filename,
                 "file_type": "application/pdf",
                 "status": "success",
-                "ai_generated": use_ai
+                "ai_generated": use_ai,
+                "generation_date": content_structure.get('document_date'),
+                "generation_datetime": content_structure.get('document_datetime')
             }
             
         except Exception as e:
@@ -98,6 +136,9 @@ class LegalService:
                 # Use provided content structure (fallback)
                 content_structure = employment_info.get('content_structure', {})
             
+            # Add metadata to content structure
+            content_structure = self._add_document_metadata(content_structure)
+            
             file_path = self.legal_generator.create_employment_agreement(
                 content_structure,
                 str(self.output_dir / filename)
@@ -108,7 +149,9 @@ class LegalService:
                 "filename": filename,
                 "file_type": "application/pdf",
                 "status": "success",
-                "ai_generated": use_ai
+                "ai_generated": use_ai,
+                "generation_date": content_structure.get('document_date'),
+                "generation_datetime": content_structure.get('document_datetime')
             }
             
         except Exception as e:
@@ -130,6 +173,9 @@ class LegalService:
                 # Use provided content structure (fallback)
                 content_structure = founders_info.get('content_structure', {})
             
+            # Add metadata to content structure
+            content_structure = self._add_document_metadata(content_structure)
+            
             file_path = self.legal_generator.create_founder_agreement(
                 content_structure,
                 str(self.output_dir / filename)
@@ -140,7 +186,9 @@ class LegalService:
                 "filename": filename,
                 "file_type": "application/pdf",
                 "status": "success",
-                "ai_generated": use_ai
+                "ai_generated": use_ai,
+                "generation_date": content_structure.get('document_date'),
+                "generation_datetime": content_structure.get('document_datetime')
             }
             
         except Exception as e:
@@ -162,6 +210,9 @@ class LegalService:
                 # Use provided content structure (fallback)
                 content_structure = company_info.get('content_structure', {})
             
+            # Add metadata to content structure
+            content_structure = self._add_document_metadata(content_structure)
+            
             file_path = self.legal_generator.create_terms_of_service(
                 content_structure,
                 str(self.output_dir / filename)
@@ -172,7 +223,9 @@ class LegalService:
                 "filename": filename,
                 "file_type": "application/pdf",
                 "status": "success",
-                "ai_generated": use_ai
+                "ai_generated": use_ai,
+                "generation_date": content_structure.get('document_date'),
+                "generation_datetime": content_structure.get('document_datetime')
             }
             
         except Exception as e:
@@ -194,6 +247,9 @@ class LegalService:
                 # Use provided content structure (fallback)
                 content_structure = company_info.get('content_structure', {})
             
+            # Add metadata to content structure
+            content_structure = self._add_document_metadata(content_structure)
+            
             file_path = self.legal_generator.create_privacy_policy(
                 content_structure,
                 str(self.output_dir / filename)
@@ -204,7 +260,9 @@ class LegalService:
                 "filename": filename,
                 "file_type": "application/pdf",
                 "status": "success",
-                "ai_generated": use_ai
+                "ai_generated": use_ai,
+                "generation_date": content_structure.get('document_date'),
+                "generation_datetime": content_structure.get('document_datetime')
             }
             
         except Exception as e:
