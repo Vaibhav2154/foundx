@@ -8,14 +8,12 @@ import cors from 'cors';
 import ApiError from './utils/ApiError.js';
 
 const app = express();
-app.use(cors(
-    {
-        origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-        credentials: true, // Allow cookies to be sent with requests  ));
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    }
-));
+app.use(cors({
+    origin: '*',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+}));
 app.use(express.json({ limit: '16kb' }));
 app.use(urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
