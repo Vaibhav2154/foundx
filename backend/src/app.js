@@ -3,6 +3,7 @@ import userRoutes from './routes/user.routes.js';
 import startUpRoutes from './routes/startUp.routes.js';
 import projectRoutes from './routes/project.router.js';
 import taskRoutes from  './routes/task.route.js'
+import healthRoutes from './routes/health.routes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import ApiError from './utils/ApiError.js';
@@ -19,14 +20,21 @@ app.use(urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
 app.use(cookieParser());
 
-
-
+// Simple root health check
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'FoundX Backend API is running!',
+        status: 'OK',
+        timestamp: new Date().toISOString()
+    });
+});
 
 // Use the routes
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/startups',startUpRoutes);
 app.use('/api/v1/projects',projectRoutes);
 app.use('/api/v1',taskRoutes)
+app.use('/api/v1/health', healthRoutes);
 
 // Global error handling middleware
 app.use((error, req, res, next) => {
