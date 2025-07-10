@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Users, UserPlus, Eye, Edit, Trash2, Settings, ChevronDown, ChevronUp, Calendar, Clock, Target, Plus, X } from 'lucide-react';
+import { showError, showSuccess } from '@/utils/toast';
 
 interface Project {
   _id: string;
@@ -52,7 +53,7 @@ export default function ProjectsPage() {
 
   const fetchEmployees = () => {
     setEmployeesLoading(true);
-    fetch('http://localhost:8000/api/v1/startups/getEmployees', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/startups/getEmployees`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -68,7 +69,7 @@ export default function ProjectsPage() {
           setEmployees(employees);
         }
       })
-      .catch(() => alert('Failed to load team'))
+      .catch(() => showError('Failed to load team'))
       .finally(() => setEmployeesLoading(false));
   };
 
@@ -81,7 +82,7 @@ export default function ProjectsPage() {
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch('http://localhost:8000/api/v1/startups/getEmployees', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/startups/getEmployees`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export default function ProjectsPage() {
       }
     } catch (error) {
       console.error('Error fetching employees:', error);
-      alert('Error fetching employees');
+      showError('Error fetching employees');
       setEmployees([]);
     } finally {
       setEmployeesLoading(false);
@@ -112,7 +113,7 @@ export default function ProjectsPage() {
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch('http://localhost:8000/api/v1/projects/create', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/create`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -125,13 +126,13 @@ export default function ProjectsPage() {
       if (res.ok) {
         setProjects((prev) => [data.data, ...prev]);
         setForm({ name: '', description: '', startDate: '', endDate: '', status: 'not-started' });
-        alert('✅ Project created successfully!');
+        showSuccess('Project created successfully!');
       } else {
-        alert(data.message || 'Error creating project');
+        showError(data.message || 'Error creating project');
       }
     } catch (error) {
       console.error('Error creating project:', error);
-      alert('Server error while creating project');
+      showError('Server error while creating project');
     } finally {
       setLoading(false);
     }
@@ -142,7 +143,7 @@ export default function ProjectsPage() {
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch('http://localhost:8000/api/v1/projects/', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ export default function ProjectsPage() {
       }
     } catch (error) {
       console.error('Error fetching projects:', error);
-      alert('Error fetching projects');
+      showError('Error fetching projects');
       setProjects([]);
     }
   };
@@ -169,7 +170,7 @@ export default function ProjectsPage() {
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch(`http://localhost:8000/api/v1/projects/${projectId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${projectId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -181,11 +182,11 @@ export default function ProjectsPage() {
         setSelectedProject(data.data);
         setShowProjectDetails(true);
       } else {
-        alert(data.message || 'Error fetching project details');
+        showError(data.message || 'Error fetching project details');
       }
     } catch (error) {
       console.error('Error fetching project details:', error);
-      alert('Error fetching project details');
+      showError('Error fetching project details');
     }
   };
 
@@ -196,7 +197,7 @@ export default function ProjectsPage() {
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch(`http://localhost:8000/api/v1/projects/delete/${projectId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/delete/${projectId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -207,13 +208,13 @@ export default function ProjectsPage() {
       const data = await res.json();
       if (res.ok) {
         setProjects((prev) => prev.filter((project) => project._id !== projectId));
-        alert('✅ Project deleted successfully!');
+        showSuccess('Project deleted successfully!');
       } else {
-        alert(data.message || 'Error deleting project');
+        showError(data.message || 'Error deleting project');
       }
     } catch (error) {
       console.error('Error deleting project:', error);
-      alert('Server error while deleting project');
+      showError('Server error while deleting project');
     }
   };
 
@@ -224,7 +225,7 @@ export default function ProjectsPage() {
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch(`http://localhost:8000/api/v1/projects/update/${editingProject._id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/update/${editingProject._id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -247,27 +248,27 @@ export default function ProjectsPage() {
           )
         );
         setEditingProject(null);
-        alert('✅ Project updated successfully!');
+        showSuccess('Project updated successfully!');
       } else {
-        alert(data.message || 'Error updating project');
+        showError(data.message || 'Error updating project');
       }
     } catch (error) {
       console.error('Error updating project:', error);
-      alert('Server error while updating project');
+      showError('Server error while updating project');
     }
   };
 
   // Add Member to Project
   const addMemberToProject = async (projectId: string) => {
     if (!selectedEmployeeId) {
-      alert('Please select an employee');
+      showError('Please select an employee');
       return;
     }
 
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch('http://localhost:8000/api/v1/projects/addMembers', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/addMembers`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -288,13 +289,13 @@ export default function ProjectsPage() {
         );
         setSelectedEmployeeId('');
         setShowEmployeeDropdown(null);
-        alert('✅ Member added successfully!');
+        showSuccess('Member added successfully!');
       } else {
-        alert(data.message || 'Error adding member');
+        showError(data.message || 'Error adding member');
       }
     } catch (error) {
       console.error('Error adding member:', error);
-      alert('Server error while adding member');
+      showError('Server error while adding member');
     }
   };
 
@@ -305,7 +306,7 @@ export default function ProjectsPage() {
     try {
       const authToken = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
       
-      const res = await fetch('http://localhost:8000/api/v1/projects/removeMembers', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/removeMembers`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -324,13 +325,13 @@ export default function ProjectsPage() {
             project._id === projectId ? data.data : project
           )
         );
-        alert('✅ Member removed successfully!');
+        showSuccess('Member removed successfully!');
       } else {
-        alert(data.message || 'Error removing member');
+        showError(data.message || 'Error removing member');
       }
     } catch (error) {
       console.error('Error removing member:', error);
-      alert('Server error while removing member');
+      showError('Server error while removing member');
     }
   };
 

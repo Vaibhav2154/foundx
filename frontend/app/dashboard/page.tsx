@@ -57,8 +57,17 @@ export default function DashboardPage() {
           revenue: 45000, // TODO: Replace with real data if available
           growth: 12.5    // TODO: Replace with real data if available
         });
-      } catch (e) {
-        console.error(e);
+      } catch (e: any) {
+        console.error('Error fetching dashboard data:', e);
+        // Set default values in case of error
+        setStats({
+          totalProjects: 0,
+          totalMembers: 0,
+          totalTasks: 0,
+          completedTasks: 0,
+          revenue: 0,
+          growth: 0
+        });
       } finally {
         setLoading(false);
       }

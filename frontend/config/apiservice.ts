@@ -1,5 +1,4 @@
-// API configuration and service calls
-const API_BASE_URL = 'http://localhost:4000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_SERVICE_URL;
 
 export interface ChatMessage {
   question: string;
@@ -182,7 +181,7 @@ class ApiService {
 
   // Health check
   async healthCheck(): Promise<{ status: string; version: string }> {
-    const response = await fetch('http://localhost:8000/health');
+    const response = await fetch(`${API_BASE_URL}/health`);
     return await response.json();
   }
 }

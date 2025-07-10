@@ -1,25 +1,23 @@
 import api from '../config/api';
 
 export const createProject = async (data: any) => {
-  const response = await api.post('/projects/create', data);
-  return response.data;
+  try {
+    const response = await api.post('/projects/create', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating project:', error);
+    throw error;
+  }
 };
 
 export const getProjects = async () => {
-  const response = await fetch('http://localhost:8000/api/v1/projects/', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'authorization': `Bearer ${localStorage.getItem('authToken')}`
-    }
-  });
-
-  //if (!response.ok) {
-    //throw new Error('Failed to fetch projects');
-  //}
-
-  console.log(response)
-  return response.json();
+  try {
+    const response = await api.get('/projects/');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    throw error;
+  }
 };
 
 export const deleteProject = async (projectId: string) => {
