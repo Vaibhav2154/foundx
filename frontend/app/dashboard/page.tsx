@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { 
   Briefcase, 
   Users, 
@@ -11,260 +11,367 @@ import {
   Target,
   DollarSign,
   Activity,
-  ArrowUpRight,
   Clock,
-  FileText
+  FileText,
+  RefreshCw,
+  BarChart3,
+  PieChart,
+  Bell,
+  AlertCircle,
+  CheckCircle
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { getProjects } from '../../api/project';
+
+import { Card, CardHeader, CardContent, CardTitle } from '../../components/ui/Card';
+import { StatCard } from '../../components/ui/StatCard';
+import { ProgressBar } from '../../components/ui/ProgressBar';
+import { Button } from '../../components/ui/Button';
+import { ActivityFeed } from '../../components/ui/ActivityFeed';
+import { MetricCard } from '../../components/ui/MetricCard';
+import { SimpleBarChart, SimpleLineChart } from '../../components/ui/Charts';
+import { AnalyticsDashboard } from '../../components/ui/AnalyticsDashboard';
+import { PerformanceMetrics } from '../../components/ui/PerformanceMetrics';
+import { TeamStatus } from '../../components/ui/TeamStatus';
+import { useDashboard } from '../../hooks/useDashboard';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [stats, setStats] = useState({
-    totalProjects: 0,
-    totalMembers: 0,
-    totalTasks: 0,
-    completedTasks: 0,
-    revenue: 0,
-    growth: 0
-  });
-  const [loading, setLoading] = useState(false);
-  const [activities, setActivities] = useState<any[]>([]);
-
-  useEffect(() => {
-    async function fetchDashboardData() {
-      setLoading(true);
-      try {
-      
-        const projects = await getProjects();
-        console.log(projects);
-        const totalProjects = projects?.data?.length || 0;
-        
-        let totalTasks = 0;
-        let completedTasks = 0;
-        let totalMembers = 0;
-        projects?.data?.forEach((project: any) => {
-          totalTasks += project.tasks?.length || 0;
-          completedTasks += (project.tasks?.filter((t: any) => t.status === 'completed').length) || 0;
-          totalMembers += project.members?.length || 0;
-        });
-        
-        setStats({
-          totalProjects,
-          totalMembers,
-          totalTasks,
-          completedTasks,
-          revenue: 45000, // TODO: Replace with real data if available
-          growth: 12.5    // TODO: Replace with real data if available
-        });
-      } catch (e: any) {
-        console.error('Error fetching dashboard data:', e);
-        // Set default values in case of error
-        setStats({
-          totalProjects: 0,
-          totalMembers: 0,
-          totalTasks: 0,
-          completedTasks: 0,
-          revenue: 0,
-          growth: 0
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchDashboardData();
-  }, []);
+  const { stats, activities, chartData, loading, error, refresh } = useDashboard();
+  const [activeTab, setActiveTab] = useState('overview');
 
   const statCards = [
     {
       title: "Active Projects",
       value: stats.totalProjects,
-      icon: Briefcase,
-      color: "from-blue-500 to-blue-600",
+      icon: <Briefcase className="w-6 h-6" />,
+      gradient: "from-blue-500 to-blue-600",
       bgColor: "bg-blue-500/10",
-      change: "+2 this month"
+      change: {
+        value: "+2 this month",
+        trend: "up" as const,
+        period: "month"
+      }
     },
     {
       title: "Team Members",
       value: stats.totalMembers,
-      icon: Users,
-      color: "from-green-500 to-green-600",
+      icon: <Users className="w-6 h-6" />,
+      gradient: "from-green-500 to-green-600",
       bgColor: "bg-green-500/10",
-      change: "+3 this month"
+      change: {
+        value: "+3 this month",
+        trend: "up" as const,
+        period: "month"
+      }
     },
     {
       title: "Total Tasks",
       value: stats.totalTasks,
-      icon: ClipboardList,
-      color: "from-purple-500 to-purple-600",
+      icon: <ClipboardList className="w-6 h-6" />,
+      gradient: "from-purple-500 to-purple-600",
       bgColor: "bg-purple-500/10",
-      change: `${stats.completedTasks} completed`
+      change: {
+        value: `${stats.completedTasks} completed`,
+        trend: "neutral" as const
+      }
     },
     {
       title: "Monthly Revenue",
       value: `$${stats.revenue.toLocaleString()}`,
-      icon: DollarSign,
-      color: "from-yellow-500 to-yellow-600",
+      icon: <DollarSign className="w-6 h-6" />,
+      gradient: "from-yellow-500 to-yellow-600",
       bgColor: "bg-yellow-500/10",
-      change: `+${stats.growth}% growth`
+      change: {
+        value: `+${stats.growth}% growth`,
+        trend: "up" as const,
+        period: "month"
+      }
     }
   ];
 
+  const quickActions = [
+    {
+      label: "New Project",
+      icon: <PlusCircle size={18} />,
+      variant: "primary" as const,
+      onClick: () => router.push('/dashboard/projects')
+    },
+    {
+      label: "New Task", 
+      icon: <PlusCircle size={18} />,
+      variant: "success" as const,
+      onClick: () => router.push('/dashboard/tasks')
+    },
+    {
+      label: "Legal Documents",
+      icon: <FileText size={18} />,
+      variant: "warning" as const,
+      onClick: () => router.push('/dashboard/legal')
+    },
+    {
+      label: "Invite Member",
+      icon: <Users size={18} />,
+      variant: "secondary" as const,
+      onClick: () => router.push('/dashboard/team')
+    }
+  ];
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-96">
+        <Card className="p-8 text-center">
+          <div className="text-red-400 mb-4">
+            <AlertCircle className="w-16 h-16 mx-auto" />
+          </div>
+          <h3 className="text-white text-lg font-semibold mb-2">Error Loading Dashboard</h3>
+          <p className="text-gray-400 mb-4">{error}</p>
+          <Button onClick={refresh} icon={<RefreshCw size={18} />}>
+            Try Again
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, index) => (
-          <div
+          <StatCard
             key={index}
-            className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 group"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl ${card.bgColor}`}>
-                <card.icon className={`w-6 h-6 bg-gradient-to-r ${card.color} bg-clip-text text-transparent`} />
-              </div>
-              <ArrowUpRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
-            </div>
-            <div>
-              <p className="text-gray-400 text-sm font-medium">{card.title}</p>
-              <p className="text-2xl font-bold text-white mb-1">
-                {loading ? '...' : card.value}
-              </p>
-              <p className="text-xs text-gray-500">{card.change}</p>
-            </div>
-          </div>
+            title={card.title}
+            value={card.value}
+            icon={card.icon}
+            gradient={card.gradient}
+            bgColor={card.bgColor}
+            change={card.change}
+            loading={loading}
+          />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1">
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <Target className="w-5 h-5 mr-2 text-blue-400" />
-              Quick Actions
-            </h3>
-            <div className="space-y-3">
-              <button
-                onClick={() => router.push('/dashboard/projects')}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
-              >
-                <PlusCircle size={18} />
-                New Project
-              </button>
-              <button
-                onClick={() => router.push('/dashboard/tasks')}
-                className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
-              >
-                <PlusCircle size={18} />
-                New Task
-              </button>
-              <button
-                onClick={() => router.push('/dashboard/legal')}
-                className="w-full bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-700 hover:to-orange-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
-              >
-                <FileText size={18} />
-                Legal Documents
-              </button>
-              <button
-                onClick={() => router.push('/dashboard/team')}
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
-              >
-                <Users size={18} />
-                Invite Member
-              </button>
+      <div className="flex space-x-1 bg-gray-800/50 p-1 rounded-xl border border-gray-700/50">
+        {[
+          { id: 'overview', label: 'Overview', icon: <BarChart3 size={16} /> },
+          { id: 'analytics', label: 'Analytics', icon: <PieChart size={16} /> },
+          { id: 'activity', label: 'Activity', icon: <Activity size={16} /> }
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              activeTab === tab.id
+                ? 'bg-blue-600 text-white shadow-lg'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+            }`}
+          >
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === 'overview' && (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Left Column - Quick Actions & Progress */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle icon={<Target className="w-5 h-5 text-blue-400" />}>
+                  Quick Actions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {quickActions.map((action, index) => (
+                    <Button
+                      key={index}
+                      variant={action.variant}
+                      onClick={action.onClick}
+                      icon={action.icon}
+                      className="w-full"
+                    >
+                      {action.label}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle icon={<TrendingUp className="w-5 h-5 text-green-400" />}>
+                  Progress Overview
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <ProgressBar
+                    value={stats.completedTasks}
+                    max={stats.totalTasks}
+                    label="Tasks Completed"
+                    showLabel={true}
+                  />
+                  <ProgressBar
+                    value={stats.productivity}
+                    max={100}
+                    label="Team Productivity"
+                    showLabel={true}
+                  />
+                  <ProgressBar
+                    value={75}
+                    max={100}
+                    label="Monthly Goal"
+                    showLabel={true}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-1 gap-3">
+              <MetricCard
+                title="Completed Projects"
+                value={stats.completedProjects}
+                icon={<CheckCircle className="w-5 h-5 text-green-400" />}
+                change={{ value: "+2", isPositive: true }}
+              />
+              <MetricCard
+                title="Active Projects"
+                value={stats.activeProjects}
+                icon={<Clock className="w-5 h-5 text-yellow-400" />}
+                change={{ value: "+1", isPositive: true }}
+              />
             </div>
           </div>
 
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 mt-6">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <TrendingUp className="w-5 h-5 mr-2 text-green-400" />
-              Progress Overview
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Tasks Completed</span>
-                  <span className="text-white">{stats.completedTasks}/{stats.totalTasks}</span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(stats.completedTasks / stats.totalTasks) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Monthly Goal</span>
-                  <span className="text-white">75%</span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full w-3/4 transition-all duration-300"></div>
-                </div>
-              </div>
-            </div>
+          <div className="space-y-6">
+            <TeamStatus />
+            
+            <Card>
+              <CardHeader>
+                <CardTitle icon={<BarChart3 className="w-5 h-5 text-purple-400" />}>
+                  Quick Stats
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <SimpleBarChart 
+                  data={chartData.projectsChart.slice(0, 3)}
+                  title=""
+                  height={200}
+                />
+              </CardContent>
+            </Card>
           </div>
-        </div>
 
-        <div className="lg:col-span-2">
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <Activity className="w-5 h-5 mr-2 text-purple-400" />
-              Recent Activity
-            </h3>
-            {activities.length === 0 ? (
-              <p className="text-gray-400 text-sm text-center py-8">No recent activity found.</p>
-            ) : (
-              <div className="space-y-4">
-                {activities.map((activity, index) => (
-                  <div key={index} className="flex items-start gap-4 p-4 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
-                    <div className={`w-2 h-2 rounded-full mt-2 ${
-                      activity.type === 'success' ? 'bg-green-400' : 
-                      activity.type === 'info' ? 'bg-blue-400' : 'bg-gray-400'
-                    }`}></div>
-                    <div className="flex-1">
-                      <p className="text-white text-sm">
-                        <strong>{activity.user}</strong> {activity.action} on{' '}
-                        <span className="text-blue-400">{activity.entity}</span>
-                      </p>
-                      <p className="text-gray-400 text-xs flex items-center mt-1">
-                        <Clock className="w-3 h-3 mr-1" />
-                        {new Date(activity.timestamp).toLocaleString()}
-                      </p>
+          <div className="lg:col-span-2 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle icon={<Activity className="w-5 h-5 text-purple-400" />}>
+                  Recent Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ActivityFeed activities={activities} loading={loading} />
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle icon={<Calendar className="w-5 h-5 text-yellow-400" />}>
+                    Upcoming Events
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
+                      <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
+                        Dec<br/>15
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-white font-medium">Product Demo</p>
+                        <p className="text-gray-400 text-sm">2:00 PM - 3:30 PM</p>
+                      </div>
+                      <Button size="sm" variant="secondary">
+                        <Bell size={14} />
+                      </Button>
+                    </div>
+                    <div className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
+                      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
+                        Dec<br/>18
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-white font-medium">Sprint Planning</p>
+                        <p className="text-gray-400 text-sm">10:00 AM - 12:00 PM</p>
+                      </div>
+                      <Button size="sm" variant="secondary">
+                        <Bell size={14} />
+                      </Button>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                </CardContent>
+              </Card>
 
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 mt-6">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <Calendar className="w-5 h-5 mr-2 text-yellow-400" />
-              Upcoming Events
-            </h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl">
-                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
-                  Dec<br/>15
-                </div>
-                <div>
-                  <p className="text-white font-medium">Product Demo Meeting</p>
-                  <p className="text-gray-400 text-sm">2:00 PM - 3:30 PM</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
-                  Dec<br/>18
-                </div>
-                <div>
-                  <p className="text-white font-medium">Sprint Planning</p>
-                  <p className="text-gray-400 text-sm">10:00 AM - 12:00 PM</p>
-                </div>
-              </div>
+              <PerformanceMetrics />
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {activeTab === 'analytics' && (
+        <div className="space-y-6">
+          <AnalyticsDashboard />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SimpleBarChart 
+              data={chartData.projectsChart}
+              title="Projects by Status"
+              height={250}
+            />
+            <SimpleBarChart 
+              data={chartData.tasksChart}
+              title="Tasks by Status"
+              height={250}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <SimpleLineChart 
+                data={chartData.productivityChart}
+                title="Weekly Productivity Trend"
+                height={300}
+              />
+            </div>
+            <PerformanceMetrics />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SimpleLineChart 
+              data={chartData.monthlyProgress}
+              title="Monthly Progress"
+              height={250}
+            />
+            <TeamStatus />
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'activity' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle icon={<Activity className="w-5 h-5 text-purple-400" />}>
+                All Recent Activity
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ActivityFeed activities={activities} loading={loading} />
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

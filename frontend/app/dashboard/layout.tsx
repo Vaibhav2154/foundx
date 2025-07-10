@@ -2,8 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Home, Rocket, Briefcase, CheckSquare, Users, Settings, Bell, User, MessageCircle, Menu, X } from 'lucide-react';
+import { Home, Rocket, Briefcase, CheckSquare, Users, Settings, Bell, User, MessageCircle, Menu, X, Search } from 'lucide-react';
 import Image from 'next/image';
+import { NotificationCenter } from '../../components/ui/NotificationCenter';
+import { CommandPalette } from '../../components/ui/CommandPalette';
+import { useRouter } from 'next/navigation';
 
 interface UserProfile {
   name: string;
@@ -20,11 +23,26 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children, user }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const router = useRouter();
   const [currentUser, setCurrentUser] = useState<UserProfile>({
     name: 'Guest User',
     role: 'Member',
     initials: 'GU'
   });
+
+  // Add keyboard shortcut for command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Get user from localStorage on component mount
   useEffect(() => {
@@ -68,6 +86,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
     { href: '/dashboard/projects', icon: Briefcase, label: 'Projects' },
     { href: '/dashboard/tasks', icon: CheckSquare, label: 'Tasks' },
     { href: '/dashboard/team', icon: Users, label: 'Team' },
+    { href: '/dashboard/legal', icon: Settings, label: 'Legal' },
   ];
 
   return (
@@ -144,7 +163,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
       </div>
 
       <div className={`${sidebarOpen ? 'pl-64' : 'pl-16'} transition-all duration-300`}>
-        <header className="bg-gray-800/30 backdrop-blur-xl border-b border-gray-700/50 px-6 py-4">
+        <header className="bg-gray-800/30 backdrop-blur-xl border-b border-gray-700/50 px-6 py-4 relative">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <button
@@ -160,7 +179,18 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 relative z-[110]">
+                <button
+                  onClick={() => setShowCommandPalette(true)}
+                  className="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-gray-700/50 flex items-center gap-2"
+                >
+                  <Search className="w-5 h-5" />
+                  <span className="hidden md:block text-sm">Search</span>
+                  <kbd className="hidden md:block px-2 py-1 text-xs text-gray-400 bg-gray-700/50 rounded border border-gray-600">
+                    ⌘K
+                  </kbd>
+                </button>
+                <NotificationCenter />
                 <Link target='_blank' href="https://lakshya-brown.vercel.app/" className="p-2 text-gray-400 hover:text-white transition-colors">
                 <Briefcase className="w-5 h-5" />
                 </Link>
@@ -170,18 +200,29 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
             </div>
           </div>
         </header>
-        <main className="p-6">
+        <main className="p-6 relative">
           {children}
         </main>
       </div>
 
-      {/* Assistant Floating Button */}
+      Assistant Floating Button
       <Link
         href="/assistant"
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white transition-all duration-300 transform hover:scale-110 group"
       >
         <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
       </Link>
+
+      {/* Command Palette */}
+      {showCommandPalette && (
+        <CommandPalette
+          onClose={() => setShowCommandPalette(false)}
+          onNavigate={(path) => {
+            router.push(path);
+            setShowCommandPalette(false);
+          }}
+        />
+      )}
     </div>
   );
 }
