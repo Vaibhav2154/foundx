@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Plus, UserPlus, UserX } from 'lucide-react';
+import { showError, showSuccess } from '@/utils/toast';
 
 type TeamMember = {
   _id: string;
@@ -16,7 +17,7 @@ export default function TeamPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/v1/startups/getEmployees',{
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/startups/getEmployees`,{
       method: 'POST',
       headers: { 'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -32,14 +33,14 @@ export default function TeamPage() {
           setMembers(employees);
         }
       })
-      .catch(() => alert('Failed to load team'));
+      .catch(() => showError('Failed to load team'));
   }, []);
 
   async function addMember() {
-    if (!newEmail.trim()) return alert('Enter email');
+    if (!newEmail.trim()) return showError('Enter email');
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/v1/startups/addEmployee', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/startups/addEmployee`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: newEmail })
@@ -48,9 +49,10 @@ export default function TeamPage() {
       if (res.ok) {
         setMembers(prev => [...prev, data.data]);
         setNewEmail('');
-      } else alert(data.message || 'Add failed');
+        showSuccess('Member added successfully');
+      } else showError(data.message || 'Add failed');
     } catch {
-      alert('Server error');
+      showError('Server error');
     } finally {
       setLoading(false);
     }
@@ -59,7 +61,7 @@ export default function TeamPage() {
   async function remove(id: string) {
     if (!confirm('Remove this member?')) return;
     try {
-      const res = await fetch('http://localhost:8000/api/v1/startups/removeEmployee', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/startups/removeEmployee`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -69,9 +71,10 @@ export default function TeamPage() {
       const data = await res.json();
       if (res.ok) {
         setMembers(prev => prev.filter(m => m._id !== id));
-      } else alert(data.message || 'Remove failed');
+        showSuccess('Member removed successfully');
+      } else showError(data.message || 'Remove failed');
     } catch {
-      alert('Server error');
+      showError('Server error');
     }
   }
 

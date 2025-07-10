@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { showError, showSuccess } from "@/utils/toast";
+import { API_BASE_URL } from "@/config/constants";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -18,12 +20,12 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); 
     if (!form.email || !form.password) {
-      alert("Please fill in all fields.");
+      showError("Please fill in all fields.");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users/login", {
+      const response = await fetch(`${API_BASE_URL}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,11 +44,11 @@ export default function SignInPage() {
       localStorage.setItem("authToken", data.data.token);
       localStorage.setItem("userId", data.data._id);
       localStorage.setItem("user", JSON.stringify(data.data));
-      alert("Sign-in successful!");
+      showSuccess("Sign-in successful!");
       router.push("/startup");
     } catch (error) {
       console.error("Error during sign-in:", error);
-      alert("An error occurred while signing in. Please try again.");
+      showError("An error occurred while signing in. Please try again.");
     }
   };
 

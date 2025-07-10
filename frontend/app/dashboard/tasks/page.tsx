@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, CheckCircle, Clock, AlertCircle, UserPlus, UserX, Edit } from 'lucide-react';
+import { showError, showSuccess } from '@/utils/toast';
 
 type Member = {
   _id: string;
@@ -52,7 +53,7 @@ export default function TasksPage() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/v1/projects',{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`,{
         method:'GET',
         headers:{
           'content-type': 'application/json',
@@ -79,13 +80,13 @@ export default function TasksPage() {
 
   const createTask = async () => {
     if (!form.title || !form.description || !form.projectId) {
-      alert('Please fill all required fields');
+      showError('Please fill all required fields');
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/${form.projectId}/task/create`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${form.projectId}/task/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -100,12 +101,12 @@ export default function TasksPage() {
       if (res.ok) {
         setTasks(prev => [data.data, ...prev]);
         setForm({ title: '', description: '', status: 'not-started', projectId: '' });
-        alert('Task created successfully!');
+        showSuccess('Task created successfully!');
       } else {
-        alert(data.message || 'Create failed');
+        showError(data.message || 'Create failed');
       }
     } catch {
-      alert('Server error');
+      showError('Server error');
     } finally {
       setLoading(false);
     }
@@ -115,7 +116,7 @@ export default function TasksPage() {
     if (!editingTask) return;
 
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/${editingTask.projectId}/task/updateTask`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${editingTask.projectId}/task/updateTask`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -132,18 +133,18 @@ export default function TasksPage() {
       if (res.ok) {
         setTasks(prev => prev.map(t => t._id === editingTask._id ? data.data : t));
         setEditingTask(null);
-        alert('Task updated successfully!');
+        showSuccess('Task updated successfully!');
       } else {
-        alert(data.message || 'Update failed');
+        showError(data.message || 'Update failed');
       }
     } catch {
-      alert('Server error');
+      showError('Server error');
     }
   };
 
   const assignMember = async () => {
     if (!memberForm.memberEmail || !memberForm.taskId) {
-      alert('Please enter member email and select task');
+      showError('Please enter member email and select task');
       return;
     }
 
@@ -152,7 +153,7 @@ export default function TasksPage() {
 
     try {
       const endpoint = memberForm.action === 'assign' ? 'assignMember' : 'deAssignMember';
-      const res = await fetch(`http://localhost:8000/api/v1/${task.projectId}/task/${endpoint}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${task.projectId}/task/${endpoint}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -167,19 +168,19 @@ export default function TasksPage() {
       if (res.ok) {
         setTasks(prev => prev.map(t => t._id === memberForm.taskId ? data.data : t));
         setMemberForm({ memberEmail: '', taskId: '', action: 'assign' });
-        alert(`Member ${memberForm.action === 'assign' ? 'assigned' : 'removed'} successfully!`);
+        showSuccess(`Member ${memberForm.action === 'assign' ? 'assigned' : 'removed'} successfully!`);
       } else {
-        alert(data.message || 'Operation failed');
+        showError(data.message || 'Operation failed');
       }
     } catch {
-      alert('Server error');
+      showError('Server error');
     }
   };
 
   // Updated fetchTasks function to handle the new response structure
   const fetchTasks = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/v1/task/getAllTasks', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/task/getAllTasks`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -193,11 +194,11 @@ export default function TasksPage() {
       if (data.success && data.statusCode === 200) {
         setTasks(data.data || []);
       } else {
-        alert(data.message || 'Failed to fetch tasks');
+        showError(data.message || 'Failed to fetch tasks');
       }
     } catch (error) {
       console.error('Error fetching tasks:', error);
-      alert('Error fetching tasks');
+      showError('Error fetching tasks');
     }
   };
 

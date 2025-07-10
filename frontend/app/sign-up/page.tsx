@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { showError, showSuccess } from "@/utils/toast";
+import { API_BASE_URL } from "@/config/constants";
 
 export default function SignUpPage() {
   const [form, setForm] = useState({
@@ -21,19 +23,19 @@ export default function SignUpPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if(!form.fullName || !form.username || !form.email || !form.password || !form.confirmPassword) {
-      alert("Please fill in all fields.");  
+      showError("Please fill in all fields.");  
       return;
     }
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match.");
+      showError("Passwords do not match.");
       return;
     }
     if (form.password.length < 6) {
-        alert("Password must be at least 6 characters long.");
+        showError("Password must be at least 6 characters long.");
         return;
       }
     try{
-      const response = fetch("http://localhost:8000/api/v1/users/register",{
+      const response = fetch(`${API_BASE_URL}/users/register`,{
         method:"POST",
         headers:{
           "Content-Type": "application/json",
@@ -48,12 +50,12 @@ export default function SignUpPage() {
      
 
       console.log("User registered:", data.user);
-      alert("Registration successful!");
+      showSuccess("Registration successful!");
       router.push("/sign-in");
       return data;
     })
     }catch{
-      alert("An error occurred while submitting the form. Please try again.");
+      showError("An error occurred while submitting the form. Please try again.");
       return;
     }
     console.log("Form submitted:", form);

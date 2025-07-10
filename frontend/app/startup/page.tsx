@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Building2, Search, Users, Plus, CheckCircle, Zap, Eye, CreditCard, Lock, UserPlus, Star, ArrowRight, Sparkles, Shield, Target } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { showError, showSuccess } from '@/utils/toast';
+import { API_BASE_URL } from '@/config/constants';
 
 type Employee = {
   _id: string;
@@ -47,7 +49,7 @@ export default function StartupPage() {
 
   const createStartup = async () => {
     if (!createForm.companyName || !createForm.password) {
-      alert('Please fill in all required fields');
+      showError('Please fill in all required fields');
       return;
     }
 
@@ -55,11 +57,11 @@ export default function StartupPage() {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) {
-        alert('Please login first');
+        showError('Please login first');
         return;
       }
 
-      const res = await fetch('http://localhost:8000/api/v1/startups/create', {
+      const res = await fetch(`${API_BASE_URL}/startups/create`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -74,15 +76,15 @@ export default function StartupPage() {
       const data = await res.json();
 
       if (res.ok) {
-        alert('✅ Startup created successfully');
+        showSuccess('Startup created successfully');
         localStorage.setItem('companyName', data.data.companyName);
         localStorage.setItem('startUpId', data.data._id);
         setCreateForm({ companyName: '', password: '' });
       } else {
-        alert(data.message || 'Something went wrong.');
+        showError(data.message || 'Something went wrong.');
       }
     } catch (error) {
-      alert('Server error');
+      showError('Server error');
     } finally {
       setLoading(false);
     }
@@ -90,7 +92,7 @@ export default function StartupPage() {
 
   const accessStartup = async () => {
     if (!accessForm.companyName || !accessForm.password) {
-      alert('Please fill in all required fields');
+      showError('Please fill in all required fields');
       return;
     }
 
@@ -98,11 +100,11 @@ export default function StartupPage() {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) {
-        alert('Please login first');
+        showError('Please login first');
         return;
       }
 
-      const res = await fetch('http://localhost:8000/api/v1/startups/access', {
+      const res = await fetch(`${API_BASE_URL}/startups/access`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -118,16 +120,16 @@ export default function StartupPage() {
 
       if (res.ok) {
         setStartupData(data.data);
-        alert('✅ Startup accessed successfully');
+        showSuccess('Startup accessed successfully');
         localStorage.setItem('companyName', data.data.companyName);
         localStorage.setItem('startUpId', data.data._id);
         router.push('/dashboard'); // As of now all the employees can see the dashboard
         setAccessForm({ companyName: '', password: '' });
       } else {
-        alert(data.message || 'Access denied');
+        showError(data.message || 'Access denied');
       }
     } catch (error) {
-      alert('Server error');
+      showError('Server error');
     } finally {
       setLoading(false);
     }
@@ -135,7 +137,7 @@ export default function StartupPage() {
 
   const joinStartup = async () => {
     if (!joinForm.companyName || !joinForm.password) {
-      alert('Please fill in all required fields');
+      showError('Please fill in all required fields');
       return;
     }
 
@@ -143,11 +145,11 @@ export default function StartupPage() {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) {
-        alert('Please login first');
+        showError('Please login first');
         return;
       }
 
-      const res = await fetch('http://localhost:8000/api/v1/startups/accessAndJoin', {
+      const res = await fetch(`${API_BASE_URL}/startups/accessAndJoin`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -162,16 +164,16 @@ export default function StartupPage() {
       const data = await res.json();
 
       if (res.ok) {
-        alert('✅ Successfully joined the startup as an employee!');
+        showSuccess('Successfully joined the startup as an employee!');
         localStorage.setItem('companyName', data.data.companyName);
         localStorage.setItem('startUpId', data.data._id);
         setJoinForm({ companyName: '', password: '' });
         router.push('/dashboard'); // As of now who ever has company credentials can see the dashboard
       } else {
-        alert(data.message || 'Failed to join startup');
+        showError(data.message || 'Failed to join startup');
       }
     } catch (error) {
-      alert('Server error');
+      showError('Server error');
     } finally {
       setLoading(false);
     }
@@ -179,13 +181,13 @@ export default function StartupPage() {
 
   const fetchEmployees = async () => {
     if (!searchName) {
-      alert('Please enter a company name');
+      showError('Please enter a company name');
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/v1/startups/employees', {
+      const res = await fetch(`${API_BASE_URL}/startups/employees`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json'
@@ -204,14 +206,14 @@ export default function StartupPage() {
           setEmployees(data.data[0].employees);
         } else {
           setEmployees([]);
-          alert('No employees found for this startup');
+          showError('No employees found for this startup');
         }
       } else {
-        alert(data.message || 'No employees found');
+        showError(data.message || 'No employees found');
         setEmployees([]);
       }
     } catch (error) {
-      alert('Server error');
+      showError('Server error');
       setEmployees([]);
     } finally {
       setLoading(false);

@@ -1,5 +1,5 @@
 // auth.service.ts - API Service Functions
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface RegisterData {
   fullName: string;
@@ -51,7 +51,6 @@ class AuthService {
   }
 
   async registerUser(userData: RegisterData): Promise<AuthResponse> {
-    // Get startUpId from localStorage if available
     const startUpId = localStorage.getItem('startUpId');
     
     const requestData = {
@@ -67,7 +66,6 @@ class AuthService {
       body: JSON.stringify(requestData),
     });
 
-    // Clear startUpId from localStorage after successful registration
     if (response.success && startUpId) {
       localStorage.removeItem('startUpId');
     }
