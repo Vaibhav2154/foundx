@@ -76,7 +76,11 @@ export default function SignUpPage() {
       const data = await response.json();
       console.log("Registration response:", data);
       showSuccess("Registration successful!");
-      navigate("/sign-in");
+      
+      // Add a small delay to ensure the toast is visible before navigation
+      setTimeout(() => {
+        navigate("/sign-in");
+      }, 1500);
     } catch (error) {
       console.error("Error during registration:", error);
       showError("An error occurred while creating your account. Please try again.");
