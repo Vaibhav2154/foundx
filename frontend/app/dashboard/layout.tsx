@@ -141,14 +141,12 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
                 <Image
                   src="/logo.png"
                   alt="FoundX Logo"
-                  width={40}
-                  height={40}
+                  width={100}
+                  height={100}
                   priority
                   className="rounded-lg"
                 />
-                <span className="ml-2 text-xl font-bold text-white">FoundX</span>
               </div>
-
               <div className="hidden md:flex items-center space-x-1">
                 {navItems.map((item) => (
                   <button
