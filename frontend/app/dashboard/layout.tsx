@@ -308,9 +308,8 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
         </div>
       </main>
 
-      {/* Assistant Floating Button */}
       <button
-        onClick={() => navigate("/assistant")}
+        onClick={() => navigate("dashboard/assistant")}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white transition-all duration-300 transform hover:scale-110 group"
       >
         <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
