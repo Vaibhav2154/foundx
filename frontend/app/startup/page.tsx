@@ -5,6 +5,7 @@ import { Building2, Search, Users, Plus, CheckCircle, Zap, Eye, CreditCard, Lock
 import { useRouter } from 'next/navigation';
 import { showError, showSuccess } from '@/utils/toast';
 import { API_BASE_URL } from '@/config/constants';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 type Employee = {
   _id: string;
@@ -21,6 +22,7 @@ type Startup = {
 
 export default function StartupPage() {
     const router = useRouter();
+    const { navigate } = useNavigation();
   const [createForm, setCreateForm] = useState({ companyName: '', password: '' });
   const [accessForm, setAccessForm] = useState({ companyName: '', password: '' });
   const [joinForm, setJoinForm] = useState({ companyName: '', password: '' });
@@ -123,7 +125,7 @@ export default function StartupPage() {
         showSuccess('Startup accessed successfully');
         localStorage.setItem('companyName', data.data.companyName);
         localStorage.setItem('startUpId', data.data._id);
-        router.push('/dashboard'); // As of now all the employees can see the dashboard
+        navigate('/dashboard'); // As of now all the employees can see the dashboard
         setAccessForm({ companyName: '', password: '' });
       } else {
         showError(data.message || 'Access denied');
@@ -168,7 +170,7 @@ export default function StartupPage() {
         localStorage.setItem('companyName', data.data.companyName);
         localStorage.setItem('startUpId', data.data._id);
         setJoinForm({ companyName: '', password: '' });
-        router.push('/dashboard'); // As of now who ever has company credentials can see the dashboard
+        navigate('/dashboard'); // As of now who ever has company credentials can see the dashboard
       } else {
         showError(data.message || 'Failed to join startup');
       }

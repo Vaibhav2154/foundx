@@ -21,6 +21,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 import { Card, CardHeader, CardContent, CardTitle } from '../../components/ui/Card';
 import { StatCard } from '../../components/ui/StatCard';
@@ -36,6 +37,7 @@ import { useDashboard } from '../../hooks/useDashboard';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { navigate } = useNavigation();
   const { stats, activities, chartData, loading, error, refresh } = useDashboard();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -94,25 +96,25 @@ export default function DashboardPage() {
       label: "New Project",
       icon: <PlusCircle size={18} />,
       variant: "primary" as const,
-      onClick: () => router.push('/dashboard/projects')
+      onClick: () => navigate('/dashboard/projects')
     },
     {
       label: "New Task", 
       icon: <PlusCircle size={18} />,
       variant: "success" as const,
-      onClick: () => router.push('/dashboard/tasks')
+      onClick: () => navigate('/dashboard/tasks')
     },
     {
       label: "Legal Documents",
       icon: <FileText size={18} />,
       variant: "warning" as const,
-      onClick: () => router.push('/dashboard/legal')
+      onClick: () => navigate('/dashboard/legal')
     },
     {
       label: "Invite Member",
       icon: <Users size={18} />,
       variant: "secondary" as const,
-      onClick: () => router.push('/dashboard/team')
+      onClick: () => navigate('/dashboard/team')
     }
   ];
 
@@ -134,7 +136,47 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-blue-600/20 rounded-2xl border border-gray-700/50 backdrop-blur-xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+        <div className="relative p-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">
+                Welcome back! 👋
+              </h1>
+              <p className="text-gray-300 text-lg">
+                Here's what's happening with your projects today.
+              </p>
+              <div className="flex items-center gap-6 mt-4">
+                <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <Clock className="w-4 h-4" />
+                  <span>Last updated: {new Date().toLocaleTimeString()}</span>
+                </div>
+                <button
+                  onClick={refresh}
+                  className="flex items-center gap-2 px-3 py-1 text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Refresh
+                </button>
+              </div>
+            </div>
+            <div className="hidden lg:flex items-center gap-4">
+              {quickActions.slice(0, 2).map((action, index) => (
+                <Button
+                  key={index}
+                  variant={action.variant}
+                  onClick={action.onClick}
+                  icon={action.icon}
+                >
+                  {action.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, index) => (
@@ -150,6 +192,8 @@ export default function DashboardPage() {
           />
         ))}
       </div>
+
+      {/* Tab Navigation */}
 
       <div className="flex space-x-1 bg-gray-800/50 p-1 rounded-xl border border-gray-700/50">
         {[

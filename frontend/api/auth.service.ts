@@ -22,12 +22,19 @@ interface AuthResponse {
 }
 
 class AuthService {
+  // Helper method to get auth token
+  getAuthToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+
   private async makeRequest(endpoint: string, options: RequestInit = {}): Promise<AuthResponse> {
     const url = `${API_BASE_URL}${endpoint}`;
     
+    const authToken = this.getAuthToken();
     const defaultOptions: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
+        ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
         ...options.headers,
       },
       credentials: 'include', // Include cookies for session management
@@ -88,20 +95,29 @@ class AuthService {
   }
 
   async logout(): Promise<AuthResponse> {
-    const response = await this.makeRequest('/users/logout', {
-      method: 'POST',
-    });
+    try {
+      const response = await this.makeRequest('/users/logout', {
+        method: 'POST',
+      });
 
-    // Clear stored auth data
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('startUpId');
+      // Clear stored auth data regardless of API response
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('startUpId');
 
-    return response;
-  }
-
-  // Helper method to get auth token
-  getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
+      return response;
+    } catch (error) {
+      // Even if the API call fails, we should clear local storage
+      // This handles cases where the token is expired or invalid
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('startUpId');
+      
+      // Return a success response since local logout succeeded
+      return {
+        success: true,
+        data: null,
+        message: 'Logged out locally'
+      };
+    }
   }
 
   // Helper method to check if user is authenticated

@@ -1038,14 +1038,13 @@ const LegalDocuments = () => {
         )}
         
         {!showGenerator && (
-          <div className="fixed bottom-8 right-8 z-50">
+          <div className="fixed bottom-24 right-6 z-50">
             <button
               onClick={() => setShowQuickSelect(true)}
-              className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center space-x-2"
+              className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center justify-center space-x-2"
               title="Quick Generate Document"
             >
               <Plus className="h-6 w-6" />
-              <span className="hidden group-hover:block text-sm font-medium pr-2 animate-pulse">Quick Generate</span>
             </button>
           </div>
         )}
