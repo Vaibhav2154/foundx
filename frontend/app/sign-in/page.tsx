@@ -56,7 +56,9 @@ export default function SignInPage() {
       localStorage.setItem("userId", data.data._id);
       localStorage.setItem("user", JSON.stringify(data.data));
       showSuccess("Sign-in successful!");
-      navigate("/startup");
+      setTimeout(() => {
+        navigate("/startup");
+      }, 1500);
     } catch (error) {
       console.error("Error during sign-in:", error);
       showError("An error occurred while signing in. Please try again.");
@@ -67,7 +69,6 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
-      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-4 -left-4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-1/2 -right-4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -76,7 +77,6 @@ export default function SignInPage() {
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
         <div className={`w-full max-w-md transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl mb-4 shadow-lg">
               <User className="w-8 h-8 text-white" />
@@ -104,9 +104,7 @@ export default function SignInPage() {
                 </div>
               </div>
 
-              {/* Password Input */}
               <div className="space-y-2">
-                {/* <label className="text-sm font-medium text-gray-300">Password</label> */}
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
@@ -147,14 +145,12 @@ export default function SignInPage() {
               </button>
             </form>
 
-            {/* Divider */}
             <div className="flex items-center my-6">
               <div className="flex-1 border-t border-gray-600"></div>
               <span className="px-4 text-sm text-gray-400">or</span>
               <div className="flex-1 border-t border-gray-600"></div>
             </div>
 
-            {/* Sign Up Link */}
             <p className="text-center text-sm text-gray-400">
               Don't have an account?{" "}
               <Link

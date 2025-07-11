@@ -125,8 +125,12 @@ export default function StartupPage() {
         showSuccess('Startup accessed successfully');
         localStorage.setItem('companyName', data.data.companyName);
         localStorage.setItem('startUpId', data.data._id);
-        navigate('/dashboard'); // As of now all the employees can see the dashboard
         setAccessForm({ companyName: '', password: '' });
+        
+        // Add a small delay to ensure the toast is visible before navigation
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
       } else {
         showError(data.message || 'Access denied');
       }
@@ -170,7 +174,11 @@ export default function StartupPage() {
         localStorage.setItem('companyName', data.data.companyName);
         localStorage.setItem('startUpId', data.data._id);
         setJoinForm({ companyName: '', password: '' });
-        navigate('/dashboard'); // As of now who ever has company credentials can see the dashboard
+        
+        // Add a small delay to ensure the toast is visible before navigation
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
       } else {
         showError(data.message || 'Failed to join startup');
       }
@@ -224,7 +232,6 @@ export default function StartupPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
-      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full opacity-20 animate-pulse delay-1000"></div>
@@ -232,7 +239,6 @@ export default function StartupPage() {
 
       <div className={`relative py-12 px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="max-w-7xl mx-auto">
-          {/* Enhanced Header */}
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200/50 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm">
               <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
@@ -250,7 +256,6 @@ export default function StartupPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Create Startup */}
             <div id='create' className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-8">
             <div className="flex items-center mb-6">
               <Plus className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-3" />
