@@ -15,7 +15,7 @@ interface StatCardProps {
   loading?: boolean;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({
+const StatCard: React.FC<StatCardProps> = ({
   title,
   value,
   change,
@@ -79,3 +79,5 @@ export const StatCard: React.FC<StatCardProps> = ({
     </div>
   );
 };
+
+export default StatCard;

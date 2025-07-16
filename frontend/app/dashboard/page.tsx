@@ -23,9 +23,11 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useNavigation } from '@/contexts/NavigationContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { formatDate, formatRelativeTime } from '@/utils/dateUtils';
 
 import { Card, CardHeader, CardContent, CardTitle } from '../../components/ui/Card';
-import { StatCard } from '../../components/ui/StatCard';
+import StatCard from '../../components/ui/StatCard';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { Button } from '../../components/ui/Button';
 import { ActivityFeed } from '../../components/ui/ActivityFeed';
@@ -39,10 +41,17 @@ import { useDashboard } from '../../hooks/useDashboard';
 export default function DashboardPage() {
   const router = useRouter();
   const { navigate } = useNavigation();
+  const { user, getUserData } = useAuth();
   const { stats, activities, chartData, loading, error, refresh } = useDashboard();
   const [activeTab, setActiveTab] = useState('overview');
   const [quote, setQuote] = useState<{text: string, author: string} | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
+  const [userData, setUserData] = useState<any | null>(null);
+  
+  useEffect(() => {
+    const data = user || getUserData();
+    setUserData(data);
+  }, [user]);
 
   const fetchQuote = async () => {
     try {
@@ -167,7 +176,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">
-                Welcome back! 👋
+                Welcome back{userData && userData.fullName ? `, ${userData.fullName.split(' ')[0]}` : ''}! 👋
               </h1>
               {quoteLoading ? (
                 <div className="flex items-center gap-2 text-gray-300 text-lg">
@@ -376,30 +385,55 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
-                      <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
-                        Dec<br/>15
+                    {loading ? (
+                      Array(2).fill(0).map((_, i) => (
+                        <div key={i} className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl animate-pulse">
+                          <div className="w-12 h-12 bg-gray-600/50 rounded-xl"></div>
+                          <div className="flex-1">
+                            <div className="h-5 bg-gray-600/50 rounded w-3/4 mb-2"></div>
+                            <div className="h-4 bg-gray-600/30 rounded w-1/2"></div>
+                          </div>
+                          <div className="w-8 h-8 bg-gray-600/40 rounded-lg"></div>
+                        </div>
+                      ))
+                    ) : (
+                      activities.slice(0, 2).map((activity, index) => {
+                        // Extract date from timestamp
+                        const date = new Date(activity.timestamp);
+                        const month = date.toLocaleDateString('en-US', { month: 'short' });
+                        const day = date.getDate();
+                        
+                        // Generate gradients for different activities
+                        const gradients = [
+                          'from-blue-500 to-blue-600',
+                          'from-purple-500 to-purple-600',
+                          'from-red-500 to-red-600',
+                          'from-green-500 to-green-600'
+                        ];
+                        
+                        return (
+                          <div key={activity.id} className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
+                            <div className={`w-12 h-12 bg-gradient-to-r ${gradients[index % gradients.length]} rounded-xl flex items-center justify-center text-white font-bold text-sm`}>
+                              {month}<br/>{day}
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-white font-medium">{activity.entity}</p>
+                              <p className="text-gray-400 text-sm">{activity.action} by {activity.user}</p>
+                              <p className="text-blue-400 text-xs mt-1">{formatRelativeTime(activity.timestamp)}</p>
+                            </div>
+                            <Button size="sm" variant="secondary">
+                              <Bell size={14} />
+                            </Button>
+                          </div>
+                        );
+                      })
+                    )}
+                    
+                    {!loading && activities.length === 0 && (
+                      <div className="text-center py-6 text-gray-400">
+                        <p>No upcoming events</p>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-white font-medium">Product Demo</p>
-                        <p className="text-gray-400 text-sm">2:00 PM - 3:30 PM</p>
-                      </div>
-                      <Button size="sm" variant="secondary">
-                        <Bell size={14} />
-                      </Button>
-                    </div>
-                    <div className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
-                      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
-                        Dec<br/>18
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-white font-medium">Sprint Planning</p>
-                        <p className="text-gray-400 text-sm">10:00 AM - 12:00 PM</p>
-                      </div>
-                      <Button size="sm" variant="secondary">
-                        <Bell size={14} />
-                      </Button>
-                    </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>

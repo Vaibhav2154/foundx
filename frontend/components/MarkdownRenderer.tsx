@@ -16,7 +16,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
       components={{
-        // Custom heading styles
         h1: ({ children }) => (
           <h1 className="pb-2 mb-3 text-xl font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-600">
             {children}
@@ -38,14 +37,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           </h4>
         ),
         
-        // Custom paragraph styles
         p: ({ children }) => (
           <p className="mb-3 leading-relaxed text-gray-700 dark:text-gray-300">
             {children}
           </p>
         ),
         
-        // Custom list styles
         ul: ({ children }) => (
           <ul className="pl-5 mb-3 space-y-1 list-disc list-outside">
             {children}
@@ -62,7 +59,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           </li>
         ),
         
-        // Custom code styles
         code: (props: {
           inline?: boolean;
           className?: string;
@@ -84,21 +80,18 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           );
         },
         
-        // Custom pre styles (for code blocks)
         pre: ({ children }) => (
           <pre className="p-3 mb-3 overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-800">
             {children}
           </pre>
         ),
         
-        // Custom blockquote styles
         blockquote: ({ children }) => (
           <blockquote className="py-2 pl-4 pr-3 mb-3 italic text-gray-700 dark:text-gray-300 border-l-4 border-indigo-200 dark:border-indigo-600 bg-indigo-50 dark:bg-indigo-900/30">
             {children}
           </blockquote>
         ),
         
-        // Custom table styles
         table: ({ children }) => (
           <div className="mb-3 overflow-x-auto">
             <table className="min-w-full border border-gray-200 dark:border-gray-600 rounded-md">
@@ -122,7 +115,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           </td>
         ),
         
-        // Custom link styles
         a: ({ children, href }) => (
           <a
             href={href}
@@ -134,26 +126,22 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           </a>
         ),
         
-        // Custom strong/bold styles
         strong: ({ children }) => (
           <strong className="font-semibold text-gray-900 dark:text-white">
             {children}
           </strong>
         ),
         
-        // Custom emphasis/italic styles
         em: ({ children }) => (
           <em className="italic text-gray-700 dark:text-gray-300">
             {children}
           </em>
         ),
         
-        // Custom horizontal rule
         hr: () => (
           <hr className="my-4 border-t border-gray-200 dark:border-gray-600" />
         ),
         
-        // Custom image styles
         img: ({ src, alt }) => (
           <img
             src={src}

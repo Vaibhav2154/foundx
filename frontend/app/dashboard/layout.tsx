@@ -8,7 +8,7 @@ import { CommandPalette } from '../../components/ui/CommandPalette';
 import { Breadcrumbs } from '../../components/ui/Breadcrumbs';
 import { useRouter } from 'next/navigation';
 import { useNavigation } from '@/contexts/NavigationContext';
-import { authService } from '@/api/auth.service';
+import { useAuth } from '@/contexts/AuthContext';
 import { showSuccess } from '@/utils/toast';
 import { useActiveRoute } from '@/hooks/useActiveRoute';
 import { NotificationCenter } from '@/components/ui/NotificationCenter';
@@ -33,11 +33,19 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
   const router = useRouter();
   const { navigate } = useNavigation();
   const { isActive, pathname } = useActiveRoute();
+  const { isAuthenticated, logout, isLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState<UserProfile>({
     name: 'Guest User',
     role: 'Member',
     initials: 'GU'
   });
+  
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/sign-in');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -74,17 +82,10 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
 
   const handleQuickLogout = async () => {
     try {
-      await authService.logout();
-      localStorage.removeItem('user');
-      localStorage.removeItem('notificationSettings');
+      await logout();
       showSuccess('Logged out successfully!');
-      router.push('/sign-in');
     } catch (error) {
       console.error('Error during logout:', error);
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      localStorage.removeItem('notificationSettings');
-      localStorage.removeItem('startUpId');
       showSuccess('Logged out successfully!');
       router.push('/sign-in');
     }
