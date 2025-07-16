@@ -25,7 +25,7 @@ export default function SignInPage() {
     setIsVisible(true);
     
     if (isAuthenticated) {
-      navigate("/dashboard");
+      navigate("/startup");
     }
   }, [isAuthenticated, navigate]);
 
