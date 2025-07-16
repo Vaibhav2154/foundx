@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Briefcase, 
   Users, 
@@ -18,7 +18,8 @@ import {
   PieChart,
   Bell,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  Quote
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useNavigation } from '@/contexts/NavigationContext';
@@ -40,6 +41,29 @@ export default function DashboardPage() {
   const { navigate } = useNavigation();
   const { stats, activities, chartData, loading, error, refresh } = useDashboard();
   const [activeTab, setActiveTab] = useState('overview');
+  const [quote, setQuote] = useState<{text: string, author: string} | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(true);
+
+  const fetchQuote = async () => {
+    try {
+      setQuoteLoading(true);
+      const response = await fetch('https://api.quotable.io/random?minLength=50&maxLength=150');
+      const data = await response.json();
+      setQuote({ text: data.content, author: data.author });
+    } catch (error) {
+      console.error('Failed to fetch quote:', error);
+      setQuote({ 
+        text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", 
+        author: "Winston Churchill" 
+      });
+    } finally {
+      setQuoteLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuote();
+  }, []);
 
   const statCards = [
     {
@@ -145,9 +169,23 @@ export default function DashboardPage() {
               <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome back! 👋
               </h1>
-              <p className="text-gray-300 text-lg">
-                Here's what's happening with your projects today.
-              </p>
+              {quoteLoading ? (
+                <div className="flex items-center gap-2 text-gray-300 text-lg">
+                  <div className="animate-pulse bg-gray-600 h-4 w-64 rounded"></div>
+                </div>
+              ) : quote ? (
+                <div className="max-w-2xl">
+                  <div className="flex items-start gap-3 text-gray-300 text-lg">
+                    <Quote className="w-5 h-5 text-blue-400 mt-1 flex-shrink-0" />
+                    <div>
+                      <p className="italic leading-relaxed">"{quote.text}"</p>
+                    <div className="text-right">
+                      <p className="text-gray-400 text-sm mt-2">— {quote.author}</p>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
               <div className="flex items-center gap-6 mt-4">
                 <div className="flex items-center gap-2 text-sm text-gray-400">
                   <Clock className="w-4 h-4" />
@@ -160,6 +198,15 @@ export default function DashboardPage() {
                   <RefreshCw className="w-4 h-4" />
                   Refresh
                 </button>
+                {quote && (
+                  <button
+                    onClick={fetchQuote}
+                    className="flex items-center gap-2 px-3 py-1 text-sm text-gray-400 hover:text-white transition-colors"
+                  >
+                    <Quote className="w-4 h-4" />
+                    New Quote
+                  </button>
+                )}
               </div>
             </div>
             <div className="hidden lg:flex items-center gap-4">
