@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ToastProvider from "@/components/ToastProvider";
 import { NavigationProvider } from "@/contexts/NavigationContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import Navbar from "@/components/landing/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
