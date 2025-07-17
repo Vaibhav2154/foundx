@@ -19,7 +19,8 @@ import {
   Bell,
   AlertCircle,
   CheckCircle,
-  Quote
+  Quote,
+  IndianRupee
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useNavigation } from '@/contexts/NavigationContext';
@@ -112,8 +113,8 @@ export default function DashboardPage() {
     },
     {
       title: "Monthly Revenue",
-      value: `$${stats.revenue.toLocaleString()}`,
-      icon: <DollarSign className="w-6 h-6" />,
+      value: `₹${stats.revenue.toLocaleString()}`,
+      icon: <IndianRupee className="w-6 h-6" />,
       gradient: "from-yellow-500 to-yellow-600",
       bgColor: "bg-yellow-500/10",
       change: {
