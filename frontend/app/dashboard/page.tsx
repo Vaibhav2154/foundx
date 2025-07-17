@@ -178,7 +178,7 @@ export default function DashboardPage() {
               <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome back{userData && userData.fullName ? `, ${userData.fullName.split(' ')[0]}` : ''}! 👋
               </h1>
-              {quoteLoading ? (
+              {/* {quoteLoading ? (
                 <div className="flex items-center gap-2 text-gray-300 text-lg">
                   <div className="animate-pulse bg-gray-600 h-4 w-64 rounded"></div>
                 </div>
@@ -194,7 +194,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-              ) : null}
+              ) : null} */}
               <div className="flex items-center gap-6 mt-4">
                 <div className="flex items-center gap-2 text-sm text-gray-400">
                   <Clock className="w-4 h-4" />
@@ -207,7 +207,7 @@ export default function DashboardPage() {
                   <RefreshCw className="w-4 h-4" />
                   Refresh
                 </button>
-                {quote && (
+                {/* {quote && (
                   <button
                     onClick={fetchQuote}
                     className="flex items-center gap-2 px-3 py-1 text-sm text-gray-400 hover:text-white transition-colors"
@@ -215,7 +215,7 @@ export default function DashboardPage() {
                     <Quote className="w-4 h-4" />
                     New Quote
                   </button>
-                )}
+                )} */}
               </div>
             </div>
             <div className="hidden lg:flex items-center gap-4">

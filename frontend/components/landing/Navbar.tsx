@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useNavigation } from "@/contexts/NavigationContext";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,19 +34,14 @@ export default function Navbar() {
       <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2 group cursor-pointer">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-              <span className="text-white font-bold text-sm">F</span>
-            </div>
-            <span className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-              FoundX
-            </span>
+            <Image src={"/logo.png"} alt="FoundX Logo" width={140} height={140} className="rounded-full" />
+            
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
             {[
               { label: "Features", id: "features" },
               { label: "How it Works", id: "how-it-works" },
-              { label: "Pricing", id: "pricing" }
             ].map((item) => (
               <button
                 key={item.id}
