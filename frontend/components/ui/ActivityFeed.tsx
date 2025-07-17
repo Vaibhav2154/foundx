@@ -1,5 +1,6 @@
 import React from 'react';
 import { Clock, User, Calendar } from 'lucide-react';
+import { formatRelativeTime } from '@/utils/dateUtils';
 
 interface Activity {
   id: string;
@@ -36,14 +37,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   };
 
   const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
-    if (diffInMinutes < 1) return 'Just now';
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
-    return date.toLocaleDateString();
+    return formatRelativeTime(timestamp);
   };
 
   if (loading) {

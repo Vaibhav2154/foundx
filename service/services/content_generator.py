@@ -314,7 +314,7 @@ class ContentGeneratorService:
         - Location: {employment_info.get('location', 'N/A')}
 
         IMPORTANT: You must return ONLY a valid JSON object with no additional text, comments, or markdown formatting. Do not include ```json or ``` markers.
-
+        
         Generate a professional employment agreement with standard employment terms. Return the response as a valid JSON object with this exact structure:
 
         {{
@@ -627,7 +627,6 @@ class ContentGeneratorService:
         elif document_type.lower() == "privacy_policy":
             return self._get_fallback_privacy_content(document_info)
         else:
-            # Generic fallback
             return {
                 "document_title": f"{document_type.upper()} AGREEMENT",
                 "content": {

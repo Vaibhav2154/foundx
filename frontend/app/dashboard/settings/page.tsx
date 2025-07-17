@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Lock, Bell, Shield, LogOut, Save, Eye, EyeOff, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { showSuccess, showError } from '@/utils/toast';
-import { authService } from '@/api/auth.service';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface UserProfile {
   name: string;
@@ -24,6 +24,7 @@ interface NotificationSettings {
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { logout, isAuthenticated, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
   const [user, setUser] = useState<UserProfile>({
     name: 'Guest User',
@@ -46,15 +47,12 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
-    // Load user data from localStorage
     try {
       const loggedUser = localStorage.getItem('user');
       const userFromStorage = loggedUser ? JSON.parse(loggedUser) : null;
       if (userFromStorage) {
         setUser(userFromStorage);
       }
-
-      // Load notification settings
       const savedNotifications = localStorage.getItem('notificationSettings');
       if (savedNotifications) {
         setNotifications(JSON.parse(savedNotifications));
@@ -94,35 +92,16 @@ export default function SettingsPage() {
       return;
     }
     
-    // In a real app, you would call an API here
     showSuccess('Password changed successfully!');
     setPasswords({ current: '', new: '', confirm: '' });
   };
 
   const handleLogout = async () => {
     try {
-      // Call the API logout endpoint (handles auth token automatically)
-      await authService.logout();
-      
-      // Clear additional user data from localStorage
-      localStorage.removeItem('user');
-      localStorage.removeItem('notificationSettings');
-      
+      await logout();
       showSuccess('Logged out successfully!');
-      
-      // Redirect to sign-in page
-      router.push('/sign-in');
     } catch (error) {
       console.error('Error during logout:', error);
-      
-      // Even if API fails, clear local data and redirect
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      localStorage.removeItem('notificationSettings');
-      localStorage.removeItem('startUpId');
-      
-      showSuccess('Logged out successfully!');
-      router.push('/sign-in');
     }
   };
 
@@ -132,7 +111,6 @@ export default function SettingsPage() {
     );
     
     if (confirmed) {
-      // In a real app, you would call an API here
       handleLogout();
       showSuccess('Account deleted successfully');
     }
@@ -153,7 +131,6 @@ export default function SettingsPage() {
       </div>
 
       <div className="bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-xl overflow-hidden">
-        {/* Tabs */}
         <div className="flex border-b border-gray-700/50">
           {tabs.map((tab) => (
             <button
@@ -171,7 +148,6 @@ export default function SettingsPage() {
           ))}
         </div>
 
-        {/* Tab Content */}
         <div className="p-6">
           {activeTab === 'profile' && (
             <div className="space-y-6">

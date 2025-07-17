@@ -15,7 +15,9 @@ import {
   AlertCircle,
   Plus,
   Sparkles,
-  Shield} from 'lucide-react';
+  Shield,
+  Image} from 'lucide-react';
+import { LogoUpload } from '@/components/ui/logo-upload';
 import apiService from '@/config/apiservice';
 
 const LegalDocuments = () => {
@@ -26,6 +28,7 @@ const LegalDocuments = () => {
   const [generatedDocument, setGeneratedDocument] = useState<any>(null);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState<any>({});
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
 
   const templates = [
     {
@@ -587,7 +590,8 @@ const LegalDocuments = () => {
               duration: formData.duration || '2',
               governing_law: formData.governingLaw || 'india'
             },
-            use_ai: true
+            use_ai: true,
+            company_logo: companyLogo || undefined
           });
           filename = `nda_${formData.companyName || 'document'}.pdf`;
           break;
@@ -602,7 +606,8 @@ const LegalDocuments = () => {
               roles_responsibilities: formData.rolesResponsibilities || {},
               governing_law: formData.governingLaw || 'india'
             },
-            use_ai: true
+            use_ai: true,
+            company_logo: companyLogo || undefined
           });
           filename = `founder_agreement_${formData.companyName || 'document'}.pdf`;
           break;
@@ -619,7 +624,8 @@ const LegalDocuments = () => {
               benefits: formData.benefits || [],
               governing_law: formData.governingLaw || 'india'
             },
-            use_ai: true
+            use_ai: true,
+            company_logo: companyLogo || undefined
           });
           filename = `employment_contract_${formData.employeeName || 'document'}.pdf`;
           break;
@@ -634,7 +640,8 @@ const LegalDocuments = () => {
               duration: formData.duration || '',
               governing_law: formData.governingLaw || 'india'
             },
-            use_ai: true
+            use_ai: true,
+            company_logo: companyLogo || undefined
           });
           filename = `consultant_agreement_${formData.consultantName || 'document'}.pdf`;
           break;
@@ -649,7 +656,8 @@ const LegalDocuments = () => {
               governing_law: formData.governingLaw || 'india',
               effective_date: formData.effectiveDate || new Date().toISOString().split('T')[0]
             },
-            use_ai: true
+            use_ai: true,
+            company_logo: companyLogo || undefined
           });
           filename = `terms_of_service_${formData.companyName || 'document'}.pdf`;
           break;
@@ -666,7 +674,8 @@ const LegalDocuments = () => {
               governing_law: formData.governingLaw || 'india',
               effective_date: formData.effectiveDate || new Date().toISOString().split('T')[0]
             },
-            use_ai: true
+            use_ai: true,
+            company_logo: companyLogo || undefined
           });
           filename = `privacy_policy_${formData.companyName || 'document'}.pdf`;
           break;
@@ -795,6 +804,7 @@ const LegalDocuments = () => {
         </div>
 
         {showGenerator ? (
+          <>
           <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 dark:border-slate-700/50 p-8">
             {error && (
               <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center text-red-700 dark:text-red-300 backdrop-blur-sm">
@@ -835,6 +845,21 @@ const LegalDocuments = () => {
               <div className="lg:col-span-2">
                 <form className="space-y-6">
                   {renderFormFields()}
+                  
+                  {/* Company Logo Upload Section */}
+                  <div className="border-t border-slate-200 dark:border-slate-700 pt-6 mt-6">
+                    <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-4 flex items-center">
+                      <Image className="h-5 w-5 mr-2 text-blue-500" />
+                      Company Logo (Optional)
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                      Add your company logo to be displayed at the top of the document.
+                    </p>
+                    <LogoUpload 
+                      onLogoChange={(logoBase64) => setCompanyLogo(logoBase64)} 
+                      className="max-w-md" 
+                    />
+                  </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -922,6 +947,7 @@ const LegalDocuments = () => {
               </div>
             </div>
           </div>
+          </>
         ) : (
           <>
             <div className="mb-8 flex flex-col sm:flex-row gap-4">

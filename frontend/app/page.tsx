@@ -8,15 +8,28 @@ import Testimonial from "@/components/landing/Testimonial";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
 import Features from "@/components/landing/Fetures";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
+  const router = useRouter();
+  const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.push('/startup');
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  
+  if (isLoading) return null;
 
   return (
     <div className="min-h-screen overflow-hidden">
@@ -31,15 +44,13 @@ export default function Home() {
       
       <div className="relative z-10 text-slate-900 dark:text-slate-100">
         <Navbar />
-
-        <main className="relative">
+        <main className="relative z-20 pt-16 px-0">
           <Intro />
           <Features />
           <HowItWorks />
           <Testimonial />
           <CTASection />
         </main>
-
         <Footer />
       </div>
     </div>

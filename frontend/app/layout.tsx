@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import ToastProvider from "@/components/ToastProvider";
 import { NavigationProvider } from "@/contexts/NavigationContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
         suppressHydrationWarning
       >
         <ThemeProvider
@@ -40,10 +41,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          <NavigationProvider>
-            {children}
-            <ToastProvider />
-          </NavigationProvider>
+          <AuthProvider>
+            <NavigationProvider>
+              {children}
+              <ToastProvider />
+            </NavigationProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

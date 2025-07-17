@@ -34,18 +34,16 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
   };
 
   const navigate = (href: string) => {
-    if (href === pathname) return; // Don't navigate to current page
+    if (href === pathname) return;
     
     setIsLoading(true);
     router.push(href);
     
-    // Set a timeout to hide loader in case the navigation doesn't trigger the effect
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
   };
 
-  // Listen to pathname changes to hide loader
   useEffect(() => {
     setIsLoading(false);
   }, [pathname]);

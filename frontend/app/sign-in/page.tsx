@@ -6,11 +6,13 @@ import Link from "next/link";
 import { showError, showSuccess } from "@/utils/toast";
 import { API_BASE_URL } from "@/config/constants";
 import { useNavigation } from "@/contexts/NavigationContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, User, Sparkles } from "lucide-react";
 
 export default function SignInPage() {
   const router = useRouter();
   const { navigate } = useNavigation();
+  const { login, isAuthenticated } = useAuth();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -21,7 +23,11 @@ export default function SignInPage() {
 
   useEffect(() => {
     setIsVisible(true);
-  }, []);
+    
+    if (isAuthenticated) {
+      navigate("/startup");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -52,9 +58,8 @@ export default function SignInPage() {
       const data = await response.json();
       console.log("Sign-in response:", data);
 
-      localStorage.setItem("authToken", data.data.token);
-      localStorage.setItem("userId", data.data._id);
-      localStorage.setItem("user", JSON.stringify(data.data));
+      login(data.data.token, data.data);
+      
       showSuccess("Sign-in successful!");
       setTimeout(() => {
         navigate("/startup");

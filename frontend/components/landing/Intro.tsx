@@ -22,7 +22,7 @@ export default function Intro() {
 
   return (
     <section 
-      className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen flex items-center"
+      className="relative py-20 px-4 sm:px-8 lg:px-12 overflow-hidden min-h-screen flex items-center"
       onMouseMove={handleMouseMove}
     >
       <div className="absolute inset-0">
@@ -42,7 +42,7 @@ export default function Intro() {
         <div className="absolute bottom-20 left-1/4 w-2 h-2 bg-pink-400 rounded-full animate-pulse delay-2000" />
       </div>
       
-      <div className="relative max-w-7xl mx-auto w-full">
+      <div className="relative max-w-[95%] 2xl:max-w-[1536px] mx-auto w-full">
         <div className="text-center max-w-4xl mx-auto">
           <div 
             className={`inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm transform transition-all duration-1000 ${

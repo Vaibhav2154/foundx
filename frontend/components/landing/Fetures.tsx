@@ -102,8 +102,8 @@ export default function Features(){
   ];
 
   return (
-    <section ref={sectionRef} id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto">
+    <section ref={sectionRef} id="features" className="py-20 px-4 sm:px-8 lg:px-12 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">
+      <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
             Everything You Need to{" "}

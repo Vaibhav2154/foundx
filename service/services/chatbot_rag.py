@@ -9,7 +9,6 @@ import json
 from utils.file_utils import PDFProcessor, DocumentProcessor
 from config import settings
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -60,10 +59,8 @@ class ChatbotRAGService:
     def _load_knowledge_base(self):
         """Load knowledge base from files and initialize with startup templates"""
         try:
-            # Load startup templates first
             self._load_startup_templates()
             
-            # Load any existing documents from knowledge_base directory
             if self.knowledge_base_path.exists():
                 for file_path in self.knowledge_base_path.glob("*.txt"):
                     try:
@@ -74,7 +71,6 @@ class ChatbotRAGService:
                     except Exception as e:
                         logger.error(f"Error loading {file_path}: {str(e)}")
                 
-                # Load PDF files if any
                 for file_path in self.knowledge_base_path.glob("*.pdf"):
                     try:
                         content = self.pdf_processor.extract_text(str(file_path))
@@ -88,7 +84,6 @@ class ChatbotRAGService:
             
         except Exception as e:
             logger.error(f"Error loading knowledge base: {str(e)}")
-            # Ensure we have at least the basic templates
             self._load_startup_templates()
 
     def _load_startup_templates(self):

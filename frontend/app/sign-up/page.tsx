@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { showError, showSuccess } from "@/utils/toast";
 import { API_BASE_URL } from "@/config/constants";
 import { useNavigation } from "@/contexts/NavigationContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, User, UserPlus, Sparkles, Check } from "lucide-react";
 
 export default function SignUpPage() {
@@ -23,13 +24,17 @@ export default function SignUpPage() {
 
   const router = useRouter();
   const { navigate } = useNavigation();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     setIsVisible(true);
-  }, []);
+    
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    // Calculate password strength
     let strength = 0;
     if (form.password.length >= 6) strength += 1;
     if (form.password.match(/[a-z]/)) strength += 1;
@@ -76,8 +81,7 @@ export default function SignUpPage() {
       const data = await response.json();
       console.log("Registration response:", data);
       showSuccess("Registration successful!");
-      
-      // Add a small delay to ensure the toast is visible before navigation
+
       setTimeout(() => {
         navigate("/sign-in");
       }, 1500);
@@ -113,7 +117,6 @@ export default function SignUpPage() {
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-8">
         <div className={`w-full max-w-md transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl mb-4 shadow-lg">
               <UserPlus className="w-8 h-8 text-white" />
@@ -154,7 +157,6 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              {/* Email Input */}
               <div className="space-y-2">
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />

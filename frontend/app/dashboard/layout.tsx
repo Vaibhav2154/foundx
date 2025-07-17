@@ -8,7 +8,7 @@ import { CommandPalette } from '../../components/ui/CommandPalette';
 import { Breadcrumbs } from '../../components/ui/Breadcrumbs';
 import { useRouter } from 'next/navigation';
 import { useNavigation } from '@/contexts/NavigationContext';
-import { authService } from '@/api/auth.service';
+import { useAuth } from '@/contexts/AuthContext';
 import { showSuccess } from '@/utils/toast';
 import { useActiveRoute } from '@/hooks/useActiveRoute';
 import { NotificationCenter } from '@/components/ui/NotificationCenter';
@@ -33,11 +33,19 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
   const router = useRouter();
   const { navigate } = useNavigation();
   const { isActive, pathname } = useActiveRoute();
+  const { isAuthenticated, logout, isLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState<UserProfile>({
     name: 'Guest User',
     role: 'Member',
     initials: 'GU'
   });
+  
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/sign-in');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -74,17 +82,10 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
 
   const handleQuickLogout = async () => {
     try {
-      await authService.logout();
-      localStorage.removeItem('user');
-      localStorage.removeItem('notificationSettings');
+      await logout();
       showSuccess('Logged out successfully!');
-      router.push('/sign-in');
     } catch (error) {
       console.error('Error during logout:', error);
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      localStorage.removeItem('notificationSettings');
-      localStorage.removeItem('startUpId');
       showSuccess('Logged out successfully!');
       router.push('/sign-in');
     }
@@ -134,7 +135,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
       <nav className="bg-gray-800/80 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
               <div className="flex items-center">
@@ -296,7 +297,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300">
+      <main className="max-w-[95%] 2xl:max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 animate-in fade-in duration-300">
         {/* Breadcrumbs - only show on sub-pages */}
         {pathname !== '/dashboard' && (
           <div className="mb-6">
