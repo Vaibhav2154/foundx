@@ -3,8 +3,8 @@ import { Star } from "lucide-react";
 
 const Testimonial = () => {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-800">
-          <div className="max-w-4xl mx-auto text-center">
+    <section className="py-20 px-4 sm:px-8 lg:px-12 bg-white dark:bg-slate-800">
+          <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto text-center">
             <div className="flex justify-center mb-6">
               <div className="flex space-x-1">
                 {[...Array(5)].map((_, i) => (

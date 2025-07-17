@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, File, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
 from services.legal_service import LegalService
 import logging
 import os
+import base64
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Legal Document Generation"])
@@ -16,31 +17,37 @@ class NDARequest(BaseModel):
     parties_info: Dict[str, Any]  # Company info, other party info, etc.
     use_ai: bool = True  # Whether to use AI for content generation
     content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    company_logo: Optional[str] = None  # Base64 encoded logo image (optional)
 
 class CDARequest(BaseModel):
     parties_info: Dict[str, Any]  # Same structure as NDA - CDA is essentially an NDA
     use_ai: bool = True  # Whether to use AI for content generation  
     content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    company_logo: Optional[str] = None  # Base64 encoded logo image (optional)
 
 class EmploymentAgreementRequest(BaseModel):
     employment_info: Dict[str, Any]  # Employee details, company details, terms, etc.
     use_ai: bool = True  # Whether to use AI for content generation
     content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    company_logo: Optional[str] = None  # Base64 encoded logo image (optional)
 
 class FounderAgreementRequest(BaseModel):
     founders_info: Dict[str, Any]  # Founder details, equity split, etc.
     use_ai: bool = True  # Whether to use AI for content generation
     content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    company_logo: Optional[str] = None  # Base64 encoded logo image (optional)
 
 class TermsOfServiceRequest(BaseModel):
     company_info: Dict[str, Any]  # Company details, service details, etc.
     use_ai: bool = True  # Whether to use AI for content generation
     content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    company_logo: Optional[str] = None  # Base64 encoded logo image (optional)
 
 class PrivacyPolicyRequest(BaseModel):
     company_info: Dict[str, Any]  # Company details, data collection practices, etc.
     use_ai: bool = True  # Whether to use AI for content generation
     content_structure: Optional[Dict[str, Any]] = None  # Manual content if use_ai is False
+    company_logo: Optional[str] = None  # Base64 encoded logo image (optional)
 
 class LegalDocumentResponse(BaseModel):
     filename: str
@@ -69,6 +76,8 @@ async def create_nda(request: NDARequest):
     
     Set use_ai=True (default) to automatically generate professional legal content,
     or use_ai=False to provide manual content_structure.
+    
+    Optionally provide a company_logo as a base64 encoded string to include in the document header.
     """
     try:
         logger.info(f"Creating {'AI-generated' if request.use_ai else 'manual'} NDA for: {request.parties_info.get('company_name', 'Unknown')}")
@@ -79,7 +88,8 @@ async def create_nda(request: NDARequest):
         
         result = await legal_service.generate_nda(
             parties_info=request.parties_info,
-            use_ai=request.use_ai
+            use_ai=request.use_ai,
+            company_logo=request.company_logo
         )
         
         file_path = result["file_path"]
@@ -118,6 +128,8 @@ async def create_cda(request: CDARequest):
     
     Set use_ai=True (default) to automatically generate professional legal content,
     or use_ai=False to provide manual content_structure.
+    
+    Optionally provide a company_logo as a base64 encoded string to include in the document header.
     """
     try:
         logger.info(f"Creating {'AI-generated' if request.use_ai else 'manual'} CDA for: {request.parties_info.get('company_name', 'Unknown')}")
@@ -128,7 +140,8 @@ async def create_cda(request: CDARequest):
         
         result = await legal_service.generate_cda(
             parties_info=request.parties_info,
-            use_ai=request.use_ai
+            use_ai=request.use_ai,
+            company_logo=request.company_logo
         )
         
         file_path = result["file_path"]
@@ -178,7 +191,8 @@ async def create_employment_agreement(request: EmploymentAgreementRequest):
         
         result = await legal_service.generate_employment_agreement(
             employment_info=request.employment_info,
-            use_ai=request.use_ai
+            use_ai=request.use_ai,
+            company_logo=request.company_logo
         )
         
         file_path = result["file_path"]
@@ -225,7 +239,8 @@ async def create_founder_agreement(request: FounderAgreementRequest):
         
         result = await legal_service.generate_founder_agreement(
             founders_info=request.founders_info,
-            use_ai=request.use_ai
+            use_ai=request.use_ai,
+            company_logo=request.company_logo
         )
         
         file_path = result["file_path"]
@@ -272,7 +287,8 @@ async def create_terms_of_service(request: TermsOfServiceRequest):
         
         result = await legal_service.generate_terms_of_service(
             company_info=request.company_info,
-            use_ai=request.use_ai
+            use_ai=request.use_ai,
+            company_logo=request.company_logo
         )
         
         file_path = result["file_path"]
@@ -321,7 +337,8 @@ async def create_privacy_policy(request: PrivacyPolicyRequest):
         
         result = await legal_service.generate_privacy_policy(
             company_info=request.company_info,
-            use_ai=request.use_ai
+            use_ai=request.use_ai,
+            company_logo=request.company_logo
         )
         
         file_path = result["file_path"]

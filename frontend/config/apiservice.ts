@@ -19,6 +19,7 @@ export interface LegalDocumentRequest {
   company_info?: any;
   use_ai?: boolean;
   content_structure?: any;
+  company_logo?: string;  // Base64 encoded logo image
 }
 
 export interface LegalDocumentResponse {
@@ -54,7 +55,6 @@ class ApiService {
     }
   }
 
-  // Chatbot/AI Assistant methods
   async askQuestion(request: ChatMessage): Promise<ChatResponse> {
     return this.makeRequest<ChatResponse>('/ask', {
       method: 'POST',
@@ -73,7 +73,6 @@ class ApiService {
     });
   }
 
-  // Legal Document Generation methods
   async createNDA(request: LegalDocumentRequest): Promise<Blob> {
     const response = await fetch(`${API_BASE_URL}/legal/create-nda`, {
       method: 'POST',

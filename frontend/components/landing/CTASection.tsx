@@ -21,7 +21,7 @@ const CTASection = () => {
 
   return (
     <section 
-      className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 overflow-hidden"
+      className="relative py-20 px-4 sm:px-8 lg:px-12 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 overflow-hidden"
       onMouseMove={handleMouseMove}
     >
       <div className="absolute inset-0">
@@ -42,7 +42,7 @@ const CTASection = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 via-purple-600/80 to-pink-600/80 backdrop-blur-sm" />
       </div>
       
-      <div className="relative max-w-4xl mx-auto text-center">
+      <div className="relative max-w-[95%] 2xl:max-w-[1536px] mx-auto text-center">
         <div className={`transform transition-all duration-1000 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>

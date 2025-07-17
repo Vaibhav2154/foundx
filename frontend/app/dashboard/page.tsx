@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Briefcase, 
-  Users, 
-  ClipboardList, 
-  PlusCircle, 
-  TrendingUp, 
+import {
+  Briefcase,
+  Users,
+  ClipboardList,
+  PlusCircle,
+  TrendingUp,
   Calendar,
   Target,
   DollarSign,
@@ -44,10 +44,10 @@ export default function DashboardPage() {
   const { user, getUserData } = useAuth();
   const { stats, activities, chartData, loading, error, refresh } = useDashboard();
   const [activeTab, setActiveTab] = useState('overview');
-  const [quote, setQuote] = useState<{text: string, author: string} | null>(null);
+  const [quote, setQuote] = useState<{ text: string, author: string } | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(true);
   const [userData, setUserData] = useState<any | null>(null);
-  
+
   useEffect(() => {
     const data = user || getUserData();
     setUserData(data);
@@ -61,9 +61,9 @@ export default function DashboardPage() {
       setQuote({ text: data.content, author: data.author });
     } catch (error) {
       console.error('Failed to fetch quote:', error);
-      setQuote({ 
-        text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", 
-        author: "Winston Churchill" 
+      setQuote({
+        text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        author: "Winston Churchill"
       });
     } finally {
       setQuoteLoading(false);
@@ -132,7 +132,7 @@ export default function DashboardPage() {
       onClick: () => navigate('/dashboard/projects')
     },
     {
-      label: "New Task", 
+      label: "New Task",
       icon: <PlusCircle size={18} />,
       variant: "success" as const,
       onClick: () => navigate('/dashboard/tasks')
@@ -188,9 +188,9 @@ export default function DashboardPage() {
                     <Quote className="w-5 h-5 text-blue-400 mt-1 flex-shrink-0" />
                     <div>
                       <p className="italic leading-relaxed">"{quote.text}"</p>
-                    <div className="text-right">
-                      <p className="text-gray-400 text-sm mt-2">— {quote.author}</p>
-                    </div>
+                      <div className="text-right">
+                        <p className="text-gray-400 text-sm mt-2">— {quote.author}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -260,11 +260,10 @@ export default function DashboardPage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-              activeTab === tab.id
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${activeTab === tab.id
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+              }`}
           >
             {tab.icon}
             {tab.label}
@@ -274,7 +273,6 @@ export default function DashboardPage() {
 
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Column - Quick Actions & Progress */}
           <div className="space-y-6">
             <Card>
               <CardHeader>
@@ -284,7 +282,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {quickActions.map((action, index) => (
+                  {quickActions.slice(2).map((action, index) => (
                     <Button
                       key={index}
                       variant={action.variant}
@@ -298,7 +296,83 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle icon={<Calendar className="w-5 h-5 text-yellow-400" />}>
+                  Upcoming Events
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {loading ? (
+                    Array(2).fill(0).map((_, i) => (
+                      <div key={i} className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl animate-pulse">
+                        <div className="w-12 h-12 bg-gray-600/50 rounded-xl"></div>
+                        <div className="flex-1">
+                          <div className="h-5 bg-gray-600/50 rounded w-3/4 mb-2"></div>
+                          <div className="h-4 bg-gray-600/30 rounded w-1/2"></div>
+                        </div>
+                        <div className="w-8 h-8 bg-gray-600/40 rounded-lg"></div>
+                      </div>
+                    ))
+                  ) : (
+                    activities.slice(0, 2).map((activity, index) => {
+                      // Extract date from timestamp
+                      const date = new Date(activity.timestamp);
+                      const month = date.toLocaleDateString('en-US', { month: 'short' });
+                      const day = date.getDate();
 
+                      // Generate gradients for different activities
+                      const gradients = [
+                        'from-blue-500 to-blue-600',
+                        'from-purple-500 to-purple-600',
+                        'from-red-500 to-red-600',
+                        'from-green-500 to-green-600'
+                      ];
+
+                      return (
+                        <div key={activity.id} className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
+                          <div className={`w-12 h-12 bg-gradient-to-r ${gradients[index % gradients.length]} rounded-xl flex items-center justify-center text-white font-bold text-sm`}>
+                            {month}<br />{day}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-white font-medium">{activity.entity}</p>
+                            <p className="text-gray-400 text-sm">{activity.action} by {activity.user}</p>
+                            <p className="text-blue-400 text-xs mt-1">{formatRelativeTime(activity.timestamp)}</p>
+                          </div>
+                          <Button size="sm" variant="secondary">
+                            <Bell size={14} />
+                          </Button>
+                        </div>
+                      );
+                    })
+                  )}
+
+                  {!loading && activities.length === 0 && (
+                    <div className="text-center py-6 text-gray-400">
+                      <p>No upcoming events</p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 gap-3">
+              <MetricCard
+                title="Completed Projects"
+                value={stats.completedProjects}
+                icon={<CheckCircle className="w-5 h-5 text-green-400" />}
+                change={{ value: "+2", isPositive: true }}
+              />
+              <MetricCard
+                title="Active Projects"
+                value={stats.activeProjects}
+                icon={<Clock className="w-5 h-5 text-yellow-400" />}
+                change={{ value: "+1", isPositive: true }}
+              />
+            </div>
             <Card>
               <CardHeader>
                 <CardTitle icon={<TrendingUp className="w-5 h-5 text-green-400" />}>
@@ -328,40 +402,6 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
-
-            <div className="grid grid-cols-1 gap-3">
-              <MetricCard
-                title="Completed Projects"
-                value={stats.completedProjects}
-                icon={<CheckCircle className="w-5 h-5 text-green-400" />}
-                change={{ value: "+2", isPositive: true }}
-              />
-              <MetricCard
-                title="Active Projects"
-                value={stats.activeProjects}
-                icon={<Clock className="w-5 h-5 text-yellow-400" />}
-                change={{ value: "+1", isPositive: true }}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <TeamStatus />
-            
-            <Card>
-              <CardHeader>
-                <CardTitle icon={<BarChart3 className="w-5 h-5 text-purple-400" />}>
-                  Quick Stats
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <SimpleBarChart 
-                  data={chartData.projectsChart.slice(0, 3)}
-                  title=""
-                  height={200}
-                />
-              </CardContent>
-            </Card>
           </div>
 
           <div className="lg:col-span-2 space-y-6">
@@ -375,70 +415,9 @@ export default function DashboardPage() {
                 <ActivityFeed activities={activities} loading={loading} />
               </CardContent>
             </Card>
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle icon={<Calendar className="w-5 h-5 text-yellow-400" />}>
-                    Upcoming Events
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {loading ? (
-                      Array(2).fill(0).map((_, i) => (
-                        <div key={i} className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl animate-pulse">
-                          <div className="w-12 h-12 bg-gray-600/50 rounded-xl"></div>
-                          <div className="flex-1">
-                            <div className="h-5 bg-gray-600/50 rounded w-3/4 mb-2"></div>
-                            <div className="h-4 bg-gray-600/30 rounded w-1/2"></div>
-                          </div>
-                          <div className="w-8 h-8 bg-gray-600/40 rounded-lg"></div>
-                        </div>
-                      ))
-                    ) : (
-                      activities.slice(0, 2).map((activity, index) => {
-                        // Extract date from timestamp
-                        const date = new Date(activity.timestamp);
-                        const month = date.toLocaleDateString('en-US', { month: 'short' });
-                        const day = date.getDate();
-                        
-                        // Generate gradients for different activities
-                        const gradients = [
-                          'from-blue-500 to-blue-600',
-                          'from-purple-500 to-purple-600',
-                          'from-red-500 to-red-600',
-                          'from-green-500 to-green-600'
-                        ];
-                        
-                        return (
-                          <div key={activity.id} className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
-                            <div className={`w-12 h-12 bg-gradient-to-r ${gradients[index % gradients.length]} rounded-xl flex items-center justify-center text-white font-bold text-sm`}>
-                              {month}<br/>{day}
-                            </div>
-                            <div className="flex-1">
-                              <p className="text-white font-medium">{activity.entity}</p>
-                              <p className="text-gray-400 text-sm">{activity.action} by {activity.user}</p>
-                              <p className="text-blue-400 text-xs mt-1">{formatRelativeTime(activity.timestamp)}</p>
-                            </div>
-                            <Button size="sm" variant="secondary">
-                              <Bell size={14} />
-                            </Button>
-                          </div>
-                        );
-                      })
-                    )}
-                    
-                    {!loading && activities.length === 0 && (
-                      <div className="text-center py-6 text-gray-400">
-                        <p>No upcoming events</p>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
 
-              <PerformanceMetrics />
+
             </div>
           </div>
         </div>
@@ -446,15 +425,15 @@ export default function DashboardPage() {
 
       {activeTab === 'analytics' && (
         <div className="space-y-6">
-          <AnalyticsDashboard />
-          
+
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SimpleBarChart 
+            <SimpleBarChart
               data={chartData.projectsChart}
               title="Projects by Status"
               height={250}
             />
-            <SimpleBarChart 
+            <SimpleBarChart
               data={chartData.tasksChart}
               title="Tasks by Status"
               height={250}
@@ -463,7 +442,7 @@ export default function DashboardPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <SimpleLineChart 
+              <SimpleLineChart
                 data={chartData.productivityChart}
                 title="Weekly Productivity Trend"
                 height={300}
@@ -473,7 +452,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SimpleLineChart 
+            <SimpleLineChart
               data={chartData.monthlyProgress}
               title="Monthly Progress"
               height={250}

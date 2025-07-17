@@ -30,7 +30,7 @@ export default function Navbar() {
         ? 'bg-white/90 dark:bg-slate-900/90 shadow-lg' 
         : 'bg-white/80 dark:bg-slate-900/80'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2 group cursor-pointer">
             <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -56,6 +56,14 @@ export default function Navbar() {
                 <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300" />
               </button>
             ))}
+            
+            <button
+              onClick={() => navigate("/build-startup")}
+              className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors relative group"
+            >
+              Build Startup
+              <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300" />
+            </button>
             
             <button
               onClick={() => navigate("/sign-up")}
@@ -94,6 +102,12 @@ export default function Navbar() {
                   {item.label}
                 </button>
               ))}
+              <button
+                onClick={() => navigate("/build-startup")}
+                className="block w-full text-left text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors py-2"
+              >
+                Build Startup
+              </button>
               <button
                 onClick={() => navigate("/sign-up")}
                 className="btn-primary w-full mt-4"

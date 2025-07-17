@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const publicRoutes = ['/sign-in', '/sign-up', '/', '/options'];
+  const publicRoutes = ['/sign-in', '/sign-up', '/', '/options', '/build-startup'];
 
   const getUserData = (): any | null => {
     try {

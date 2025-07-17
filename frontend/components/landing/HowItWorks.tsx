@@ -40,13 +40,13 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm relative overflow-hidden">
+    <section id="how-it-works" className="py-20 px-4 sm:px-8 lg:px-12 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm relative overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-2xl animate-pulse" />
         <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-2xl animate-pulse delay-1000" />
       </div>
       
-      <div className="max-w-7xl mx-auto relative">
+      <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto relative">
         <div className={`text-center mb-16 transform transition-all duration-1000 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
