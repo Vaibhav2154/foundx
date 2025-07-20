@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Home, Briefcase, CheckSquare, Users, Settings, Bell, MessageCircle, Menu, X, Search, Scale, LogOut, ChevronDown } from 'lucide-react';
+import { Home, Users, Settings, Bell, MessageCircle, Menu, X, Search, Scale, LogOut, ChevronDown, ExternalLink, Bot } from 'lucide-react';
 import Image from 'next/image';
 import { CommandPalette } from '../../components/ui/CommandPalette';
 import { Breadcrumbs } from '../../components/ui/Breadcrumbs';
@@ -126,9 +126,8 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
 
   const navItems = [
     { href: '/dashboard', icon: Home, label: 'Overview' },
-    { href: '/dashboard/projects', icon: Briefcase, label: 'Projects' },
-    { href: '/dashboard/tasks', icon: CheckSquare, label: 'Tasks' },
     { href: '/dashboard/team', icon: Users, label: 'Team' },
+    { href: '/dashboard/assistant', icon: Bot, label: 'PitchPilot' },
     { href: '/dashboard/legal', icon: Scale, label: 'Legal' },
   ];
 
@@ -177,7 +176,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
 
 
               <Link target='_blank' href="https://lakshya-brown.vercel.app/" className="p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-colors">
-                <Briefcase className="w-5 h-5" />
+                <ExternalLink className="w-5 h-5" />
               </Link>
 
               <button 
@@ -308,13 +307,6 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
           {children}
         </div>
       </main>
-
-      <button
-        onClick={() => navigate("dashboard/assistant")}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white transition-all duration-300 transform hover:scale-110 group"
-      >
-        <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
-      </button>
 
       {/* Command Palette */}
       {showCommandPalette && (

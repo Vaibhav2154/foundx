@@ -26,9 +26,15 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor to handle 401 errors
+// Response interceptor to handle 401 errors and HTML responses
 api.interceptors.response.use(
     (response) => {
+        // Check if response is HTML when JSON was expected
+        const contentType = response.headers['content-type'];
+        if (contentType && contentType.includes('text/html') && response.config.headers?.['Content-Type'] === 'application/json') {
+            console.error('Received HTML response when JSON was expected. Server might be down or returning error page.');
+            throw new Error('Server returned HTML instead of JSON. Please check if the backend is running.');
+        }
         return response;
     },
     (error) => {
@@ -40,6 +46,13 @@ api.interceptors.response.use(
             // Optionally redirect to login page
             // window.location.href = '/sign-in';
         }
+        
+        // Handle HTML responses in error cases
+        if (error.response?.headers?.['content-type']?.includes('text/html')) {
+            console.error('Server returned HTML error page:', error.response?.status);
+            return Promise.reject(new Error(`Server error: ${error.response?.status || 'Unknown'}. Backend may be down.`));
+        }
+        
         return Promise.reject(error);
     }
 );

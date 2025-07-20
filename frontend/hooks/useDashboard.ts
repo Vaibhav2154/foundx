@@ -120,8 +120,14 @@ export const useDashboard = () => {
       }
       
       const [projectsResponse, tasksResponse] = await Promise.all([
-        getProjects().catch(() => ({ data: [] })),
-        getAllTasks(startUpId).catch(() => ({ data: [] }))
+        getProjects().catch((error) => {
+          console.error('Projects API error:', error.message || error);
+          return { data: [] };
+        }),
+        getAllTasks(startUpId).catch((error) => {
+          console.error('Tasks API error:', error.message || error);
+          return { data: [] };
+        })
       ]);
 
       const projects = projectsResponse?.data || [];
