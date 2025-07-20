@@ -363,38 +363,76 @@ class ChatbotRAGService:
         additional_context: Optional[str] = None,
         startup_type: Optional[str] = None
     ) -> str:
-        """Build a dynamic prompt for startup advisory Q&A with adjustable response length based on question intent."""
+        """Build a dynamic prompt for startup advisory Q&A with better response length control."""
 
-        # Define keywords that indicate a need for detailed explanations
-        detailed_keywords = ["explain", "describe", "elaborate", "analyze", "how", "why", "in detail"]
-
-        # Check if the question includes any detailed keywords
-        needs_detailed_response = any(re.search(rf"\b{kw}\b", question.lower()) for kw in detailed_keywords)
-
+        # Define keywords that indicate the desired response length and complexity
+        detailed_keywords = [
+            "explain", "describe", "elaborate", "analyze", "in detail", "breakdown", 
+            "comprehensive", "thorough", "deep dive", "step by step", "guide"
+        ]
+        
+        brief_keywords = [
+            "briefly", "summarize", "quick", "short", "concise", "simple", 
+            "straightforward", "overview", "tl;dr", "summary"
+        ]
+        
+        # Determine response length based on keyword analysis
+        has_detailed_keywords = any(re.search(rf"\b{kw}\b", question.lower()) for kw in detailed_keywords)
+        has_brief_keywords = any(re.search(rf"\b{kw}\b", question.lower()) for kw in brief_keywords)
+        question_length = len(question.split())
+        
+        # Classify response type based on keywords and question length
+        if has_detailed_keywords:
+            response_type = "detailed"
+        elif has_brief_keywords:
+            response_type = "brief"
+        elif question_length > 15:  # Longer questions typically need more detailed answers
+            response_type = "moderate"
+        else:
+            response_type = "moderate"  # Default to moderate length
+        
+        # Create base prompt
         prompt = (
             "You are a highly experienced startup advisor with expertise in entrepreneurship, "
             "business development, and the global startup ecosystem. Based on the following information, "
         )
-
-        prompt += "provide a comprehensive, actionable response" if needs_detailed_response else "give a brief and to-the-point response"
-        prompt += " to the user's question.\n\n"
-
-        prompt += f"Primary Knowledge Context:\n{context.strip()}\n"
-
+        
+        # Add specific instructions based on response type
+        if response_type == "detailed":
+            prompt += (
+                "provide a comprehensive response to the question. Use 4-6 paragraphs or 5-8 bullet points "
+                "where appropriate. Include actionable insights and examples."
+            )
+        elif response_type == "brief":
+            prompt += (
+                "provide a concise response to the question. Limit your answer to 2-3 short paragraphs "
+                "or 3-4 bullet points. Be direct and focused."
+            )
+        else:  # moderate
+            prompt += (
+                "provide a balanced response to the question. Use 3-4 paragraphs or 4-5 bullet points "
+                "as appropriate. Be informative but avoid excessive detail."
+            )
+        
+        # Add context and question
+        prompt += f"\n\nPrimary Knowledge Context:\n{context.strip()}\n"
+        
         if additional_context:
             prompt += f"\nAdditional Background Information:\n{additional_context.strip()}\n"
-
+        
         if startup_type:
             prompt += f"\nStartup Type: {startup_type.strip()}\n"
-
+        
         prompt += f"\nUser Question:\n{question.strip()}\n\n"
-
-        prompt += (
-            "Respond in a detailed and structured manner using paragraphs or bullet points if necessary."
-            if needs_detailed_response else
-            "Respond concisely and avoid unnecessary elaboration. Give a 3 4 line response."
-        )
-
+        
+        # Add specific output format instructions
+        if response_type == "detailed":
+            prompt += "Your response should be thorough but well-structured. Use headings if necessary."
+        elif response_type == "brief":
+            prompt += "Your response should be direct and concise. Aim for approximately 100-150 words."
+        else:
+            prompt += "Your response should be balanced and practical. Aim for approximately 150-250 words."
+        
         return prompt
 
     

@@ -16,7 +16,7 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div className={`
       ${gradient 
-        ? 'bg-gradient-to-br from-gray-800/50 via-gray-800/30 to-gray-900/50' 
+        ? 'bg-slate-800/50 border-slate-700/50' 
         : 'bg-gray-800/50'
       }
       backdrop-blur-sm rounded-2xl border border-gray-700/50 

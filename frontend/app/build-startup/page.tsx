@@ -180,12 +180,12 @@ export default function BuildStartupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-4 -left-4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 -right-4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute -bottom-8 left-1/3 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute top-1/2 -right-4 w-96 h-96 bg-green-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-8 left-1/3 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
       
       <div className="relative z-10 container mx-auto px-6 py-12">
@@ -195,28 +195,28 @@ export default function BuildStartupPage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-600 rounded-3xl mb-6 shadow-lg">
             <Rocket className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-green-600 leading-tight">
             Build Your Startup
           </h1>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-8">
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-4xl mx-auto leading-relaxed mb-8">
             Follow our comprehensive step-by-step guide to transform your idea into a successful startup. 
             Each step includes detailed activities, expert tips, and valuable resources.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-            <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
+            <div className="bg-white dark:bg-slate-800 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
               <div className="flex items-center justify-center w-12 h-12 bg-blue-500/20 rounded-xl mb-4 mx-auto">
-                <TrendingUp className="w-6 h-6 text-blue-400" />
+                <TrendingUp className="w-6 h-6 text-blue-600" />
               </div>
-              <div className="text-2xl font-bold text-white mb-1">{steps.length}</div>
-              <div className="text-gray-400 text-sm">Total Steps</div>
+              <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1">{steps.length}</div>
+              <div className="text-slate-600 dark:text-slate-400 text-sm">Total Steps</div>
             </div>
-            <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
+            <div className="bg-white dark:bg-slate-800 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
               <div className="flex items-center justify-center w-12 h-12 bg-green-500/20 rounded-xl mb-4 mx-auto">
-                <Clock className="w-6 h-6 text-green-400" />
+                <Clock className="w-6 h-6 text-green-600" />
               </div>
               <div className="text-2xl font-bold text-white mb-1">12-24</div>
               <div className="text-gray-400 text-sm">Weeks Timeline</div>
@@ -249,7 +249,7 @@ export default function BuildStartupPage() {
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPercentage}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full"
+                    className="bg-green-600 h-3 rounded-full"
                   ></motion.div>
                 </div>
                 <div className="text-gray-400 text-sm">
@@ -288,8 +288,8 @@ export default function BuildStartupPage() {
                       <div
                         className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
                           isCompleted
-                            ? "bg-gradient-to-r from-green-500 to-emerald-500"
-                            : "bg-gradient-to-r from-blue-500 to-purple-500 group-hover:shadow-lg"
+                            ? "bg-green-600"
+                            : "bg-blue-600 group-hover:shadow-lg"
                         }`}
                       >
                         {isCompleted ? (
@@ -300,20 +300,20 @@ export default function BuildStartupPage() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-4 mb-2">
-                          <h3 className="text-2xl font-bold text-white">
+                          <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
                             Step {index + 1}: {step.title}
                           </h3>
                           <div className="flex gap-2">
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(step.difficulty)}`}>
                               {step.difficulty}
                             </span>
-                            <span className="px-3 py-1 rounded-full text-xs font-medium text-blue-400 bg-blue-400/10">
+                            <span className="px-3 py-1 rounded-full text-xs font-medium text-blue-600 bg-blue-100 dark:bg-blue-600/10">
                               <Clock className="w-3 h-3 inline mr-1" />
                               {step.duration}
                             </span>
                           </div>
                         </div>
-                        <p className="text-gray-300 text-base leading-relaxed">{step.description}</p>
+                        <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed">{step.description}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
@@ -321,8 +321,8 @@ export default function BuildStartupPage() {
                         onClick={(e) => toggleComplete(index, e)}
                         className={`w-8 h-8 rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
                           isCompleted
-                            ? "bg-green-500 border-green-500"
-                            : "border-gray-400 hover:border-green-400"
+                            ? "bg-green-600 border-green-600"
+                            : "border-gray-400 hover:border-green-600"
                         }`}
                       >
                         {isCompleted && (
@@ -380,12 +380,12 @@ export default function BuildStartupPage() {
                         </div>
                       </div>
 
-                      <div className="ml-6 mt-8 bg-gradient-to-r from-purple-500/10 to-blue-500/10 p-6 rounded-2xl border border-purple-500/20">
-                        <h5 className="text-purple-400 font-medium mb-3 flex items-center">
+                      <div className="ml-6 mt-8 bg-purple-50 dark:bg-purple-900/10 p-6 rounded-2xl border border-purple-200 dark:border-purple-500/20">
+                        <h5 className="text-purple-600 dark:text-purple-400 font-medium mb-3 flex items-center">
                           <Lightbulb className="w-4 h-4 mr-2" />
                           Pro Tip
                         </h5>
-                        <p className="text-gray-300 text-sm italic leading-relaxed">{step.tips}</p>
+                        <p className="text-slate-600 dark:text-slate-300 text-sm italic leading-relaxed">{step.tips}</p>
                       </div>
                     </motion.div>
                   )}
@@ -402,17 +402,17 @@ export default function BuildStartupPage() {
           viewport={{ once: true }}
           className="text-center mt-20"
         >
-          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-3xl p-8 border border-blue-500/20 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <div className="bg-blue-50 dark:bg-blue-900/10 rounded-3xl p-8 border border-blue-200 dark:border-blue-500/20 max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 text-blue-600">
               Ready to Start Your Journey?
             </h2>
-            <p className="text-gray-300 mb-8 text-lg">
+            <p className="text-slate-600 dark:text-slate-300 mb-8 text-lg">
               Join thousands of entrepreneurs who have successfully built their startups using our proven methodology.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
               <Link 
                 href="/sign-up" 
-                className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 inline-flex items-center shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="group bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 inline-flex items-center shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Get Started Today
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

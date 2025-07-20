@@ -149,9 +149,9 @@ export const TeamStatus: React.FC<TeamStatusProps> = ({ className = '' }) => {
   };
 
   const getWorkloadColor = (workload: number) => {
-    if (workload >= 90) return 'from-red-500 to-red-400';
-    if (workload >= 70) return 'from-yellow-500 to-yellow-400';
-    return 'from-green-500 to-green-400';
+    if (workload >= 90) return 'bg-red-600';
+    if (workload >= 70) return 'bg-yellow-600';
+    return 'bg-green-600';
   };
 
   const getInitials = (name: string) => {
@@ -201,7 +201,7 @@ export const TeamStatus: React.FC<TeamStatusProps> = ({ className = '' }) => {
             className="flex items-center gap-3 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors group"
           >
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                 {getInitials(member.name)}
               </div>
               <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-gray-800 ${getStatusColor(member.status)}`}></div>
@@ -229,7 +229,7 @@ export const TeamStatus: React.FC<TeamStatusProps> = ({ className = '' }) => {
                 </div>
                 <div className="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
                   <div 
-                    className={`h-full bg-gradient-to-r ${getWorkloadColor(member.workload)} transition-all duration-300 rounded-full`}
+                    className={`h-full ${getWorkloadColor(member.workload)} transition-all duration-300 rounded-full`}
                     style={{ width: `${member.workload}%` }}
                   ></div>
                 </div>

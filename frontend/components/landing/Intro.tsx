@@ -26,10 +26,10 @@ export default function Intro() {
       onMouseMove={handleMouseMove}
     >
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-transparent to-purple-50 dark:from-blue-900/20 dark:via-transparent dark:to-purple-900/20 opacity-50" />
+        <div className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 opacity-50" />
         
         <div 
-          className="absolute w-96 h-96 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"
+          className="absolute w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"
           style={{
             left: mousePosition.x - 192,
             top: mousePosition.y - 192,
@@ -45,7 +45,7 @@ export default function Intro() {
       <div className="relative max-w-[95%] 2xl:max-w-[1536px] mx-auto w-full">
         <div className="text-center max-w-4xl mx-auto">
           <div 
-            className={`inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm transform transition-all duration-1000 ${
+            className={`inline-flex items-center px-6 py-3 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm transform transition-all duration-1000 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -61,9 +61,9 @@ export default function Intro() {
           >
             From Idea to{" "}
             <span className="relative">
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient">
+              {/* <span className="text-blue-600 font-bold animate-gradient"> */}
                 Launch
-              </span>
+              {/* </span> */}
             </span>
           </h1>
           
@@ -83,7 +83,7 @@ export default function Intro() {
           >
             <Link href="/options">
               <button className="group relative btn-secondary overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                <div className="absolute inset-0 bg-blue-700 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
                 <span className="relative z-10 flex items-center">
                   Start Building Today
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -92,7 +92,7 @@ export default function Intro() {
             </Link>
             
             <button className="group border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-8 py-4 rounded-xl hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 font-semibold text-lg relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+              <div className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               <span className="relative z-10 flex items-center">
                 <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
                 Watch Demo

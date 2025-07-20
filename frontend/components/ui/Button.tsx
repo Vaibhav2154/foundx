@@ -26,19 +26,11 @@ export const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'font-medium rounded-xl flex items-center justify-center gap-2 transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none';
   
   const variants = {
-    primary: gradient 
-      ? 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl'
-      : 'bg-blue-600 hover:bg-blue-700 text-white',
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl',
     secondary: 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600',
-    danger: gradient
-      ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl'
-      : 'bg-red-600 hover:bg-red-700 text-white',
-    success: gradient
-      ? 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl'
-      : 'bg-green-600 hover:bg-green-700 text-white',
-    warning: gradient
-      ? 'bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl'
-      : 'bg-amber-600 hover:bg-amber-700 text-white'
+    danger: 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl',
+    success: 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl',
+    warning: 'bg-amber-600 hover:bg-amber-700 text-white shadow-lg hover:shadow-xl'
   };
 
   const sizes = {

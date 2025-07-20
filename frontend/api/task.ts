@@ -12,7 +12,7 @@ export const getAllTasks = async (startUpId: string) => {
 
 export const getTasksByProject = async (projectId: string) => {
   try {
-    const response = await api.get(`/task/${projectId}/tasks`);
+    const response = await api.get(`/${projectId}/tasks`);
     return response.data;
   } catch (error) {
     console.error('Error fetching project tasks:', error);
@@ -22,7 +22,7 @@ export const getTasksByProject = async (projectId: string) => {
 
 export const createTask = async (projectId: string, data: any) => {
   try {
-    const response = await api.post(`/task/${projectId}/task/create`, data);
+    const response = await api.post(`/${projectId}/task/create`, data);
     return response.data;
   } catch (error) {
     console.error('Error creating task:', error);
@@ -32,7 +32,7 @@ export const createTask = async (projectId: string, data: any) => {
 
 export const updateTask = async (projectId: string, data: any) => {
   try {
-    const response = await api.post(`/task/${projectId}/task/updateTask`, data);
+    const response = await api.post(`/${projectId}/task/updateTask`, data);
     return response.data;
   } catch (error) {
     console.error('Error updating task:', error);
@@ -42,10 +42,8 @@ export const updateTask = async (projectId: string, data: any) => {
 
 export const deleteTask = async (projectId: string, taskId: string) => {
   try {
-    // Since there's no specific delete endpoint in the routes, we might need to use deAssignMember or updateTask with a status change
-    // For now, I'm implementing it to match the pattern of other endpoints
-    const response = await api.post(`/task/${projectId}/task/deAssignMember`, { taskId });
-    return response.data;
+    // Note: Delete functionality not implemented in backend yet
+    throw new Error('Delete functionality is not available yet');
   } catch (error) {
     console.error('Error deleting task:', error);
     throw error;

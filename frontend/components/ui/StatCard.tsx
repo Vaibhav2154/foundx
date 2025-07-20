@@ -10,7 +10,6 @@ interface StatCardProps {
     period?: string;
   };
   icon: React.ReactNode;
-  gradient: string;
   bgColor: string;
   loading?: boolean;
 }
@@ -20,7 +19,6 @@ const StatCard: React.FC<StatCardProps> = ({
   value,
   change,
   icon,
-  gradient,
   bgColor,
   loading = false
 }) => {

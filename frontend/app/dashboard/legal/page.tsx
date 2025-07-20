@@ -534,9 +534,9 @@ const LegalDocuments = () => {
     if (!content) return null;
 
     return (
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-6 backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
+      <div className="bg-blue-50 dark:bg-slate-800/50 rounded-2xl p-6 backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
         <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
             <HelpCircle className="h-4 w-4 text-white" />
           </div>
           {content.title}
@@ -739,22 +739,22 @@ const LegalDocuments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-blue-300/10 to-purple-300/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-700/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
       
       <div className="relative z-10 flex-1 p-8">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
               <Shield className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold text-blue-600 dark:text-blue-400">
                 Legal Documents
               </h1>
               <p className="text-slate-600 dark:text-slate-300 mt-1 flex items-center">
@@ -765,9 +765,9 @@ const LegalDocuments = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 backdrop-blur-sm border border-blue-200/30 dark:border-blue-700/30 rounded-xl p-4">
+            <div className="bg-blue-100 dark:bg-blue-900/20 backdrop-blur-sm border border-blue-200/30 dark:border-blue-700/30 rounded-xl p-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
                   <FileText className="h-4 w-4 text-white" />
                 </div>
                 <div>
@@ -777,9 +777,9 @@ const LegalDocuments = () => {
               </div>
             </div>
             
-            <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 dark:from-green-500/20 dark:to-emerald-500/20 backdrop-blur-sm border border-green-200/30 dark:border-green-700/30 rounded-xl p-4">
+            <div className="bg-green-100 dark:bg-green-900/20 backdrop-blur-sm border border-green-200/30 dark:border-green-700/30 rounded-xl p-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg flex items-center justify-center mr-3">
+                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center mr-3">
                   <CheckCircle className="h-4 w-4 text-white" />
                 </div>
                 <div>
@@ -789,9 +789,9 @@ const LegalDocuments = () => {
               </div>
             </div>
             
-            <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 dark:from-orange-500/20 dark:to-red-500/20 backdrop-blur-sm border border-orange-200/30 dark:border-orange-700/30 rounded-xl p-4">
+            <div className="bg-orange-100 dark:bg-orange-900/20 backdrop-blur-sm border border-orange-200/30 dark:border-orange-700/30 rounded-xl p-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-r from-orange-600 to-red-600 rounded-lg flex items-center justify-center mr-3">
+                <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center mr-3">
                   <Clock className="h-4 w-4 text-white" />
                 </div>
                 <div>
@@ -814,14 +814,14 @@ const LegalDocuments = () => {
             )}
 
             {generatedDocument && (
-              <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl flex items-center justify-between backdrop-blur-sm">
+              <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl flex items-center justify-between backdrop-blur-sm">
                 <div className="flex items-center text-green-700 dark:text-green-300">
                   <CheckCircle className="h-5 w-5 mr-2" />
                   <span>Document generated successfully: {generatedDocument.filename}</span>
                 </div>
                 <button
                   onClick={() => downloadDocument(generatedDocument.filename)}
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center shadow-lg hover:shadow-xl"
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center shadow-lg hover:shadow-xl"
                 >
                   <Download className="h-4 w-4 mr-1" />
                   Download
@@ -830,7 +830,7 @@ const LegalDocuments = () => {
             )}
 
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-semibold text-blue-600 dark:text-blue-400">
                 Generate NDA
               </h2>
               <button
@@ -911,7 +911,7 @@ const LegalDocuments = () => {
                         e.preventDefault();
                         generateDocument();
                       }}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl flex items-center"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl flex items-center"
                     >
                       {isGenerating ? (
                         <>
@@ -942,7 +942,7 @@ const LegalDocuments = () => {
                 </form>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-6 backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
+              <div className="bg-blue-50 dark:bg-slate-800/50 rounded-2xl p-6 backdrop-blur-sm border border-white/20 dark:border-slate-700/50">
                 {renderHelpContent()}
               </div>
             </div>
@@ -966,17 +966,17 @@ const LegalDocuments = () => {
             </div>
 
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+              <h2 className="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6">
                 Document Templates
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {templates.map((template) => (
                   <div key={template.id} className="group bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/20 dark:border-slate-700/50 hover:shadow-xl transition-all duration-300 hover:scale-105 card-hover">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-3 shadow-lg">
+                      <div className="bg-blue-600 rounded-xl p-3 shadow-lg">
                         <FileText className="h-6 w-6 text-white" />
                       </div>
-                      <span className="text-xs px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-300 rounded-full font-medium">
+                      <span className="text-xs px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full font-medium">
                         {template.category}
                       </span>
                     </div>
@@ -989,7 +989,7 @@ const LegalDocuments = () => {
                       </span>
                       <button
                         onClick={() => startNewDocument(template.id)}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl group-hover:scale-105"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl group-hover:scale-105"
                       >
                         Generate
                       </button>
@@ -1000,7 +1000,7 @@ const LegalDocuments = () => {
             </div>
 
             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 dark:border-slate-700/50 p-6">
-              <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+              <h2 className="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6">
                 Recent Documents
               </h2>
               <div className="overflow-x-auto">
@@ -1019,7 +1019,7 @@ const LegalDocuments = () => {
                       <tr key={index} className="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
                         <td className="py-4 px-4">
                           <div className="flex items-center">
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
+                            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
                               <FileText className="h-5 w-5 text-white" />
                             </div>
                             <span className="font-medium text-slate-900 dark:text-slate-100">{doc.title}</span>
@@ -1029,8 +1029,8 @@ const LegalDocuments = () => {
                         <td className="py-4 px-4">
                           <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                             doc.status === 'completed' 
-                              ? 'bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 text-green-800 dark:text-green-300' 
-                              : 'bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 text-yellow-800 dark:text-yellow-300'
+                              ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300' 
+                              : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300'
                           }`}>
                             {doc.status === 'completed' ? (
                               <CheckCircle className="h-3 w-3 mr-1" />
@@ -1067,7 +1067,7 @@ const LegalDocuments = () => {
           <div className="fixed bottom-24 right-6 z-50">
             <button
               onClick={() => setShowQuickSelect(true)}
-              className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center justify-center space-x-2"
+              className="group bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center justify-center space-x-2"
               title="Quick Generate Document"
             >
               <Plus className="h-6 w-6" />
@@ -1080,7 +1080,7 @@ const LegalDocuments = () => {
             <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 dark:border-slate-700/50 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <h3 className="text-2xl font-semibold text-blue-600 dark:text-blue-400">
                     Quick Generate Document
                   </h3>
                   <button
@@ -1099,10 +1099,10 @@ const LegalDocuments = () => {
                         startNewDocument(template.id);
                         setShowQuickSelect(false);
                       }}
-                      className="text-left p-4 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-800 rounded-xl hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-200 border border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-600 group"
+                      className="text-left p-4 bg-slate-50 dark:bg-slate-700 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 border border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-600 group"
                     >
                       <div className="flex items-center mb-2">
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                           <FileText className="h-4 w-4 text-white" />
                         </div>
                         <span className="font-medium text-slate-900 dark:text-slate-100">{template.title}</span>

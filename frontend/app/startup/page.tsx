@@ -235,23 +235,21 @@ export default function StartupPage() {
     };
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full opacity-20 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-purple-400 to-pink-600 rounded-full opacity-20 animate-pulse delay-1000"></div>
-        </div>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 relative overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600 rounded-full opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-700 rounded-full opacity-20 animate-pulse delay-1000"></div>
 
         <div className={`relative py-12 px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200/50 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm">
+              <div className="inline-flex items-center px-6 py-3 rounded-full bg-blue-100 dark:bg-blue-900 border border-blue-200/50 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm">
                 <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
                 Startup Management Hub
                 <Star className="w-4 h-4 ml-2 text-yellow-500" />
               </div>
               <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight">
                 Build Your 
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient"> Dream Team</span>
+                <span className="text-blue-600 dark:text-blue-400"> Dream Team</span>
               </h1>
               <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
                 Create, manage, and scale your startup with powerful team collaboration tools. 
@@ -300,7 +298,7 @@ export default function StartupPage() {
                 <button
                   onClick={createStartup}
                   disabled={loading || !createForm.companyName || !createForm.password}
-                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   {loading ? (
                     <span className="flex items-center justify-center">
@@ -356,7 +354,7 @@ export default function StartupPage() {
                 <button
                   onClick={joinStartup}
                   disabled={loading || !joinForm.companyName || !joinForm.password}
-                  className="w-full py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   {loading ? (
                     <span className="flex items-center justify-center">
@@ -410,7 +408,7 @@ export default function StartupPage() {
                 <button
                   onClick={accessStartup}
                   disabled={loading || !accessForm.companyName || !accessForm.password}
-                  className="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   {loading ? (
                     <span className="flex items-center justify-center">
@@ -426,7 +424,7 @@ export default function StartupPage() {
                 </button>
 
                 {startupData && (
-                  <div className="mt-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-xl border border-green-200 dark:border-green-700">
+                  <div className="mt-6 bg-green-50 dark:bg-green-900/20 p-6 rounded-xl border border-green-200 dark:border-green-700">
                     <div className="flex items-center mb-3">
                       <Building2 className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                       <h3 className="text-lg font-bold text-green-900 dark:text-green-100">{startupData.companyName}</h3>
@@ -466,7 +464,7 @@ export default function StartupPage() {
                 </div>
                 <button
                   onClick={fetchEmployees}
-                  className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
                   <span className="flex items-center justify-center">
                     <Users className="w-5 h-5 mr-2" />
@@ -484,10 +482,10 @@ export default function StartupPage() {
                       {employees.map((emp, idx) => (
                         <div
                           key={idx}
-                          className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-xl border border-purple-200 dark:border-purple-700 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
+                          className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-xl border border-purple-200 dark:border-purple-700 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
                         >
                           <div className="flex items-center mb-2">
-                            <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mr-3">
+                            <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center mr-3">
                               <span className="text-white font-bold text-sm">
                                 {emp.fullName.split(' ').map(n => n[0]).join('').toUpperCase()}
                               </span>

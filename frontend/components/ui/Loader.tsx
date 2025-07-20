@@ -57,7 +57,7 @@ const DotsLoader = ({ size }: { size: string }) => {
 const PulseLoader = ({ size }: { size: string }) => (
   <motion.div
     className={cn(
-      'bg-gradient-to-r from-blue-500 to-purple-600 rounded-full',
+      'bg-blue-600 rounded-full',
       size === 'sm' && 'w-8 h-8',
       size === 'md' && 'w-12 h-12',
       size === 'lg' && 'w-16 h-16',
@@ -215,7 +215,7 @@ export const AdvancedLoader = () => (
       
       {/* Center dot */}
       <motion.div
-        className="absolute top-1/2 left-1/2 w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"
+        className="absolute top-1/2 left-1/2 w-2 h-2 bg-blue-600 rounded-full transform -translate-x-1/2 -translate-y-1/2"
         animate={{
           scale: [1, 1.5, 1],
           opacity: [0.5, 1, 0.5],
@@ -233,7 +233,7 @@ export const AdvancedLoader = () => (
 // Page loader with company branding
 export const PageLoader = ({ message = 'Loading...' }: { message?: string }) => (
   <motion.div
-    className="fixed inset-0 bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center z-50"
+    className="fixed inset-0 bg-blue-50 dark:bg-slate-900 flex items-center justify-center z-50"
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
@@ -241,7 +241,7 @@ export const PageLoader = ({ message = 'Loading...' }: { message?: string }) => 
     <div className="text-center space-y-8">
       {/* Logo animation */}
       <motion.div
-        className="w-20 h-20 mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center"
+        className="w-20 h-20 mx-auto bg-blue-600 rounded-2xl flex items-center justify-center"
         animate={{
           scale: [1, 1.1, 1],
           rotate: [0, 360],
@@ -267,7 +267,7 @@ export const PageLoader = ({ message = 'Loading...' }: { message?: string }) => 
       {/* Progress indicator */}
       <div className="w-64 h-1 bg-gray-200 rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"
+          className="h-full bg-blue-600 rounded-full"
           initial={{ x: '-100%' }}
           animate={{ x: '100%' }}
           transition={{
