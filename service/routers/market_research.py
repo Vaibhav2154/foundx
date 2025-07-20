@@ -163,7 +163,6 @@ async def market_research_health():
     Health check for market research service
     """
     try:
-        # Test basic functionality
         test_query = "test market"
         await market_research_service.search_market_data(test_query, "us")
         
