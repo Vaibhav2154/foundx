@@ -73,26 +73,26 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-4 -left-4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 -right-4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute -bottom-8 left-1/3 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute top-1/2 -right-4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-8 left-1/3 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
         <div className={`w-full max-w-md transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl mb-4 shadow-lg">
-              <User className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl mb-4">
+              <img src="/logo.png" alt="FoundX" className="w-20 h-20" />
             </div>
-            <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold mb-2 text-blue-600">
               Welcome Back
             </h1>
-            <p className="text-gray-300">Sign in to continue your startup journey</p>
+            <p className="text-slate-600 dark:text-slate-300">Sign in to continue your startup journey</p>
           </div>
 
-          <div className="bg-gray-800/60 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
+          <div className="bg-white dark:bg-slate-800 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500/50 transition-all duration-300">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <div className="relative">
@@ -104,7 +104,7 @@ export default function SignInPage() {
                     onChange={handleChange}
                     placeholder="Enter your email"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-slate-900 dark:text-white placeholder-gray-400 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
               </div>
@@ -119,7 +119,7 @@ export default function SignInPage() {
                     onChange={handleChange}
                     placeholder="Enter your password"
                     required
-                    className="w-full pl-10 pr-12 py-3 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-12 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-slate-900 dark:text-white placeholder-gray-400 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                   <button
                     type="button"
@@ -134,7 +134,7 @@ export default function SignInPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center text-white"
               >
                 {isLoading ? (
                   <div className="flex items-center">
@@ -150,16 +150,16 @@ export default function SignInPage() {
             </form>
 
             <div className="flex items-center my-6">
-              <div className="flex-1 border-t border-gray-600"></div>
-              <span className="px-4 text-sm text-gray-400">or</span>
-              <div className="flex-1 border-t border-gray-600"></div>
+              <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+              <span className="px-4 text-sm text-slate-600 dark:text-slate-400">or</span>
+              <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
             </div>
 
-            <p className="text-center text-sm text-gray-400">
+            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
               Don't have an account?{" "}
               <Link
                 href="/sign-up"
-                className="text-blue-400 hover:text-blue-300 font-medium transition-colors inline-flex items-center"
+                className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center"
               >
                 Create account
                 <Sparkles className="w-4 h-4 ml-1" />

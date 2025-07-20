@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Home, Users, Settings, Bell, MessageCircle, Menu, X, Search, Scale, LogOut, ChevronDown, ExternalLink, Bot } from 'lucide-react';
+import { Home, Users, Settings, Bell, MessageCircle, Menu, X, Search, Scale, LogOut, ChevronDown, ExternalLink, Bot, TrendingUp, Workflow, WorkflowIcon } from 'lucide-react';
 import Image from 'next/image';
 import { CommandPalette } from '../../components/ui/CommandPalette';
 import { Breadcrumbs } from '../../components/ui/Breadcrumbs';
@@ -128,6 +128,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
     { href: '/dashboard', icon: Home, label: 'Overview' },
     { href: '/dashboard/team', icon: Users, label: 'Team' },
     { href: '/dashboard/assistant', icon: Bot, label: 'PitchPilot' },
+    { href: '/dashboard/market-research', icon: TrendingUp, label: 'Market Research' },
     { href: '/dashboard/legal', icon: Scale, label: 'Legal' },
   ];
 
@@ -176,8 +177,8 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
 
 
               <Link target='_blank' href="https://lakshya-brown.vercel.app/" className="p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-colors">
-                <ExternalLink className="w-5 h-5" />
-              </Link>
+                <WorkflowIcon className="w-5 h-5" />
+                </Link>
 
               <button 
                 onClick={() => navigate('/dashboard/settings')}

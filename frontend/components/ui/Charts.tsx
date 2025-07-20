@@ -35,7 +35,7 @@ export const SimpleBarChart: React.FC<ChartProps> = ({
             <div className="relative w-full max-w-12">
               <div 
                 className={`w-full rounded-t-lg transition-all duration-500 ease-out ${
-                  item.color || 'bg-gradient-to-t from-blue-500 to-blue-400'
+                  item.color || 'bg-blue-600'
                 }`}
                 style={{ 
                   height: `${(item.value / maxValue) * (height - 60)}px`,

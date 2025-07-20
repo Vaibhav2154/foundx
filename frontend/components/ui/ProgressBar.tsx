@@ -27,11 +27,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     lg: 'h-3'
   };
 
-  const getGradientClass = (percentage: number) => {
-    if (percentage >= 80) return 'from-green-500 to-emerald-600';
-    if (percentage >= 60) return 'from-blue-500 to-blue-600';
-    if (percentage >= 40) return 'from-yellow-500 to-orange-600';
-    return 'from-red-500 to-red-600';
+  const getColorClass = (percentage: number) => {
+    if (percentage >= 80) return 'bg-green-600';
+    if (percentage >= 60) return 'bg-blue-600';
+    if (percentage >= 40) return 'bg-yellow-600';
+    return 'bg-red-600';
   };
 
   return (
@@ -44,11 +44,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       )}
       <div className={`w-full bg-gray-700 rounded-full ${sizeClasses[size]} overflow-hidden`}>
         <div 
-          className={`${sizeClasses[size]} rounded-full transition-all duration-500 ease-out ${
-            gradient 
-              ? `bg-gradient-to-r ${getGradientClass(percentage)}`
-              : 'bg-blue-500'
-          }`}
+          className={`${sizeClasses[size]} rounded-full transition-all duration-500 ease-out ${getColorClass(percentage)}`}
           style={{ width: `${percentage}%` }}
         >
           <div className="h-full bg-white/20 rounded-full animate-pulse"></div>

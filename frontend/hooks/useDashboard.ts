@@ -191,10 +191,10 @@ export const useDashboard = () => {
       };
       
       const projectStatuses: StatusChart = {
-        'not-started': { label: 'Not Started', value: 0, color: 'bg-gradient-to-t from-gray-500 to-gray-400' },
-        'in-progress': { label: 'In Progress', value: 0, color: 'bg-gradient-to-t from-blue-500 to-blue-400' },
-        'completed': { label: 'Completed', value: 0, color: 'bg-gradient-to-t from-green-500 to-green-400' },
-        'on-hold': { label: 'On Hold', value: 0, color: 'bg-gradient-to-t from-yellow-500 to-yellow-400' }
+        'not-started': { label: 'Not Started', value: 0, color: 'bg-gray-500' },
+        'in-progress': { label: 'In Progress', value: 0, color: 'bg-blue-600' },
+        'completed': { label: 'Completed', value: 0, color: 'bg-green-600' },
+        'on-hold': { label: 'On Hold', value: 0, color: 'bg-yellow-600' }
       };
       
       projects.forEach((project: any) => {
@@ -207,9 +207,9 @@ export const useDashboard = () => {
       });
       
       const taskStatuses: StatusChart = {
-        'not-started': { label: 'Not Started', value: 0, color: 'bg-gradient-to-t from-red-500 to-red-400' },
-        'in-progress': { label: 'In Progress', value: 0, color: 'bg-gradient-to-t from-yellow-500 to-yellow-400' },
-        'completed': { label: 'Completed', value: 0, color: 'bg-gradient-to-t from-green-500 to-green-400' }
+        'not-started': { label: 'Not Started', value: 0, color: 'bg-red-600' },
+        'in-progress': { label: 'In Progress', value: 0, color: 'bg-yellow-600' },
+        'completed': { label: 'Completed', value: 0, color: 'bg-green-600' }
       };
       
       tasks.forEach((task: any) => {

@@ -149,7 +149,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({ classNam
               <>
                 <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full transition-all duration-300"
+                    className="h-full bg-green-600 rounded-full transition-all duration-300"
                     style={{ width: `${stats.productivity}%` }}
                   ></div>
                 </div>

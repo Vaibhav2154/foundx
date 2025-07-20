@@ -73,7 +73,6 @@ type AssistantCard = {
   description: string;
   icon: any;
   color: string;
-  gradient: string;
   category: string;
   complexity: 'beginner' | 'intermediate' | 'advanced';
   estimatedTime: string;
@@ -107,7 +106,6 @@ const AIAssistant = () => {
       description: 'Get comprehensive guidance on setting up your startup\'s legal foundation, including entity formation, contracts, and compliance.',
       icon: Shield,
       color: 'emerald',
-      gradient: 'from-emerald-400 via-emerald-500 to-emerald-600',
       category: 'legal',
       complexity: 'intermediate',
       estimatedTime: '5-10 min',
@@ -122,7 +120,6 @@ const AIAssistant = () => {
       description: 'Create a comprehensive funding roadmap from bootstrapping to Series A, including pitch deck optimization.',
       icon: DollarSign,
       color: 'blue',
-      gradient: 'from-blue-400 via-blue-500 to-blue-600',
       category: 'funding',
       complexity: 'advanced',
       estimatedTime: '10-15 min',
@@ -137,7 +134,6 @@ const AIAssistant = () => {
       description: 'Master the art of building high-performing teams, from co-founder selection to equity distribution.',
       icon: Users,
       color: 'purple',
-      gradient: 'from-purple-400 via-purple-500 to-purple-600',
       category: 'team',
       complexity: 'intermediate',
       estimatedTime: '7-12 min',
@@ -152,7 +148,6 @@ const AIAssistant = () => {
       description: 'Develop winning product strategies, from MVP planning to market validation and scaling techniques.',
       icon: Rocket,
       color: 'orange',
-      gradient: 'from-orange-400 via-orange-500 to-orange-600',
       category: 'product',
       complexity: 'advanced',
       estimatedTime: '8-15 min',
@@ -167,7 +162,6 @@ const AIAssistant = () => {
       description: 'Conduct thorough market research, competitive analysis, and identify untapped opportunities.',
       icon: TrendingUp,
       color: 'cyan',
-      gradient: 'from-cyan-400 via-cyan-500 to-cyan-600',
       category: 'market',
       complexity: 'intermediate',
       estimatedTime: '6-10 min',
@@ -182,7 +176,6 @@ const AIAssistant = () => {
       description: 'Design sustainable business models with multiple revenue streams and pricing strategies.',
       icon: Target,
       color: 'pink',
-      gradient: 'from-pink-400 via-pink-500 to-pink-600',
       category: 'business',
       complexity: 'advanced',
       estimatedTime: '10-20 min',
@@ -197,7 +190,6 @@ const AIAssistant = () => {
       description: 'Implement proven growth strategies and marketing techniques to scale your startup rapidly.',
       icon: Zap,
       color: 'yellow',
-      gradient: 'from-yellow-400 via-yellow-500 to-yellow-600',
       category: 'growth',
       complexity: 'intermediate',
       estimatedTime: '5-8 min',
@@ -212,7 +204,6 @@ const AIAssistant = () => {
       description: 'Create detailed financial projections, cash flow models, and investment scenarios.',
       icon: Calculator,
       color: 'indigo',
-      gradient: 'from-indigo-400 via-indigo-500 to-indigo-600',
       category: 'finance',
       complexity: 'advanced',
       estimatedTime: '12-18 min',
@@ -364,10 +355,10 @@ const AIAssistant = () => {
   };
 
   const renderCardsView = () => (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Hero Section */}
       <div className="relative px-8 pt-12 pb-8">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 via-purple-600/10 to-pink-600/10 rounded-3xl"></div>
+        <div className="absolute inset-0 bg-blue-600/10 rounded-3xl"></div>
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center mb-8">
             <div className="inline-flex items-center px-4 py-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-sm font-medium mb-4">
@@ -376,7 +367,7 @@ const AIAssistant = () => {
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-4">
               Your Startup's
-              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"> AI Brain</span>
+              <span className="text-blue-600 dark:text-blue-400"> AI Brain</span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
               Get expert-level guidance on legal frameworks, funding strategies, team building, and product development. 
@@ -435,7 +426,7 @@ const AIAssistant = () => {
                       }]);
                     }
                   }}
-                  className="px-6 py-3 bg-gradient-to-r from-green-500 via-teal-500 to-blue-500 text-white rounded-xl font-semibold flex items-center space-x-2 hover:shadow-lg hover:scale-105 transition-all duration-200"
+                  className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold flex items-center space-x-2 hover:shadow-lg hover:scale-105 transition-all duration-200"
                 >
                   <MessageSquare className="w-5 h-5" />
                   <span>General Chat</span>
@@ -484,10 +475,10 @@ const AIAssistant = () => {
                   }]);
                 }
               }}
-              className="group p-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/20 dark:via-purple-900/20 dark:to-pink-900/20 border border-indigo-200 dark:border-indigo-700 rounded-2xl hover:shadow-xl transition-all duration-300 text-left hover:-translate-y-1"
+              className="group p-6 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700 rounded-2xl hover:shadow-xl transition-all duration-300 text-left hover:-translate-y-1"
             >
               <div className="flex items-center space-x-4 mb-3">
-                <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+                <div className="p-3 bg-indigo-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
                   <MessageSquare className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -510,10 +501,10 @@ const AIAssistant = () => {
                 setMessage("I have a quick question about my startup: ");
                 setViewMode('chat');
               }}
-              className="group p-6 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-emerald-900/20 dark:via-teal-900/20 dark:to-cyan-900/20 border border-emerald-200 dark:border-emerald-700 rounded-2xl hover:shadow-xl transition-all duration-300 text-left hover:-translate-y-1"
+              className="group p-6 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-2xl hover:shadow-xl transition-all duration-300 text-left hover:-translate-y-1"
             >
               <div className="flex items-center space-x-4 mb-3">
-                <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+                <div className="p-3 bg-emerald-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
                   <Lightbulb className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -536,10 +527,10 @@ const AIAssistant = () => {
                 setMessage("I'd like to brainstorm ideas about: ");
                 setViewMode('chat');
               }}
-              className="group p-6 bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 dark:from-yellow-900/20 dark:via-orange-900/20 dark:to-red-900/20 border border-yellow-200 dark:border-yellow-700 rounded-2xl hover:shadow-xl transition-all duration-300 text-left hover:-translate-y-1"
+              className="group p-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-2xl hover:shadow-xl transition-all duration-300 text-left hover:-translate-y-1"
             >
               <div className="flex items-center space-x-4 mb-3">
-                <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+                <div className="p-3 bg-yellow-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
                   <Brain className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -577,6 +568,21 @@ const AIAssistant = () => {
               const Icon = card.icon;
               const isBookmarked = bookmarkedCards.includes(card.id);
               
+              // Helper function to get solid background color
+              const getColorClass = (color: string) => {
+                const colorMap: { [key: string]: string } = {
+                  emerald: 'bg-emerald-600',
+                  blue: 'bg-blue-600',
+                  purple: 'bg-purple-600',
+                  orange: 'bg-orange-600',
+                  cyan: 'bg-cyan-600',
+                  pink: 'bg-pink-600',
+                  yellow: 'bg-yellow-600',
+                  indigo: 'bg-indigo-600'
+                };
+                return colorMap[color] || 'bg-blue-600';
+              };
+              
               return (
                 <div
                   key={card.id}
@@ -585,7 +591,7 @@ const AIAssistant = () => {
                 >
                   {/* Trending Badge */}
                   {card.trending && (
-                    <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center">
+                    <div className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center">
                       <TrendingUp className="w-3 h-3 mr-1" />
                       Trending
                     </div>
@@ -600,7 +606,7 @@ const AIAssistant = () => {
                   
                   {/* Card Header */}
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 bg-gradient-to-r ${card.gradient} rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`p-3 ${getColorClass(card.color)} rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     
@@ -651,7 +657,7 @@ const AIAssistant = () => {
                   </div>
                   
                   {/* Action Button */}
-                  <button className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-2 px-4 rounded-xl font-medium flex items-center justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-xl font-medium flex items-center justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Start Consultation</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
@@ -665,7 +671,7 @@ const AIAssistant = () => {
   );
 
   const renderChatView = () => (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800 flex flex-col">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col">
       {/* Modern Header */}
       <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-white/20 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -682,7 +688,7 @@ const AIAssistant = () => {
             
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl">
+                <div className="p-2 bg-blue-600 rounded-xl">
                   <Wand2 className="w-5 h-5 text-white" />
                 </div>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
@@ -733,7 +739,7 @@ const AIAssistant = () => {
         {chatHistory.length === 0 && (
           <div className="text-center py-12">
             <div className="mb-6">
-              <div className="inline-flex p-4 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl mb-4">
+              <div className="inline-flex p-4 bg-blue-600 rounded-2xl mb-4">
                 <Brain className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
@@ -754,7 +760,7 @@ const AIAssistant = () => {
                 {/* Assistant Avatar and Name */}
                 {message.type === 'assistant' && (
                   <div className="flex items-center space-x-2 mb-3">
-                    <div className="p-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg">
+                    <div className="p-1.5 bg-blue-600 rounded-lg">
                       <Bot className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-sm font-medium text-slate-600 dark:text-slate-400">PitchPilot</span>
@@ -769,7 +775,7 @@ const AIAssistant = () => {
                 {/* Message Bubble */}
                 <div className={`relative p-6 rounded-3xl shadow-lg ${
                   message.type === 'user'
-                    ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'
                 }`}>
                   {message.type === 'user' ? (
@@ -926,7 +932,7 @@ const AIAssistant = () => {
             <button
               onClick={() => handleSendMessage()}
               disabled={!message.trim() || isLoading}
-              className="p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-2xl hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 disabled:from-slate-300 disabled:to-slate-400 shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed group"
+              className="p-4 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 disabled:bg-slate-300 shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed group"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

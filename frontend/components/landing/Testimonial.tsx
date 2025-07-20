@@ -16,7 +16,7 @@ const Testimonial = () => {
               "FoundX saved us months of legal back-and-forth and gave us the structure we needed to scale our team from 2 to 10 people seamlessly."
             </blockquote>
             <div className="flex items-center justify-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+              <div className="w-12 h-12 bg-blue-600 rounded-full"></div>
               <div className="text-left">
                 <div className="font-semibold text-slate-900 dark:text-white">Sarah Chen</div>
                 <div className="text-slate-600 dark:text-slate-300">Co-founder, TechFlow</div>

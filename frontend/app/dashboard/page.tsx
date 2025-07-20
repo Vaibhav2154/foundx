@@ -87,8 +87,7 @@ export default function DashboardPage() {
       title: "Active Projects",
       value: stats.totalProjects,
       icon: <Briefcase className="w-6 h-6" />,
-      gradient: "from-blue-500 to-blue-600",
-      bgColor: "bg-blue-500/10",
+      bgColor: "bg-blue-600",
       change: {
         value: "+2 this month",
         trend: "up" as const,
@@ -99,8 +98,7 @@ export default function DashboardPage() {
       title: "Team Members",
       value: stats.totalMembers,
       icon: <Users className="w-6 h-6" />,
-      gradient: "from-green-500 to-green-600",
-      bgColor: "bg-green-500/10",
+      bgColor: "bg-green-600",
       change: {
         value: "+3 this month",
         trend: "up" as const,
@@ -111,8 +109,7 @@ export default function DashboardPage() {
       title: "Total Tasks",
       value: stats.totalTasks,
       icon: <ClipboardList className="w-6 h-6" />,
-      gradient: "from-purple-500 to-purple-600",
-      bgColor: "bg-purple-500/10",
+      bgColor: "bg-purple-600",
       change: {
         value: `${stats.completedTasks} completed`,
         trend: "neutral" as const
@@ -122,8 +119,7 @@ export default function DashboardPage() {
       title: "Monthly Revenue",
       value: `₹${stats.revenue.toLocaleString()}`,
       icon: <IndianRupee className="w-6 h-6" />,
-      gradient: "from-yellow-500 to-yellow-600",
-      bgColor: "bg-yellow-500/10",
+      bgColor: "bg-yellow-600",
       change: {
         value: `+${stats.growth}% growth`,
         trend: "up" as const,
@@ -178,8 +174,8 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-blue-600/20 rounded-2xl border border-gray-700/50 backdrop-blur-xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+      <div className="relative overflow-hidden bg-blue-600/20 rounded-2xl border border-gray-700/50 backdrop-blur-xl">
+        <div className="absolute inset-0 bg-blue-600/10"></div>
         <div className="relative p-8">
           <div className="flex items-center justify-between">
             <div>
@@ -249,7 +245,6 @@ export default function DashboardPage() {
             title={card.title}
             value={card.value}
             icon={card.icon}
-            gradient={card.gradient}
             bgColor={card.bgColor}
             change={card.change}
             loading={loading}
@@ -330,17 +325,17 @@ export default function DashboardPage() {
                       const month = date.toLocaleDateString('en-US', { month: 'short' });
                       const day = date.getDate();
 
-                      // Generate gradients for different activities
-                      const gradients = [
-                        'from-blue-500 to-blue-600',
-                        'from-purple-500 to-purple-600',
-                        'from-red-500 to-red-600',
-                        'from-green-500 to-green-600'
+                      // Generate colors for different activities
+                      const bgColors = [
+                        'bg-blue-600',
+                        'bg-purple-600',
+                        'bg-red-600',
+                        'bg-green-600'
                       ];
 
                       return (
                         <div key={activity.id} className="flex items-center gap-4 p-3 bg-gray-700/30 rounded-xl hover:bg-gray-700/50 transition-colors">
-                          <div className={`w-12 h-12 bg-gradient-to-r ${gradients[index % gradients.length]} rounded-xl flex items-center justify-center text-white font-bold text-sm`}>
+                          <div className={`w-12 h-12 ${bgColors[index % bgColors.length]} rounded-xl flex items-center justify-center text-white font-bold text-sm`}>
                             {month}<br />{day}
                           </div>
                           <div className="flex-1">

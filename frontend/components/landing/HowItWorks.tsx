@@ -20,30 +20,30 @@ const HowItWorks = () => {
       number: 1,
       title: "Sign Up & Set Goals",
       description: "Tell us about your startup and what you want to accomplish. Our onboarding process takes just 2 minutes.",
-      color: "from-blue-500 to-purple-500",
-      bgColor: "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20"
+      color: "blue-600",
+      bgColor: "bg-blue-50 dark:bg-blue-900/20"
     },
     {
       number: 2,
       title: "Generate & Organize",
       description: "Create legal documents, invite team members, and set up your first projects using our intuitive tools.",
-      color: "from-purple-500 to-pink-500",
-      bgColor: "bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20"
+      color: "purple-600",
+      bgColor: "bg-purple-50 dark:bg-purple-900/20"
     },
     {
       number: 3,
       title: "Scale & Succeed",
       description: "Track progress, get AI guidance, and focus on building your product while we handle the operational complexity.",
-      color: "from-pink-500 to-red-500",
-      bgColor: "bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20"
+      color: "pink-600",
+      bgColor: "bg-pink-50 dark:bg-pink-900/20"
     }
   ];
 
   return (
     <section id="how-it-works" className="py-20 px-4 sm:px-8 lg:px-12 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm relative overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-2xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-2xl animate-pulse delay-1000" />
+        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-400/10 rounded-full blur-2xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-400/10 rounded-full blur-2xl animate-pulse delay-1000" />
       </div>
       
       <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto relative">
@@ -75,11 +75,11 @@ const HowItWorks = () => {
               <div className={`absolute inset-0 ${step.bgColor} rounded-2xl transform scale-0 group-hover:scale-100 transition-transform duration-300 opacity-50`} />
               
               <div className="relative p-8">
-                <div className={`w-16 h-16 bg-gradient-to-r ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 transform transition-all duration-300 ${
+                <div className={`w-16 h-16 bg-${step.color} rounded-full flex items-center justify-center mx-auto mb-6 transform transition-all duration-300 ${
                   activeStep === index ? 'scale-110 shadow-2xl' : 'scale-100'
                 }`}>
                   <span className="text-white font-bold text-xl">{step.number}</span>
-                  <div className={`absolute inset-0 bg-gradient-to-r ${step.color} rounded-full blur-lg opacity-30 animate-pulse ${
+                  <div className={`absolute inset-0 bg-${step.color} rounded-full blur-lg opacity-30 animate-pulse ${
                     activeStep === index ? 'scale-150' : 'scale-100'
                   } transition-transform duration-300`} />
                 </div>

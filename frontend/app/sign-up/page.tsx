@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { showError, showSuccess } from "@/utils/toast";
@@ -108,25 +109,30 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-4 -left-4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 -right-4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute -bottom-8 left-1/3 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute top-1/2 -right-4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-8 left-1/3 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-8">
         <div className={`w-full max-w-md transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl mb-4 shadow-lg">
-              <UserPlus className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl mb-4">
+              <Image
+                src="/logo.png" 
+                alt="FoundX"
+                width={150}
+                height={150}
+              />
             </div>
-            <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold mb-2 text-blue-600">
               Join FoundX
             </h1>
-            <p className="text-gray-300">Create your account and start building</p>
+            <p className="text-slate-600 dark:text-slate-300">Create your account and start building</p>
           </div>
-          <div className="bg-gray-800/60 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-gray-700/50 hover:border-green-500/50 transition-all duration-300">
+          <div className="bg-white dark:bg-slate-800 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500/50 transition-all duration-300">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <div className="relative">
@@ -138,7 +144,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     placeholder="Enter your full name"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-slate-900 dark:text-white placeholder-gray-400 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
               </div>
@@ -152,7 +158,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     placeholder="Choose a username"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-slate-900 dark:text-white placeholder-gray-400 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
               </div>
@@ -167,7 +173,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     placeholder="Enter your email"
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-slate-900 dark:text-white placeholder-gray-400 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
               </div>
@@ -182,7 +188,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     placeholder="Create a password"
                     required
-                    className="w-full pl-10 pr-12 py-3 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-12 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-slate-900 dark:text-white placeholder-gray-400 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                   <button
                     type="button"
@@ -220,7 +226,7 @@ export default function SignUpPage() {
                     onChange={handleChange}
                     placeholder="Confirm your password"
                     required
-                    className="w-full pl-10 pr-12 py-3 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                    className="w-full pl-10 pr-12 py-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-slate-900 dark:text-white placeholder-gray-400 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
                   <button
                     type="button"
@@ -243,13 +249,13 @@ export default function SignUpPage() {
                   </div>
                 )}
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-slate-600 dark:text-slate-400">
                 By creating an account, you agree to our{" "}
-                <Link href="#" className="text-green-400 hover:text-green-300 transition-colors">
+                <Link href="#" className="text-blue-600 hover:text-blue-700 transition-colors">
                   Terms of Service
                 </Link>{" "}
                 and{" "}
-                <Link href="#" className="text-green-400 hover:text-green-300 transition-colors">
+                <Link href="#" className="text-blue-600 hover:text-blue-700 transition-colors">
                   Privacy Policy
                 </Link>
               </div>
@@ -257,7 +263,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-700 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center text-white"
               >
                 {isLoading ? (
                   <div className="flex items-center">
@@ -274,16 +280,16 @@ export default function SignUpPage() {
             </form>
 
             <div className="flex items-center my-6">
-              <div className="flex-1 border-t border-gray-600"></div>
-              <span className="px-4 text-sm text-gray-400">or</span>
-              <div className="flex-1 border-t border-gray-600"></div>
+              <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+              <span className="px-4 text-sm text-slate-600 dark:text-slate-400">or</span>
+              <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
             </div>
 
-            <p className="text-center text-sm text-gray-400">
+            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
               Already have an account?{" "}
               <Link
                 href="/sign-in"
-                className="text-green-400 hover:text-green-300 font-medium transition-colors inline-flex items-center"
+                className="text-blue-600 hover:text-blue-700 font-medium transition-colors inline-flex items-center"
               >
                 Sign in
                 <Sparkles className="w-4 h-4 ml-1" />
