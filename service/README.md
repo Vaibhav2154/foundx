@@ -1,12 +1,13 @@
 # FoundX GenAI Service
 
-A FastAPI-based AI service for startup assistance, providing intelligent Q&A, clause explanations, and document generation using Google's Gemini AI with RAG (Retrieval-Augmented Generation) capabilities.
+A comprehensive FastAPI-based AI service for startup assistance, providing intelligent Q&A, clause explanations, document generation, and market research using Google's Gemini AI with RAG (Retrieval-Augmented Generation) capabilities.
 
 ## Features
 
 - **Q&A for Startups**: Intelligent question-answering system for startup-related queries
 - **Clause Explanations**: Legal and business clause explanations in simple terms
 - **Document Generation**: AI-powered generation of business documents
+- **Market Research**: Comprehensive market analysis using real-time data and AI insights
 - **RAG Pipeline**: Retrieval-Augmented Generation using company knowledge base
 - **RESTful API**: Clean, documented API endpoints
 - **Docker Support**: Easy deployment with Docker

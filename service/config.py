@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     
     # API Configuration
     gemini_api_key: str = ""
+    serper_api_key: str = ""
     
     # Server Configuration
     host: str = "0.0.0.0"
