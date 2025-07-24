@@ -27,7 +27,9 @@ interface ExpenseManagerProps {
 }
 
 export default function ExpenseManager({ startUpId, onUpdate }: ExpenseManagerProps) {
+  const [uploading, setUploading] = useState(false);
   const handleReceiptFileUpload = async (file: File) => {
+    setUploading(true);
     // Upload file directly to Python backend, then create expense in Node backend
     try {
       // Upload to Python backend
@@ -74,6 +76,8 @@ export default function ExpenseManager({ startUpId, onUpdate }: ExpenseManagerPr
     } catch (error) {
       console.error('Error creating expense from receipt file:', error);
       showError('Failed to process receipt file');
+    } finally {
+      setUploading(false);
     }
   };
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -183,7 +187,7 @@ export default function ExpenseManager({ startUpId, onUpdate }: ExpenseManagerPr
             <Plus className="mr-2 h-4 w-4" />
             Add Expense
           </Button>
-          <ReceiptFileUploadButton onUpload={handleReceiptFileUpload} />
+          <ReceiptFileUploadButton onUpload={handleReceiptFileUpload} uploading={uploading} />
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 import multer from 'multer';
 const upload = multer();
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { Router } from 'express';
 import {
     createExpense,
@@ -27,33 +28,37 @@ import {
 
 const router = Router();
 
+
+// Expense routes (protected)
 router.route('/startup/:startUpId/expenses')
-    .post(createExpense)
-    .get(getExpenses);
-router.post('/startup/:startUpId/expenses/from-receipt', createExpenseFromReceipt);
-router.get('/startup/:startUpId/expenses/analytics', getExpenseAnalytics);
+    .post(authMiddleware, createExpense)
+    .get(authMiddleware, getExpenses);
+import { createExpenseFromReceiptFile } from '../controllers/fund.controller.js';
+router.post('/startup/:startUpId/expenses/from-receipt-file', authMiddleware, upload.single('file'), createExpenseFromReceiptFile);
+router.post('/startup/:startUpId/expenses/from-receipt', authMiddleware, createExpenseFromReceipt);
+router.get('/startup/:startUpId/expenses/analytics', authMiddleware, getExpenseAnalytics);
 
 router.route('/startup/:startUpId/budgets')
-    .post(createBudget)
-    .get(getBudgets);
+    .post(authMiddleware, createBudget)
+    .get(authMiddleware, getBudgets);
 
-router.put('/budget/:budgetId/spending', updateBudgetSpending);
-router.get('/startup/:startUpId/budget-vs-actual', getBudgetVsActual);
+router.put('/budget/:budgetId/spending', authMiddleware, updateBudgetSpending);
+router.get('/startup/:startUpId/budget-vs-actual', authMiddleware, getBudgetVsActual);
 
 router.route('/startup/:startUpId/funding-sources')
-    .post(createFundingSource)
-    .get(getFundingSources);
+    .post(authMiddleware, createFundingSource)
+    .get(authMiddleware, getFundingSources);
 
 router.route('/startup/:startUpId/fundraising-campaigns')
-    .post(createFundraisingCampaign)
-    .get(getFundraisingCampaigns);
+    .post(authMiddleware, createFundraisingCampaign)
+    .get(authMiddleware, getFundraisingCampaigns);
 
-router.put('/fundraising-campaign/:campaignId/investor', updateInvestorStatus);
+router.put('/fundraising-campaign/:campaignId/investor', authMiddleware, updateInvestorStatus);
 
 router.route('/startup/:startUpId/financial-reports')
-    .post(generateFinancialReport)
-    .get(getFinancialReports);
+    .post(authMiddleware, generateFinancialReport)
+    .get(authMiddleware, getFinancialReports);
 
-router.get('/startup/:startUpId/dashboard', getDashboardData);
+router.get('/startup/:startUpId/dashboard', authMiddleware, getDashboardData);
 
 export default router;
