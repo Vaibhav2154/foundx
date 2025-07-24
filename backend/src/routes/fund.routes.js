@@ -27,7 +27,6 @@ import {
 
 const router = Router();
 
-router.post('/startup/:startUpId/expenses/from-receipt-file', upload.single('file'), createExpenseFromReceiptFile);
 router.route('/startup/:startUpId/expenses')
     .post(createExpense)
     .get(getExpenses);
