@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Home, Users, Settings, Bell, MessageCircle, Menu, X, Search, Scale, LogOut, ChevronDown, ExternalLink, Bot, TrendingUp, Workflow, WorkflowIcon } from 'lucide-react';
+import { Home, Users, Settings, Bell, MessageCircle, Menu, X, Search, Scale, LogOut, ChevronDown, ExternalLink, Bot, TrendingUp, Workflow, WorkflowIcon, Wallet } from 'lucide-react';
 import Image from 'next/image';
 import { CommandPalette } from '../../components/ui/CommandPalette';
 import { Breadcrumbs } from '../../components/ui/Breadcrumbs';
@@ -129,6 +129,7 @@ export default function DashboardLayout({ children, user }: DashboardLayoutProps
     { href: '/dashboard/team', icon: Users, label: 'Team' },
     { href: '/dashboard/assistant', icon: Bot, label: 'PitchPilot' },
     { href: '/dashboard/market-research', icon: TrendingUp, label: 'Market Research' },
+    { href: '/dashboard/fund-management', icon: Wallet, label: 'Fund Management' },
     { href: '/dashboard/legal', icon: Scale, label: 'Legal' },
   ];
 

@@ -26,10 +26,8 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor to handle 401 errors and HTML responses
 api.interceptors.response.use(
     (response) => {
-        // Check if response is HTML when JSON was expected
         const contentType = response.headers['content-type'];
         if (contentType && contentType.includes('text/html') && response.config.headers?.['Content-Type'] === 'application/json') {
             console.error('Received HTML response when JSON was expected. Server might be down or returning error page.');
@@ -43,8 +41,6 @@ api.interceptors.response.use(
             localStorage.removeItem('authToken');
             localStorage.removeItem('userId');
             localStorage.removeItem('user');
-            // Optionally redirect to login page
-            // window.location.href = '/sign-in';
         }
         
         // Handle HTML responses in error cases
