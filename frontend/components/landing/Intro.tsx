@@ -22,53 +22,36 @@ export default function Intro() {
 
   return (
     <section 
-      className="relative py-20 px-4 sm:px-8 lg:px-12 overflow-hidden min-h-screen flex items-center"
+      className="relative py-20 px-4 sm:px-8 lg:px-12 overflow-hidden min-h-screen flex items-center bg-black"
       onMouseMove={handleMouseMove}
     >
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 opacity-50" />
-        
-        <div 
-          className="absolute w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"
-          style={{
-            left: mousePosition.x - 192,
-            top: mousePosition.y - 192,
-            transition: 'all 0.3s ease',
-          }}
-        />
-        
-        <div className="absolute top-10 left-10 w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-        <div className="absolute top-32 right-20 w-3 h-3 bg-purple-400 rounded-full animate-pulse delay-1000" />
-        <div className="absolute bottom-20 left-1/4 w-2 h-2 bg-pink-400 rounded-full animate-pulse delay-2000" />
-      </div>
+      <div className="absolute inset-0 bg-black" />
       
       <div className="relative max-w-[95%] 2xl:max-w-[1536px] mx-auto w-full">
         <div className="text-center max-w-4xl mx-auto">
           <div 
-            className={`inline-flex items-center px-6 py-3 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 text-sm font-medium mb-8 backdrop-blur-sm transform transition-all duration-1000 ${
+            className={`inline-flex items-center px-6 py-3 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium mb-8 backdrop-blur-sm transform transition-all duration-1000 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             <Sparkles className="w-4 h-4 mr-2 animate-spin" style={{ animationDuration: '3s' }} />
             Simplify Your Startup Journey
-            <div className="ml-2 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <div className="ml-2 w-2 h-2 bg-white rounded-full animate-pulse" />
           </div>
           
           <h1 
-            className={`text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 dark:text-white mb-6 leading-tight transform transition-all duration-1000 delay-200 ${
+            className={`text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight transform transition-all duration-1000 delay-200 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
             From Idea to{" "}
             <span className="relative">
-              {/* <span className="text-blue-600 font-bold animate-gradient"> */}
-                Launch
-              {/* </span> */}
+              Launch
             </span>
           </h1>
           
           <p 
-            className={`text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed transform transition-all duration-1000 delay-400 ${
+            className={`text-xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed transform transition-all duration-1000 delay-400 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -83,7 +66,7 @@ export default function Intro() {
           >
             <Link href="/options">
               <button className="group relative btn-secondary overflow-hidden">
-                <div className="absolute inset-0 bg-blue-700 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                <div className="absolute inset-0 bg-black dark:bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
                 <span className="relative z-10 flex items-center">
                   Start Building Today
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -91,8 +74,8 @@ export default function Intro() {
               </button>
             </Link>
             
-            <button className="group border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-8 py-4 rounded-xl hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 font-semibold text-lg relative overflow-hidden">
-              <div className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+            <button className="group border-2 border-white text-white px-8 py-4 rounded-xl hover:border-white hover:bg-white/10 transition-all duration-200 font-semibold text-lg relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               <span className="relative z-10 flex items-center">
                 <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
                 Watch Demo
@@ -101,7 +84,7 @@ export default function Intro() {
           </div>
           
           <div 
-            className={`flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500 dark:text-slate-400 transform transition-all duration-1000 delay-800 ${
+            className={`flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400 transform transition-all duration-1000 delay-800 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
           >
@@ -111,8 +94,8 @@ export default function Intro() {
               { icon: CheckCircle, text: "Setup in minutes" }
             ].map((item, index) => (
               <div key={index} className="flex items-center group">
-                <item.icon className="w-4 h-4 text-green-500 mr-2 group-hover:scale-110 transition-transform" />
-                <span className="group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors">
+                <item.icon className="w-4 h-4 text-white mr-2 group-hover:scale-110 transition-transform" />
+                <span className="group-hover:text-white transition-colors">
                   {item.text}
                 </span>
               </div>

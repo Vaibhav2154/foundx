@@ -32,17 +32,15 @@ export default function Home() {
   if (isLoading) return null;
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen overflow-hidden bg-black dark:bg-black">
       <div 
-        className="fixed inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-blue-900"
+        className="fixed inset-0 bg-black dark:bg-black"
         style={{
           transform: `translateY(${scrollY * 0.5}px)`,
         }}
       />
       
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100 via-transparent to-purple-100 dark:from-blue-900/20 dark:via-transparent dark:to-purple-900/20 opacity-50" />
-      
-      <div className="relative z-10 text-slate-900 dark:text-slate-100">
+      <div className="relative z-10 text-white">
         <Navbar />
         <main className="relative z-20 pt-16 px-0">
           <Intro />

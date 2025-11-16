@@ -21,26 +21,10 @@ const CTASection = () => {
 
   return (
     <section 
-      className="relative py-20 px-4 sm:px-8 lg:px-12 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 overflow-hidden"
+      className="relative py-20 px-4 sm:px-8 lg:px-12 bg-black overflow-hidden"
       onMouseMove={handleMouseMove}
     >
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-black/10" />
-        <div 
-          className="absolute w-96 h-96 bg-white/10 rounded-full blur-3xl"
-          style={{
-            left: mousePosition.x - 192,
-            top: mousePosition.y - 192,
-            transition: 'all 0.3s ease',
-          }}
-        />
-        
-        <div className="absolute top-10 left-10 w-4 h-4 bg-white/20 rounded-full animate-bounce" />
-        <div className="absolute top-20 right-20 w-3 h-3 bg-white/30 rounded-full animate-bounce delay-1000" />
-        <div className="absolute bottom-20 left-1/4 w-2 h-2 bg-white/25 rounded-full animate-bounce delay-2000" />
-        
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 via-purple-600/80 to-pink-600/80 backdrop-blur-sm" />
-      </div>
+      <div className="absolute inset-0 bg-black" />
       
       <div className="relative max-w-[95%] 2xl:max-w-[1536px] mx-auto text-center">
         <div className={`transform transition-all duration-1000 ${
@@ -59,22 +43,22 @@ const CTASection = () => {
             </span>
           </h2>
           
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             Join thousands of founders who have simplified their startup operations with FoundX.
           </p>
           
           <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 transform transition-all duration-1000 delay-300 ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
-            <button className="group relative bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-50 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+            <button className="group relative bg-white text-black px-8 py-4 rounded-xl hover:bg-slate-100 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl overflow-hidden">
+              <div className="absolute inset-0 bg-slate-100 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               <span className="relative z-10 flex items-center">
                 Start Your Free Trial
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </span>
             </button>
             
-            <button className="group border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-200 font-semibold text-lg relative overflow-hidden">
+            <button className="group border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-black transition-all duration-200 font-semibold text-lg relative overflow-hidden">
               <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               <span className="relative z-10 flex items-center">
                 <Calendar className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
@@ -83,19 +67,19 @@ const CTASection = () => {
             </button>
           </div>
           
-          <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto text-blue-200 text-sm transform transition-all duration-1000 delay-500 ${
+          <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto text-slate-300 text-sm transform transition-all duration-1000 delay-500 ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
             <div className="flex items-center justify-center">
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse" />
+              <div className="w-2 h-2 bg-slate-400 rounded-full mr-2 animate-pulse" />
               14-day free trial
             </div>
             <div className="flex items-center justify-center">
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse" />
+              <div className="w-2 h-2 bg-slate-400 rounded-full mr-2 animate-pulse" />
               No credit card required
             </div>
             <div className="flex items-center justify-center">
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse" />
+              <div className="w-2 h-2 bg-slate-400 rounded-full mr-2 animate-pulse" />
               Cancel anytime
             </div>
           </div>

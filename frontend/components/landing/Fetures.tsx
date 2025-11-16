@@ -31,8 +31,8 @@ export default function Features(){
       icon: FileText,
       title: "Legal Document Generator",
       description: "Generate NDAs, founder agreements, and freelance contracts with plain-English explanations for every clause.",
-      color: "from-blue-500 to-blue-600",
-      hoverColor: "hover:border-blue-300 dark:hover:border-blue-600",
+      color: "from-black to-black",
+      hoverColor: "hover:border-slate-400 dark:hover:border-slate-500",
       benefits: [
         "Customizable templates",
         "Export as PDF/DOCX", 
@@ -43,8 +43,8 @@ export default function Features(){
       icon: Users,
       title: "Team Management",
       description: "Add team members, assign roles, and maintain decision logs to keep everyone aligned and accountable.",
-      color: "from-purple-500 to-purple-600",
-      hoverColor: "hover:border-purple-300 dark:hover:border-purple-600",
+      color: "from-black to-black",
+      hoverColor: "hover:border-slate-400 dark:hover:border-slate-500",
       benefits: [
         "Role-based permissions",
         "Decision tracking",
@@ -55,8 +55,8 @@ export default function Features(){
       icon: Target,
       title: "Project & Task Tracker",
       description: "Organize projects into sprints, track tasks with Kanban boards, and never miss important deadlines.",
-      color: "from-green-500 to-green-600",
-      hoverColor: "hover:border-green-300 dark:hover:border-green-600",
+      color: "from-black to-black",
+      hoverColor: "hover:border-slate-400 dark:hover:border-slate-500",
       benefits: [
         "Kanban & list views",
         "Priority & status tags",
@@ -67,8 +67,8 @@ export default function Features(){
       icon: Bot,
       title: "AI Assistant",
       description: "Get instant answers to legal, operational, and funding questions with our specialized startup AI assistant.",
-      color: "from-orange-500 to-orange-600",
-      hoverColor: "hover:border-orange-300 dark:hover:border-orange-600",
+      color: "from-black to-black",
+      hoverColor: "hover:border-slate-400 dark:hover:border-slate-500",
       benefits: [
         "Startup-focused knowledge",
         "24/7 availability",
@@ -79,8 +79,8 @@ export default function Features(){
       icon: Shield,
       title: "Security & Compliance",
       description: "Enterprise-grade security with encrypted data storage and compliance tracking for peace of mind.",
-      color: "from-red-500 to-red-600",
-      hoverColor: "hover:border-red-300 dark:hover:border-red-600",
+      color: "from-black to-black",
+      hoverColor: "hover:border-slate-400 dark:hover:border-slate-500",
       benefits: [
         "End-to-end encryption",
         "Compliance tracking",
@@ -91,8 +91,8 @@ export default function Features(){
       icon: Zap,
       title: "Quick Setup",
       description: "Get up and running in minutes with our guided onboarding process designed for non-technical founders.",
-      color: "from-indigo-500 to-indigo-600",
-      hoverColor: "hover:border-indigo-300 dark:hover:border-indigo-600",
+      color: "from-black to-black",
+      hoverColor: "hover:border-slate-400 dark:hover:border-slate-500",
       benefits: [
         "Guided onboarding",
         "Template library",
@@ -102,16 +102,16 @@ export default function Features(){
   ];
 
   return (
-    <section ref={sectionRef} id="features" className="py-20 px-4 sm:px-8 lg:px-12 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">
+    <section ref={sectionRef} id="features" className="py-20 px-4 sm:px-8 lg:px-12 bg-black">
       <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Everything You Need to{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-white">
               Launch
             </span>
           </h2>
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
             Built specifically for early-stage founders who need to move fast without getting bogged down by complex tools.
           </p>
         </div>
@@ -125,7 +125,7 @@ export default function Features(){
               <div
                 key={index}
                 data-index={index}
-                className={`feature-card group relative p-8 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm ${feature.hoverColor} hover:shadow-xl transition-all duration-500 cursor-pointer transform ${
+                className={`feature-card group relative p-8 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm hover:border-white/40 hover:shadow-xl transition-all duration-500 cursor-pointer transform ${
                   isVisible 
                     ? 'translate-y-0 opacity-100 scale-100' 
                     : 'translate-y-10 opacity-0 scale-95'
@@ -134,21 +134,21 @@ export default function Features(){
                   transitionDelay: `${index * 100}ms`
                 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-white/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
                 <div className="relative">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className={`w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                    <Icon className="w-6 h-6 text-black" />
                   </div>
                   
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-xl font-semibold text-white group-hover:text-white transition-colors">
                       {feature.title}
                     </h3>
-                    <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
                   
-                  <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+                  <p className="text-slate-300 mb-6 leading-relaxed">
                     {feature.description}
                   </p>
                   
@@ -156,19 +156,19 @@ export default function Features(){
                     {feature.benefits.map((benefit, benefitIndex) => (
                       <li 
                         key={benefitIndex}
-                        className="flex items-center text-sm text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors"
+                        className="flex items-center text-sm text-slate-400 group-hover:text-slate-300 transition-colors"
                         style={{
                           transitionDelay: `${(index * 100) + (benefitIndex * 50)}ms`
                         }}
                       >
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-3 group-hover:scale-110 transition-transform" />
+                        <CheckCircle className="w-4 h-4 text-white mr-3 group-hover:scale-110 transition-transform" />
                         {benefit}
                       </li>
                     ))}
                   </ul>
                 </div>
                 
-                <div className={`absolute -inset-px bg-gradient-to-r ${feature.color} rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm`} />
+                <div className="absolute -inset-px bg-white/10 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm" />
               </div>
             );
           })}

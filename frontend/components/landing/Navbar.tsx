@@ -26,10 +26,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`border-b border-slate-200/50 dark:border-slate-700/50 backdrop-blur-md sticky top-0 z-50 transition-all duration-300 ${
+    <nav className={`border-b border-white/20 backdrop-blur-md sticky top-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-white/90 dark:bg-slate-900/90 shadow-lg' 
-        : 'bg-white/80 dark:bg-slate-900/80'
+        ? 'bg-black/90 shadow-lg' 
+        : 'bg-black/80'
     }`}>
       <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="flex justify-between items-center h-16">
@@ -46,10 +46,10 @@ export default function Navbar() {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors relative group"
+                className="text-slate-300 hover:text-white transition-colors relative group"
               >
                 {item.label}
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300" />
+                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300" />
               </button>
             ))}
             
@@ -58,32 +58,32 @@ export default function Navbar() {
               className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors relative group"
             >
               Build Startup
-              <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300" />
+              <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white group-hover:w-full transition-all duration-300" />
             </button>
             
             <button
               onClick={() => navigate("/sign-up")}
               className="group btn-primary relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-blue-700 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+              <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               <span className="relative z-10">Sign Up</span>
             </button>
           </div>
           
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
-              <X className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+              <X className="w-6 h-6 text-white" />
             ) : (
-              <Menu className="w-6 h-6 text-slate-600 dark:text-slate-300" />
+              <Menu className="w-6 h-6 text-white" />
             )}
           </button>
         </div>
         
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-lg">
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-white/20 shadow-lg">
             <div className="px-4 py-4 space-y-4">
               {[
                 { label: "Features", id: "features" },
@@ -93,14 +93,14 @@ export default function Navbar() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="block w-full text-left text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors py-2"
+                  className="block w-full text-left text-slate-300 hover:text-white transition-colors py-2"
                 >
                   {item.label}
                 </button>
               ))}
               <button
                 onClick={() => navigate("/build-startup")}
-                className="block w-full text-left text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors py-2"
+                className="block w-full text-left text-slate-300 hover:text-white transition-colors py-2"
               >
                 Build Startup
               </button>

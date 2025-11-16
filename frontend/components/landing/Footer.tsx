@@ -2,13 +2,13 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-900 text-white py-16 px-4 sm:px-8 lg:px-12">
+    <footer className="bg-black text-white py-16 px-4 sm:px-8 lg:px-12">
       <div className="max-w-[95%] 2xl:max-w-[1536px] mx-auto">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">F</span>
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-white/20">
+                <span className="text-black font-bold text-sm">F</span>
               </div>
               <span className="text-xl font-bold">FoundX</span>
             </div>
@@ -46,7 +46,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-white/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-slate-400">© 2025 FoundX. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="text-slate-400 hover:text-white transition-colors">Privacy</a>
