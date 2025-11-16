@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 // Parse receipt from uploaded file
 export const createExpenseFromReceiptFile = asyncHandler(async (req, res) => {
     const { startUpId } = req.params;
-    const serviceUrl = process.env.SERVICE_URL || 'http://localhost:4000';
+    const serviceUrl = process.env.SERVICE_URL || 'https://foundx.onrender.com';
     if (!req.file) {
         throw new ApiError(400, 'No file uploaded');
     }
@@ -70,7 +70,7 @@ export const createExpense = asyncHandler(async (req, res) => {
         startUp: startUpId,
         createdBy: req.user._id,
     });
-
+    
     res.status(201).json(new ApiResponse(201, expense, 'Expense created successfully'));
 });
 
@@ -78,11 +78,8 @@ export const createExpenseFromReceipt = asyncHandler(async (req, res) => {
     const { receiptData } = req.body;
     const { startUpId } = req.params;
 
-    const serviceUrl = process.env.SERVICE_URL || 'http://localhost:4000';
-    console.log("Linking to service URL:", serviceUrl);
-        
-    console.log('Parsing receipt data:', receiptData);
 
+    const serviceUrl = 'https://foundx.onrender.com';
     const parseResponse = await fetch(`${serviceUrl}/api/v1/bill-parser/parse-from-images`, {
         method: 'POST',
         headers: {
